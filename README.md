@@ -46,6 +46,7 @@ You can preview the production build with `npm run preview`.
 
 ## GLEN
     [ ] Create the home page
+        [ ] Movie recommendation element
     [ ] Create an account signup page
     [ ] Create a navigation bar
 
