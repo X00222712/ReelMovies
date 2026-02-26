@@ -2,36 +2,71 @@
     // Maybe make logic to personalise movies
     // TODO
         // Make a recommended DB for easy modifycation
-    let movies = [
-        {ID : 0, poster : "SpiderMan.jpeg", name : "Spider Man", description : "Peter parker gets biten by a spider and becomes spider man, a hero"},
-        {ID : 1, poster : ".", name : ".", description : "..."},
-        {ID : 2, poster : ".", name : ".", description : "..."},
-        {ID : 3, poster : ".", name : ".", description : "..."}
+        // Make it a recommended element not a recommended movie element.
+    let rec_movies = [
+        {ID : 0, active : true, poster : "SpiderMan.jpeg", name : "Spider Man", description : "Peter parker gets biten by a spider and becomes spider man, a hero"},
+        {ID : 1, active : false, poster : "Lorax", name : "The lorax", description : "The lorax is a movie about saving the enviorment. A young boy wonders from the city to an old run down house where he hears stories about how trees were everywhere, the mysterious man has more then just stories for the boy..."},
+        {ID : 2, active : false, poster : "NONE", name : "NONE", description : "NONE"},
+        {ID : 3, active : false, poster : "SpiderMan.jpeg", name : "Some filler information", description : "Need to make a proper DB or data."}
     ]
     const poster = import.meta.glob(['$lib/assets/movie_poster/**.jpeg', '$lib/assets/movie_poster/**.webp'], {eager : true, query: "?url", import: "default"});
     const noPoster = "no_poster_found.webp";
 
 </script>
 
-<div style="height: 5em;">
-    <!-- Outer container to scroll through all movies -->
-    <div class="row d-flex flex-row">
-        {#each movies as movie}
-            <div class="card bg-dark text-white p-3 col-sm-12 col-md-6 col-lg-4" style="border : 2px solid cyan; border-radius: 1rem;">
-                <div class="d-flex justify-content-center my-2">
-                    {#if poster['/src/lib/assets/movie_poster/' + movie.poster] != null}
-                        <a href="/movie/{movie.name}"><img class="mx-4" style="max-height: 25rem;" src={poster['/src/lib/assets/movie_poster/' + movie.poster]} alt="{movie.name} promotional poster"></a>
-                    {:else}
-                        <a href="/movie/{movie.name}"><img class="mx-4" style="max-height: 25rem;" src={poster['/src/lib/assets/movie_poster/' + noPoster]} alt="No poster found"></a>
-                    {/if}
-                </div>
-                <div class="mx-2">
-                    <h1>{movie.name}</h1>
-                    <p>{movie.description}</p>
-                </div>
-            </div>
-    {/each}
+<!-- Made with the help of documentation -->
+<!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
 
+<div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {#each rec_movies as movie}
+            {#if true === movie.active}
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" class="active" aria-label="Movie slider {movie.name}"></button>
+            {:else}
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" aria-label="Movie slider {movie.name}"></button>
+            {/if}
+        {/each}
     </div>
 
+    <div class="carousel-inner">
+        {#each rec_movies as movie, i}
+            {#if poster['/src/lib/assets/movie_poster/' + movie.poster] === undefined}
+
+                <div class="carousel-item {movie.active ? 'active' : ''}">
+                    <div class="d-flex bg-primary w-100" style="height: 32rem;">
+                        <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + noPoster]} alt='promotional poster {movie.name}'>
+                        <div class="m-5">
+                            <h2>{movie.name}</h2>
+                            <p>{movie.description}</p>
+                        </div>
+                    </div>
+                </div>
+
+            {:else}
+
+                <div class="carousel-item {movie.active ? 'active' : ''}">
+                    <div class="d-flex bg-primary w-100" style="height : 32rem">
+                        <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + movie.poster]} alt='promotional poster {movie.name}'>
+                        <div class="m-5">
+                            <h2>{movie.name}</h2>
+                            <p>{movie.description}</p>
+                        </div>
+                    </div>
+                </div>
+
+            {/if}
+        {/each}
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon " aria-hidden="true" alt="Previous"></span>
+<!-- prevents werning about no content -->
+        <span class="visually-hidden">Previous</span>
+    </button>
+    
+    <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon text-danger" aria-hidden="true"></span>
+<!-- prevents werning about no content -->
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
