@@ -45,21 +45,21 @@ You can preview the production build with `npm run preview`.
 # TODO
 
 ## GLEN
-    - [ ] Create the home page
-        - [X] Movie recommendation element
-            - [ ] Create movie recommendation DB
-    - [ ] Create an account signup page
-    - [ ] Create a navigation bar
+- [ ] Create the home page
+    - [X] Movie recommendation element
+        - [ ] Create movie recommendation DB
+- [ ] Create an account signup page
+- [ ] Create a navigation bar
 
 ## ALEX
-    - [ ] Create a feedback element
-    - [ ] Create the layout style
-    - [ ] Verify layout styling is consisent
+- [ ] Create a feedback element
+- [ ] Create the layout style
+- [ ] Verify layout styling is consisent
 
 ## LAUREN 
-    - [ ] Create a contact page
-    - [ ] Check usability and accessibility
-    - [ ] Verify layout styling is consisent
+- [ ] Create a contact page
+- [ ] Check usability and accessibility
+- [ ] Verify layout styling is consisent
 
 
 # What we are doing
