@@ -21,4 +21,46 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
+<div class="d-flex justify-content-between">
+	<h1>REEL MOVIES</h1>
+	<nav class="navbar navbar-expand navbar-light bg-light justify-content-end">
+		<ul class="navbar-nav">
+			<li class="nav-item me-5">Home</li>
+			<li class="nav-item me-5">Movies</li>
+			<li class="nav-item me-5">Menu</li>
+			<li class="nav-item me-5">Account</li>
+		</ul>
+	</nav>
+</div>
+
 {@render children()}
+
+<footer class="RM-BKP d-flex justify-content-around">
+
+	<div class="my-auto ms-5 py-4">
+	<h2>REEL MOVIES</h2>
+	</div>
+
+	<div class="my-auto ms-5 py-4">
+		<nav class="navbar">
+			<ul class="navbar-nav">
+				<a class="nav-link" href="#"><li>About Reel Movies</li></a>
+				<a class="nav-link" href="#"><li>About Us</li></a>
+			</ul>
+		</nav>
+	</div>
+
+	<div class="my-auto me-5 py-4">
+		<nav class="navbar">
+			<ul class="navbar-nav">
+				<a class="nav-link" href="#"><li>Account</li></a>
+				<a class="nav-link" href="#"><li>Feedback</li></a>
+				<a class="nav-link" href="#"><li>Contact us</li></a>
+			</ul>
+		</nav>
+	</div>
+
+</footer>
+
+
+<link rel="stylesheet" href="/src/styles/style.css">

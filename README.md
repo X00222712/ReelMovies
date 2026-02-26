@@ -80,3 +80,9 @@ To help make this a reference helps
     - Seat selection screen
     - Payment screen for seats
     - Payment screen for food
+    - Contact us page
+    - Feedback page
+    - Account signup page
+    - Account signin page
+    - Purchases page
+    - View purchase details page

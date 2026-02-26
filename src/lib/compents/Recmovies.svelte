@@ -17,7 +17,7 @@
 <!-- Made with the help of documentation -->
 <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
 
-<div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="movieCarousel" class="carousel slide RM-BKB" data-bs-ride="carousel">
     <div class="carousel-indicators">
         {#each rec_movies as movie}
             {#if true === movie.active}
@@ -33,7 +33,7 @@
             {#if poster['/src/lib/assets/movie_poster/' + movie.poster] === undefined}
 
                 <div class="carousel-item {movie.active ? 'active' : ''}">
-                    <div class="d-flex bg-primary w-100" style="height: 32rem;">
+                    <div class="d-flex w-100" style="height: 32rem;">
                         <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + noPoster]} alt='promotional poster {movie.name}'>
                         <div class="m-5">
                             <h2>{movie.name}</h2>
@@ -45,7 +45,7 @@
             {:else}
 
                 <div class="carousel-item {movie.active ? 'active' : ''}">
-                    <div class="d-flex bg-primary w-100" style="height : 32rem">
+                    <div class="d-flex w-100" style="height : 32rem">
                         <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + movie.poster]} alt='promotional poster {movie.name}'>
                         <div class="m-5">
                             <h2>{movie.name}</h2>
