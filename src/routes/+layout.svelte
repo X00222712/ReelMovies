@@ -21,14 +21,14 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="d-flex justify-content-between">
+<div class="p-3 d-flex justify-content-between">
 	<h1>REEL MOVIES</h1>
 	<nav class="navbar navbar-expand navbar-light bg-light justify-content-end">
 		<ul class="navbar-nav">
-			<li class="nav-item me-5">Home</li>
-			<li class="nav-item me-5">Movies</li>
-			<li class="nav-item me-5">Menu</li>
-			<li class="nav-item me-5">Account</li>
+			<a class="nav-link nav-item me-5" href="#"><li>Home</li></a>
+			<a class="nav-link nav-item me-5" href="#"><li>Movies</li></a>
+			<a class="nav-link nav-item me-5" href="#"><li>Menu</li></a>
+			<a class="nav-link nav-item me-5" href="#"><li>Account</li></a>
 		</ul>
 	</nav>
 </div>
