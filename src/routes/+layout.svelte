@@ -13,6 +13,19 @@
 		window.addEventListener("scroll", handleScroll);
 	});
 		let { children } = $props();
+	import { onMount } from 'svelte';
+
+	// Browser test to see if client or server side
+	import { browser } from '$app/environment';
+	import 'bootstrap/dist/css/bootstrap.min.css';
+	import 'bootstrap-icons/font/bootstrap-icons.min.css';
+
+	onMount( async () => {
+		if (browser) {
+			await import('bootstrap');
+		}
+	})
+
 </script>
 <nav class="navbar navbar-expand-lg fixed-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
   <div class="container">
