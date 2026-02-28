@@ -13,7 +13,6 @@
 		window.addEventListener("scroll", handleScroll);
 	});
 		let { children } = $props();
-	import { onMount } from 'svelte';
 
 	// Browser test to see if client or server side
 	import { browser } from '$app/environment';
@@ -27,7 +26,7 @@
 	})
 
 </script>
-<nav class="navbar navbar-expand-lg fixed-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
+<nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
   <div class="container">
 
     <!-- Logo -->
