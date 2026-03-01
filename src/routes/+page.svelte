@@ -1,6 +1,9 @@
 <script>
     import Recmovies from "$lib/compents/Recmovies.svelte";
 
+    let { data } = $props();
+    let recMovies = data.recMovies
+
     // TODO
         // Make a DB so this is dynamic
     let user_content = {
@@ -23,5 +26,5 @@
     </div>
 </div>
 
-<Recmovies/>
+<Recmovies { recMovies }/>
 

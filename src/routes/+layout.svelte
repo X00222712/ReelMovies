@@ -140,41 +140,29 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<div class="p-3 d-flex justify-content-between">
-	<h1>REEL MOVIES</h1>
-	<nav class="navbar navbar-expand navbar-light bg-light justify-content-end">
-		<ul class="navbar-nav">
-			<a class="nav-link nav-item me-5" href="#"><li>Home</li></a>
-			<a class="nav-link nav-item me-5" href="#"><li>Movies</li></a>
-			<a class="nav-link nav-item me-5" href="#"><li>Menu</li></a>
-			<a class="nav-link nav-item me-5" href="#"><li>Account</li></a>
-		</ul>
-	</nav>
-</div>
-
 {@render children()}
 
-<footer class="RM-BKP d-flex justify-content-around">
+<footer class="RM-BKP d-flex justify-content-around text-center">
 
-	<div class="my-auto ms-5 py-4">
-	<h2>REEL MOVIES</h2>
+	<div class="my-auto ms-2 ms-md-5 py-md-4">
+	<a class="fw-bold link-body-emphasis link-offset-2 link-underline-dark link-underline-opacity-75" href="/"><h2>REEL MOVIES</h2></a>
 	</div>
 
-	<div class="my-auto ms-5 py-4">
+	<div class="my-auto py-4">
 		<nav class="navbar">
 			<ul class="navbar-nav">
-				<a class="nav-link" href="#"><li>About Reel Movies</li></a>
-				<a class="nav-link" href="#"><li>About Us</li></a>
+				<a class="nav-link my-2 py-md-0 fs-4" href="#"><li>About Reel Movies</li></a>
+				<a class="nav-link my-2 py-md-0 fs-4" href="#"><li>About Us</li></a>
 			</ul>
 		</nav>
 	</div>
 
-	<div class="my-auto me-5 py-4">
+	<div class="my-auto ps-3 me-4 me-md-5 py-4">
 		<nav class="navbar">
 			<ul class="navbar-nav">
-				<a class="nav-link" href="#"><li>Account</li></a>
-				<a class="nav-link" href="#"><li>Feedback</li></a>
-				<a class="nav-link" href="#"><li>Contact us</li></a>
+				<a class="nav-link my-1 my-md-0 fs-4" href="#"><li>Account</li></a>
+				<a class="nav-link my-1 my-md-0 fs-4" href="#"><li>Feedback</li></a>
+				<a class="nav-link my-1 my-md-0 fs-4" href="#"><li>Contact us</li></a>
 			</ul>
 		</nav>
 	</div>

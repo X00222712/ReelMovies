@@ -49,10 +49,10 @@ You can preview the production build with `npm run preview`.
     - [X] Movie recommendation element
         - [ ] Create movie recommendation DB
 - [ ] Create an account signup page
-- [X] Create a navigation bar
 - [X] Create a footer
 
 ## ALEX
+- [X] Create a navigation bar
 - [ ] Create a feedback element
 - [ ] Create the layout style
 - [ ] Verify layout styling is consisent
