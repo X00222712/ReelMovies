@@ -13,7 +13,6 @@
 		window.addEventListener("scroll", handleScroll);
 	});
 		let { children } = $props();
-	import { onMount } from 'svelte';
 
 	// Browser test to see if client or server side
 	import { browser } from '$app/environment';
@@ -27,7 +26,7 @@
 	})
 
 </script>
-<nav class="navbar navbar-expand-lg fixed-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
+<nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
   <div class="container">
 
     <!-- Logo -->
@@ -118,6 +117,7 @@
   }
 
   .nav-link:hover::after {
+    box-shadow: 0 -2px 8px 1px #a0e2f3;
     width: 100%;
   }
 
@@ -125,12 +125,13 @@
     background: #a755c2;
     border-radius: 30px;
     color: white !important;
-    transition: 0.3s ease;
+    transition: 0.5s ease-in;
+    transition: 0.2s ease-out;
   }
 
   .btn-ticket:hover {
-    background: #a755c2;
-    box-shadow: 0 0 20px #a755c2;
+    background: #112977;
+    box-shadow: 0 0 20px #a0b3f3;
   }
 
   .navbar-toggler {
