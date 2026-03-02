@@ -50,29 +50,29 @@
       <ul class="navbar-nav gap-lg-4 text-center">
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="/">Home</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Movies</a>
+          <a class="nav-link" href="/movies">Movies</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Food</a>
+          <a class="nav-link" href="/food">Food</a>
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Loyalty Program</a>
+          <a class="nav-link" href="/loyalty">Loyalty Program</a>
         </li>
 
 		    <li class="nav-item">
-          <a class="nav-link" href="#">Account</a>
+          <a class="nav-link" href="/account">Account</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/contact">Contact us</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link btn-ticket ms-lg-3 px-3" href="#">
+          <a class="nav-link btn-ticket ms-lg-3 px-3" href="/tickets">
             Book Tickets
           </a>
         </li>
