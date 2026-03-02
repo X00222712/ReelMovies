@@ -65,10 +65,12 @@
           <a class="nav-link" href="#">Loyalty Program</a>
         </li>
 
-		<li class="nav-item">
+		    <li class="nav-item">
           <a class="nav-link" href="#">Account</a>
         </li>
-
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Contact us</a>
+        </li>
         <li class="nav-item">
           <a class="nav-link btn-ticket ms-lg-3 px-3" href="#">
             Book Tickets
