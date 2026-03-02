@@ -13,7 +13,7 @@
 		window.addEventListener("scroll", handleScroll);
 	});
 		let { children } = $props();
-	import { onMount } from 'svelte';
+
 
 	// Browser test to see if client or server side
 	import { browser } from '$app/environment';
@@ -142,3 +142,61 @@
 </svelte:head>
 
 {@render children()}
+
+
+<footer class="footer bg-dark text-light pt-5 pb-4 mt-5">
+  <div class="container">
+    <div class="row gy-4">
+
+      <!-- Brand -->
+      <div class="col-lg-4 col-md-6">
+        <h5 class="fw-semibold">ReelMovies</h5>
+        <p class="text-secondary small mt-3">
+          This is a fictional movie booking web application created for our 2nd year project. All content, including movie titles, showtimes, and offers, is purely illustrative and does not represent real data or services.
+        </p>
+      </div>
+
+      <!-- Navigation -->
+      <div class="col-lg-2 col-md-6">
+        <h6 class="fw-semibold mb-3">Explore</h6>
+        <ul class="list-unstyled">
+          <li><a href="/" class="footer-link">Home</a></li>
+          <li><a href="/movies" class="footer-link">Movies</a></li>
+          <li><a href="/food" class="footer-link">Food</a></li>
+          <li><a href="/loyalty" class="footer-link">Loyalty Program</a></li>
+          <li><a href="/account" class="footer-link">Account</a></li>
+          <li><a href="/tickets" class="footer-link">Book Tickets</a></li>
+        </ul>
+      </div>
+
+      <!-- Support -->
+      <div class="col-lg-3 col-md-6">
+        <h6 class="fw-semibold mb-3">Support</h6>
+        <ul class="list-unstyled">
+          <li><a href="#" class="footer-link">Contact Us</a></li>
+        </ul>
+      </div>
+
+       <div class="col-lg-3 col-md-6">
+        <h6 class="fw-semibold mb-3">Opening hours</h6>
+        <ul class="list-unstyled">
+        <p class="text-secondary small mt-3">Mon - Friday: 9 AM - 10 PM</p>
+        <p class="text-secondary small mt-3">Saturday: 10 AM - 11 PM</p>
+        <p class="text-secondary small mt-3">Sunday: 10 AM - 10 PM</p>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr class="border-secondary my-4" />
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center small text-secondary">
+      <span>© {new Date().getFullYear()} ReelMovies. All rights reserved.</span>
+      <div class="mt-2 mt-md-0">
+        <a href="#" class="footer-link me-3">Instagram</a>
+        <a href="#" class="footer-link me-3">Twitter</a>
+        <a href="#" class="footer-link">Facebook</a>
+      </div>
+    </div>
+  </div>
+</footer>
