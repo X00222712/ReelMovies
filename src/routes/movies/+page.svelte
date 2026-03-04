@@ -99,5 +99,8 @@
       <p>No movies found.</p>
     {/if}
   </div>
-
 </div>
+
+<style>
+
+</style>
