@@ -60,6 +60,8 @@ You can preview the production build with `npm run preview`.
 - [ ] Create a contact page
 - [ ] Check usability and accessibility
 - [ ] Verify layout styling is consisent
+- [ ] Food page
+
 
 
 # What we are doing
