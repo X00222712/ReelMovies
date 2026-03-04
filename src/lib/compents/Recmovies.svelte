@@ -25,7 +25,7 @@
     </div>
 
     <div class="carousel-inner">
-        <div style="height: 40rem;">
+        <div class="mt-5" style="height: 40rem; margin-inline: 10%;">
             {#each recMovies as movie, i}
                 {#if poster['/src/lib/assets/movie_poster/' + movie.poster] === undefined}
 

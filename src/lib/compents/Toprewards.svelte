@@ -3,27 +3,20 @@
     const menu = import.meta.glob(['$lib/assets/menu/**.jpeg', '$lib/assets/menu/**.webp', '$lib/assets/menu/*/*.png'], {eager : true, query: "?url", import: "default"});
 
     async function reedemPoint(id) {
-        console.log(userToken)
-        const rsp = await fetch("/", {
-            method: 'POST',
-            body: JSON.stringify({userToken}),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+
         console.log(rsp);
     }
 
 </script>
 
-<div class="d-flex flex-wrap">
+<div class="d-flex flex-wrap justify-content-around">
     {#each rewardItems as item}
 
-        <div class="d-flex justify-content-between border border-2 border-dark p-2 m-1" style="min-width: 30%; max-width: 48%; max-height: 15rem;">
-            <img class="w-50" src={menu['/src/lib/assets/menu/' + item.image]} alt="image of {item.name}">
-            <div>
+        <div class="col-6 RM-reward-item d-flex flex-column flex-md-row justify-content-around border border-2 border-dark p-2 m-1">
+            <img class="mx-auto mx-md-4 p-2" src={menu['/src/lib/assets/menu/' + item.image]} alt="image of {item.name}">
+            <div class="mt-5 pb-3 mx-auto text-center text-sm-start">
                 <h3 class="m-0">{item.name}</h3>
-                <p class="pe-3">{item.price}RM points</p>
+                <p><strong>{item.price}RM</strong> points</p>
                 <input id="clickme" type="button" value="Reedem" class="btn btn-warning btn-reedem" onclick={reedemPoint}/>
             </div>
         </div>
@@ -33,6 +26,16 @@
 </div>
 
 <style>
+    .RM-reward-item {
+        width: fit-content;
+    }
+    @media (max-width: 768px)
+    {
+        .RM-reward-item {
+            width: 100%;
+        }
+    }
+
     .btn-reedem {
         transition: 0.2s ease-out;
     }

@@ -30,7 +30,7 @@
   <div class="container">
 
     <!-- Logo -->
-    <a class="navbar-brand fw-bold text-white" href="#">
+    <a class="navbar-brand fw-bold text-white" href="/">
       ReelMovies
     </a>
 
