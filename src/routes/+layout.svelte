@@ -13,7 +13,6 @@
 
     window.addEventListener("scroll", handleScroll);
 
-    
     import('bootstrap');
 
     return () => {
