@@ -11,10 +11,9 @@
       scrolled = window.scrollY > 20;
     };
 
-		window.addEventListener("scroll", handleScroll);
-	});
-		let { children } = $props();
+    window.addEventListener("scroll", handleScroll);
 
+    
     import('bootstrap');
 
     return () => {
@@ -22,56 +21,9 @@
     };
   });
 </script>
-<nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
-  <div class="container">
-
-    <!-- Logo -->
-    <a class="navbar-brand fw-bold text-white" href="#">
-      ReelMovies
-    </a>
-
-    <!-- Toggle Button -->
-    <button
-      class="navbar-toggler text-white border-0"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarContent"
-    >
-      ☰
-    </button>
-
-    <!-- Nav Links -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
-      <ul class="navbar-nav gap-lg-4 text-center">
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Movies</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Food</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="#">Loyalty Program</a>
-        </li>
-
-		<li class="nav-item">
-          <a class="nav-link" href="#">Account</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link btn-ticket ms-lg-3 px-3" href="#">
-            Book Tickets
-          </a>
-        </li>
-
-      </ul>
-    </div>
+<svelte:head>
+  <link rel="icon" href={favicon} />
+</svelte:head>
 
 <div class="app-wrapper">
 
@@ -258,6 +210,3 @@
 }
 </style>
 
-<svelte:head>
-  <link rel="icon" href={favicon} />
-</svelte:head>
