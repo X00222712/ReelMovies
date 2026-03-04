@@ -4,8 +4,6 @@
 
 </script>
 <h3 class="text-center">Contact Us</h3>
-<h3 class="text-center">Contact Us</h3>
-<h3 class="text-center">Contact Us</h3>
 
 <form class="text-center mt-4">
   <div class="text-center mb-3">

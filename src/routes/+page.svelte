@@ -1,5 +1,5 @@
 <script>
-    import Recmovies from "$lib/compents/Recmovies.svelte";
+    import Recmovies from "$lib/components/Recmovies.svelte";
 </script>
 
 <h1>Welcome to SvelteKit</h1>
