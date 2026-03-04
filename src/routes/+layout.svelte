@@ -49,6 +49,7 @@
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
           <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
+          <li class="nav-item"><a class="nav-link" href="/feedback">Feedback</a></li>
 
           <li class="nav-item">
             <a class="nav-link btn-ticket ms-lg-3 px-3" href="/tickets">
@@ -160,13 +161,13 @@
 }
 
 .navbar-brand {
-  color: var(--text-main) !important;
+  color: var(--text-main);
   font-size: 1.4rem;
   letter-spacing: 1px;
 }
 
 .nav-link {
-  color: var(--text-muted) !important;
+  color: var(--text-muted);
   font-weight: 500;
   position: relative;
   transition: 0.3s ease;
@@ -184,7 +185,7 @@
 }
 
 .nav-link:hover {
-  color: var(--text-main) !important;
+  color: var(--text-main);
 }
 
 .nav-link:hover::after {
@@ -194,7 +195,7 @@
 .btn-ticket {
   background: var(--accent);
   border-radius: 30px;
-  color: white !important;
+  color: white;
   padding: 6px 18px;
   transition: 0.3s ease;
 }
