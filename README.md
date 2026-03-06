@@ -46,10 +46,16 @@ You can preview the production build with `npm run preview`.
 
 ## GLEN
 - [ ] Create the home page
+    - [X] Use cookies to get user data
+    - [X] Reward point recommendation element
     - [X] Movie recommendation element
+    - [ ] Screening times of top movies
+    - [ ] About Reel movies blurb
+
+    - [X] movie recommendation DB
+        - [X] Create movie recommendation Service
+        - [X] Create movie recommendation Data Access
         - [ ] Create movie recommendation DB
-- [ ] Create an account signup page
-- [X] Create a footer
 
 ## ALEX
 - [X] Create a navigation bar
