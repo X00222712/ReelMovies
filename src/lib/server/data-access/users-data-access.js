@@ -8,7 +8,7 @@ const users = [
 ];
 
 let userCookies =  {
-    "123" : 1
+    "123" : 0
 };
 
 export const usersDataAccess = {

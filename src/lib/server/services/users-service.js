@@ -17,16 +17,17 @@ export const usersService = {
         if ('string' === typeof user_cookie && user_cookie.length <= 32)
         {
             const userData = await usersDataAccess.getUserDetails(user_cookie);
-            if (!userData) { throw new NotFoundError("Could not find user data"); }
+            if (!userData) { return { username : "Guest", RMPoints : 0, signout : true}; }
             return userData
         }
         else
-            { throw new ValidationError("Param was not valid"); }
+            {throw new ValidationError(`Param was not valid cookie was ${typeof user_cookie}`); }
     },
 
     async signinUser(username, userpassword)
     {
         const userId = await usersDataAccess.getUserIdFromName(username);
         const userPas = await usersDataAccess.getUserPasswordFromId(userId);
+        return "123";
     }
 }
