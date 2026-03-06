@@ -1,25 +1,37 @@
 <script>
-  import 'bootstrap/dist/css/bootstrap.min.css';
-  import 'bootstrap-icons/font/bootstrap-icons.min.css';
-  import favicon from '$lib/assets/favicon.svg';
-  import { onMount } from "svelte";
+    import favicon from '$lib/assets/favicon.svg';
+    import { onMount } from "svelte";
 
-  let scrolled = false;
+    // Browser test to see if client or server side
+    import { browser } from '$app/environment';
+    import 'bootstrap/dist/css/bootstrap.min.css';
+	import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-  onMount(() => {
+	onMount( async () => {
+		if (browser) {
+			await import('bootstrap');
+		}
+	})
+
+    let { children } = $props();
+
+
+    let scrolled = false;
+
+
     const handleScroll = () => {
-      scrolled = window.scrollY > 20;
+        scrolled = window.scrollY > 20;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    onMount(() => {
+        window.addEventListener("scroll", handleScroll);
 
-    import('bootstrap');
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    });
 </script>
+
 <svelte:head>
   <link rel="icon" href={favicon} />
 </svelte:head>
