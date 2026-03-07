@@ -7,28 +7,28 @@
 
   // Mock data (replace later with DB)
   let movies = [
-    {
-      id: 1,
-      title: "Interstellar",
-      genre: "Sci-Fi",
-      rating: "PG-13",
-      poster: "https://via.placeholder.com/300x450"
-    },
-    {
-      id: 2,
-      title: "The Batman",
-      genre: "Action",
-      rating: "PG-13",
-      poster: "https://via.placeholder.com/300x450"
-    },
-    {
-      id: 3,
-      title: "Coco",
-      genre: "Animation",
-      rating: "G",
-      poster: "https://via.placeholder.com/300x450"
-    }
-  ];
+  {
+    id: 1,
+    title: "Interstellar",
+    genre: "Sci-Fi",
+    rating: "PG-13",
+    poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg"
+  },
+  {
+    id: 2,
+    title: "The Batman",
+    genre: "Action",
+    rating: "PG-13",
+    poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+  },
+  {
+    id: 3,
+    title: "Coco",
+    genre: "Animation",
+    rating: "G",
+    poster: "https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg"
+  }
+];
 
   const genres = ["All", "Action", "Sci-Fi", "Animation"];
   const ratings = ["All", "G", "PG", "PG-13", "R"];
