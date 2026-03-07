@@ -57,6 +57,17 @@ You can preview the production build with `npm run preview`.
         - [X] Create movie recommendation Data Access
         - [ ] Create movie recommendation DB
 
+    - [X] Create signing page
+        - [X] Signin tokens
+        - [X] Signout
+        - [X] Service layers
+        - [X] Data access layer
+        - [ ] DB
+
+    - [X] Create signup page
+        - [X] Create profiles
+        - [X] Auto login
+
 ## ALEX
 - [X] Create a navigation bar
 - [ ] Create a feedback element

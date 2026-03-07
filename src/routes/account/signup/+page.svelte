@@ -1,16 +1,16 @@
 <script>
 	import { enhance } from '$app/forms';
+
     let { data, form } = $props();
     let signedIn = $state(false);
-
 </script>
 
 <div>
-    <form class="mx-5 my-5 text-center" method="post" action="?/signin">
-        <h2 class="py-3">Sign into ReelMovies</h2>
+    <form class="mx-5 my-5 text-center" method="post" action="?/signup">
+        <h2 class="py-3">Sign up for ReelMovies</h2>
 
-        {#if 200 != form?.status && form != null}
-                    <strong><p class="text-danger fs-5">Username or password incorrect</p></strong>
+        {#if "TAKEN" === form?.status && form != null}
+                    <strong><p class="text-warning fs-5">Username is already taken</p></strong>
         {/if}
         <div class="form-group d-flex flex-column mx-3 align-items-center">
             <input
@@ -32,13 +32,10 @@
                 required
             />
 
-            <div class="d-flex flex-column w-100 align-items-center">
-                <button class="btn btn-primary my-3" type="submit">Sign in</button>
-                <button class="btn btn-primary w-25 mt-3">
-                    <a style="color:aliceblue; text-decoration: none;" href="/account/signup">Create new account</a>
-                </button>
+            <div class="d-flex w-100 flex-column align-items-center">
+                <button class="btn btn-primary w-50 my-3" type="submit">Create account</button>
+                <a href="/account/signin" class="w-50 mt-3"><button class="btn btn-primary">Sign In</button></a>
             </div>
-
         </div>
     </form>
 </div>
@@ -49,8 +46,9 @@
         border-bottom: 3px solid #0000AA;
         width: 50%;
     }
+
     button {
-        width: 50%;
+        width: 30%;
     }
 
     @media (max-width: 576px) {
