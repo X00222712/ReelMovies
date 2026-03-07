@@ -50,5 +50,16 @@ export const usersService = {
     },
 
     async signoutUser(userCookie)
-        { await usersDataAccess.endUserSession(userCookie); }
+        { await usersDataAccess.endUserSession(userCookie); },
+
+
+    async addUser(username, password)
+    {
+        // Validated username and password
+        // TODO
+        if(await usersDataAccess.userRegistered(username))
+            { return "TAKEN" }
+        await usersDataAccess.addUser(username, password);
+        return "OK"
+    }
 }

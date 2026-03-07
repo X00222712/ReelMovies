@@ -1,4 +1,11 @@
-const users = [
+// Remove when DB added
+let users = [
+    {
+        id: 0,
+        username : "Admin",
+        password : "password123",
+        RMPoints : 1_000_000
+    },
     {
         id : 1,
         username : "Glen",
@@ -10,19 +17,15 @@ const users = [
         username : "Alex",
         password : "SuperCool",
         RMPoints : 40
-    },
-    {
-        id: 0,
-        username : "Admin",
-        password : "password123",
-        RMPoints : 1_000_000
     }
 ];
-
+// Remove when DB added
+let nextId = 5;
 
 // Must remove when the DB is added
 let userCookies =  {};
 
+// Remove until "here" when DB added
 function selectIDFromUsername(username)
 {
     let id = -1;
@@ -68,6 +71,7 @@ function getUserIdFromCookie(hash)
     });
     return ID;
 }
+// Here
 
 export const usersDataAccess = {
     async getUserDetails(cookie)
@@ -99,6 +103,7 @@ export const usersDataAccess = {
         return 1
     },
 
+    // Simpy endUserSession functions when DB added
     async endUserSessionIds(ID)
         { delete userCookies[ID]; },
 
@@ -106,5 +111,30 @@ export const usersDataAccess = {
     {
         let userId = getUserIdFromCookie(userCookie)
         delete userCookies[userId];
+    },
+
+    // Add user data to the DB
+    async addUser(username, password)
+    {
+        users.push(
+            {
+                id : nextId,
+                username : username,
+                password : password,
+                RMPoints : 0
+            }
+        )
+        nextId++;
+    },
+
+    // Verify inforamtion
+    async userRegistered(username)
+    {
+        let userPresent = await selectIDFromUsername(username);
+        // The user is not in the DB
+        if (-1 === userPresent)
+            { return false; }
+        // The user is in the DB
+        return true;
     }
 };
