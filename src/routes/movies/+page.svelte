@@ -48,12 +48,8 @@
 </script>
 
 <div class="container py-5">
-
   <h2 class="mb-4">Movies</h2>
-
-  <!-- Search + Filters -->
   <div class="row g-3 mb-4">
-
     <div class="col-md-4">
       <input
         type="text"
@@ -62,18 +58,16 @@
         bind:value={search}
       />
     </div>
-
     <div class="col-md-3">
       <select
         class="form-select"
         bind:value={selectedGenre}
-      >
+        >
         {#each genres as genre}
           <option>{genre}</option>
         {/each}
       </select>
     </div>
-
     <div class="col-md-3">
       <select
         class="form-select"
@@ -84,10 +78,7 @@
         {/each}
       </select>
     </div>
-
   </div>
-
-  <!-- Movie Grid -->
   <div class="row g-4">
     {#if filteredMovies.length > 0}
       {#each filteredMovies as movie}
