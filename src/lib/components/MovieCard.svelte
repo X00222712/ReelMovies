@@ -6,26 +6,21 @@
 
   <div class="poster-wrapper">
     <img src={movie.poster} alt={movie.title} />
-
     <div class="rating-badge">
       {movie.rating}
     </div>
-
     <div class="overlay">
       <a href="/tickets" class="btn btn-ticket">Book Tickets</a>
     </div>
   </div>
-
   <div class="movie-info">
     <h5>{movie.title}</h5>
     <span class="genre">{movie.genre}</span>
   </div>
-
 </div>
 
 <style>
 
-/* Card container */
 .movie-card {
   background: rgba(28, 37, 65, 0.75);
   backdrop-filter: blur(14px);
@@ -40,13 +35,11 @@
   box-shadow: 0 25px 45px rgba(0,0,0,0.5);
 }
 
-/* Poster area */
 .poster-wrapper {
   position: relative;
   overflow: hidden;
 }
 
-/* Poster image */
 .poster-wrapper img {
   width: 100%;
   height: 340px;
@@ -58,7 +51,6 @@
   transform: scale(1.08);
 }
 
-/* Overlay when hovering */
 .overlay {
   position: absolute;
   inset: 0;
@@ -74,7 +66,6 @@
   opacity: 1;
 }
 
-/* Rating badge */
 .rating-badge {
   position: absolute;
   top: 10px;
@@ -87,7 +78,6 @@
   color: white;
 }
 
-/* Movie info section */
 .movie-info {
   padding: 1rem;
 }
@@ -99,7 +89,6 @@
   margin-bottom: 6px;
 }
 
-/* Genre tag */
 .genre {
   font-size: 0.8rem;
   color: rgba(255,255,255,0.7);
@@ -108,7 +97,6 @@
   border-radius: 8px;
 }
 
-/* Button */
 .btn-ticket {
   border-radius: 30px;
   font-weight: 600;
