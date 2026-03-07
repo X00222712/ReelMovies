@@ -4,7 +4,7 @@
 
     let { data } = $props();
     // Cookie
-    let userToken = $state(data.userToken);
+    let userToken = data.userToken;
     // Data
     let userData = data.userData;
     let recMovies = data.recMovies;

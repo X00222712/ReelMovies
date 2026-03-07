@@ -7,8 +7,10 @@ export async function load( { cookies } ) {
     checkoutCookies( cookies );
     let userToken = cookies.get("userToken");
     let userData = await usersService.getUserDetails(userToken);
-    if (!userData)
-    { cookies.set("userToken", null, {path : "/"})}
+    if (!userData || userData.signout)
+        { cookies.set("userToken", null, {path : "/"}) }
+
+    userToken = cookies.get("userToken");
 
     const recommendedMovies = await recommendedMoviesService.getRecommendedMovies();
     const rewards = await rewardsService.getRecommendedRewards();
@@ -23,10 +25,8 @@ export async function load( { cookies } ) {
     };
 }
 
-
 function checkoutCookies(cookies)
 {
-    console.log(String.undefined === cookies.get("userToken"))
     if (String.undefined === cookies.get("userToken"))
-    { cookies.set("userToken", null, { path: "/"}); }
+        { cookies.set("userToken", null, { path: "/"}); }
 }
