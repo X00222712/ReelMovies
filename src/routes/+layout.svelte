@@ -64,6 +64,7 @@
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
           <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
+          <li class="nav-item"><a class="nav-link" href="/about">About us</a></li>
           <li class="nav-item"><a class="nav-link" href="/feedback">Feedback</a></li>
 
           <li class="nav-item">
