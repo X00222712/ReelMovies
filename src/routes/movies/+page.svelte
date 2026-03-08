@@ -1,50 +1,31 @@
 <script>
   import MovieCard from '$lib/components/MovieCard.svelte';
 
-  let search = "";
-  let selectedGenre = "All";
-  let selectedRating = "All";
+  let search = $state("");
+  let selectedGenre = $state("All");
+  let selectedRating = $state("All");
 
-  // Mock data (replace later with DB)
-  let movies = [
-  {
-    id: 1,
-    title: "Interstellar",
-    genre: "Sci-Fi",
-    rating: "PG-13",
-    poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg"
-  },
-  {
-    id: 2,
-    title: "The Batman",
-    genre: "Action",
-    rating: "PG-13",
-    poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
-  },
-  {
-    id: 3,
-    title: "Coco",
-    genre: "Animation",
-    rating: "G",
-    poster: "https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg"
-  }
-];
+  let {data} = $props();
+
+  // replace with requests to POST
+  let movies = data.movies
+  console.log(movies)
 
   const genres = ["All", "Action", "Sci-Fi", "Animation"];
   const ratings = ["All", "G", "PG", "PG-13", "R"];
 
-  $: filteredMovies = movies.filter((movie) => {
+  let filteredMovies = $derived(movies.filter((movie) => {
     const matchesSearch =
-      movie.title.toLowerCase().includes(search.toLowerCase());
+        movie.title.toLowerCase().includes(search.toLowerCase());
 
     const matchesGenre =
-      selectedGenre === "All" || movie.genre === selectedGenre;
+        selectedGenre === "All" || movie.genre === selectedGenre;
 
-    const matchesRating =
-      selectedRating === "All" || movie.rating === selectedRating;
+    const matchesRating = 
+        selectedRating === "All" || movie.rating === selectedRating;
 
     return matchesSearch && matchesGenre && matchesRating;
-  });
+  }));
 </script>
 
 <div class="container py-5">

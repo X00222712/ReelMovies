@@ -40,7 +40,7 @@
 
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
-    <div class="container">
+    <div class="container jusify-content-between px-0">
 
       <a class="navbar-brand fw-bold text-white" href="/">
         ReelMovies
@@ -62,13 +62,10 @@
           <li class="nav-item"><a class="nav-link" href="/movies">Movies</a></li>
           <li class="nav-item"><a class="nav-link" href="/food">Food</a></li>
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
-          <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
-          <li class="nav-item"><a class="nav-link" href="/about">About us</a></li>
-          <li class="nav-item"><a class="nav-link" href="/feedback">Feedback</a></li>
 
           <li class="nav-item">
-            <a class="nav-link btn-ticket ms-lg-3 px-3" href="/tickets">
+            <a class="nav-link btn-ticket ms-lg-3 px-3" href="/purchase/tickets">
               Book Tickets
             </a>
           </li>
@@ -76,12 +73,24 @@
         </ul>
       </div>
 
+      <div class="ms-5 d-none d-lg-flex">
+        <a href="/account/">
+          <div
+          class="bg-white"
+          style="border-radius: 50%; scale: 180%; width:fit-content">
+              <i class="bi bi-person-fill bg-white"></i>
+              <span class="visually-hidden">Next</span>
+          </div>
+        </a>
+      </div>
+
     </div>
   </nav>
 
   <!-- PAGE CONTENT -->
   <main>
-    <slot />
+  <!-- SLOT renders webpage -->
+    <slot/>
   </main>
 
   <!-- FOOTER -->
@@ -96,6 +105,10 @@
             This is a fictional movie booking web application created for our 2nd year project.
             All content is purely illustrative and does not represent real data or services.
           </p>
+          <ul>
+            <li><a href="/about" class="footer-link">About us</a></li>
+            <li><a href="/#" class="footer-link">About ReelMovies</a></li>
+          </ul>
         </div>
 
         <!-- Navigation -->
@@ -116,6 +129,7 @@
           <h6 class="fw-semibold mb-3">Support</h6>
           <ul class="list-unstyled">
             <li><a href="/contact" class="footer-link">Contact Us</a></li>
+            <li><a href="/feedback" class="footer-link">Feedback</a></li>
           </ul>
         </div>
 
