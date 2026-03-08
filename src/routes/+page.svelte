@@ -1,15 +1,14 @@
 <script>
-    import Recmovies from "$lib/compents/Recmovies.svelte";
-    import Toprewards from "$lib/compents/Toprewards.svelte";
+    import Recmovies from "$lib/components/Recmovies.svelte";
+    import Toprewards from "$lib/components/Toprewards.svelte";
 
     let { data } = $props();
     // Cookie
-    let userToken = $state(data.userToken);
+    let userToken = data.userToken;
     // Data
     let userData = data.userData;
     let recMovies = data.recMovies;
     let rewardItems = data.rewards;
-
 </script>
 
 <div class="p-2 RM-BKG">
