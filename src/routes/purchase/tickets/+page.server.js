@@ -5,34 +5,76 @@ export async function load( { cookie } ) {
     const times = {
         "Interstellar" : [
             {
-                screen: 1,
+                screen: "screen 1",
                 time: "9 AM"
             },
             {
-                screen: 2,
+                screen: "screen 2",
                 time: "11:15 AM"
             }
         ],
         "The Batman" : [
             {
-                screen: 2,
+                screen: "screen 2",
                 time: "9 AM"
             },
             {
-                screen: 2,
+                screen: "screen 2",
                 time: "13:15 PM"
             }
         ],
         "Coco" : [
             {
-                screen: 1,
+                screen: "screen 1",
                 time: "11:15 AM"
             },
             {
-                screen: 2,
+                screen: "screen 2",
                 time: "19:30 PM"
             }
         ]
     };
-    return { movies : movies, movieTimes : times}
+    const screens = {
+        "screen 1" : {
+            seats : [
+                "SSSSSDDDD",
+                "SSSSSSSSS",
+                "RRRRRRRRR",
+                "VVVVVVVVV",
+                "RRRRRRRRR"
+            ],
+            taken : [
+                "0,7",
+                "0,8",
+                "1,1",
+                "1,2",
+                "1,4",
+                "1,5",
+                "1,8",
+                "3,3",
+                "4,7",
+            ]
+        },
+        "screen 2" : {
+            seats : [
+                "SSSSSDDDD",
+                "SSSSSSSSS",
+                "RRRRRRRRR",
+                "VVVVVVVVV",
+                "VVVVVVVVV"
+            ],
+            taken : [
+                "0,7",
+                "0,8",
+                "1,1",
+                "1,2",
+                "1,4",
+                "1,5",
+                "1,8",
+                "3,3",
+                "4,7",
+            ]
+        }
+    }
+    return { movies : movies, movieTimes : times, screens : screens}
 }
