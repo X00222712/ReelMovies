@@ -6,7 +6,7 @@
 </script>
 
 <div>
-    <form class="mx-5 my-5 text-center" method="post" action="?/signup">
+    <form class="rounded-4 w-75 mx-auto my-5 text-center" method="post" action="?/signup" style="box-shadow: 0 0 25px;">
         <h2 class="py-3">Sign up for ReelMovies</h2>
 
         {#if "TAKEN" === form?.status && form != null}
@@ -21,6 +21,7 @@
                 id="username"
                 autocomplete="off"
                 required
+                style="box-shadow: 0 0 5px;"
             />
             <input
                 class="form-control my-5"
@@ -30,11 +31,14 @@
                 id="password"
                 autocomplete="off"
                 required
+                style="box-shadow: 0 0 5px;"
             />
 
-            <div class="d-flex w-100 flex-column align-items-center">
-                <button class="btn btn-primary w-50 my-3" type="submit">Create account</button>
-                <a href="/account/signin" class="w-50 mt-3"><button class="btn btn-primary">Sign In</button></a>
+            <div class="d-flex flex-column w-100 align-items-center">
+                <button class="btn btn-success w-75 my-3" type="submit">Create account</button>
+                    <button class="btn btn-secondary my-3">
+                        <a style="color: aliceblue; text-decoration: none;" href="/account/signin" class="w-100 my-3">Sign In</a>
+                    </button>
             </div>
         </div>
     </form>
@@ -48,7 +52,7 @@
     }
 
     button {
-        width: 30%;
+        width: 50%;
     }
 
     @media (max-width: 576px) {

@@ -1,7 +1,6 @@
 import { usersService } from '$lib/server/services/users-service';
 import { recommendedMoviesService } from '$lib/server/services/recmovies-service';
 import { rewardsService } from '$lib/server/services/rewards-service';
-import { undefined } from 'zod/v3';
 
 export async function load( { cookies } ) {
     checkoutCookies( cookies );

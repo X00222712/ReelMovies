@@ -11,7 +11,7 @@
     let rewardItems = data.rewards;
 </script>
 
-<div class="p-2 RM-BKG">
+<div class="p-2">
 
     <!-- Greetings -->
     <div class="d-flex justify-content-between">
