@@ -62,6 +62,7 @@
           <li class="nav-item"><a class="nav-link" href="/movies">Movies</a></li>
           <li class="nav-item"><a class="nav-link" href="/menu">Menu</a></li>
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
+          <li class="nav-item d-lg-none"><a class="nav-link" href="/account">Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
 
           <li class="nav-item">
