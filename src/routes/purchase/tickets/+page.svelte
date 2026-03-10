@@ -122,7 +122,7 @@
                 <h2 class="border border-3 border-dark text-center w-50 mx-auto" style="margin-top: 5rem;">SCREEN</h2>
 
                 <div class="py-5">
-                    <div class="screen-seats d-flex justify-content-center py-3" style="box-shadow: 0 0 30px; background-color: rgb(0, 0, 0, 0.5);">
+                    <div class="screen-seats mx-auto p-4 py-5 rounded-4" style="box-shadow: 0 0 30px; width:fit-content">
                         <div>
                             {#each screen.seats as row, i}
                                 <div class="d-flex flex-row justify-content-center">

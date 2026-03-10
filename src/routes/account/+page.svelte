@@ -40,8 +40,13 @@
 
 {:else}
 
-
-    <a href="/"><h2>You are signed out, go home?</h2></a>
+    <div class="p-4 d-flex d-flex justify-content-between">
+        <a href="/"><h2>You are signed out, go home?</h2></a>
+        <div class="me-2 my-auto">
+            <a href="/account/signup"><button type="button" class="btn btn-dark me-3 my-auto">Sign up</button></a>
+            <a href="/account/signin"><button type="button" class="btn" style="background-color: #70d6ff;">Sign In</button></a>
+        </div>
+    </div>
 
 
 {/if}

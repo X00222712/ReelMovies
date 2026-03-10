@@ -27,9 +27,10 @@
 
     {#if null === userToken || "null" == userToken}
         <!-- Rewards advertising -->
-        <div class="ms-4">
+        <div class="mx-5 my-3 p-2 rounded" style="box-shadow: 0 0 15px;">
             <h3>Don't have an account?</h3>
-            <p class="ms-3">Don't worry ... Some filler content</p>
+            <p class="ms-2 m-0"><a href="/account/signup" alt="Signup" style="text-decoration: none;">Sign up</a> now to get exclusive deals, Reel Movie reward points and easier booking management!</p>
+            <p class="ms-2">Discover our movies and menu with <strong>reel</strong> good deals today.</p>
         </div>
     {:else}
         <!-- Reward points -->

@@ -22,7 +22,7 @@
         selectedGenre === "All" || movie.genre === selectedGenre;
 
     const matchesRating = 
-        selectedRating === "All" || movie.rating === selectedRating;
+        selectedRating === "All" || movie.ageRating === selectedRating;
 
     return matchesSearch && matchesGenre && matchesRating;
   }));
