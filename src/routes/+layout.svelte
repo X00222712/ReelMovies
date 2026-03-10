@@ -60,7 +60,7 @@
 
           <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/movies">Movies</a></li>
-          <li class="nav-item"><a class="nav-link" href="/food">Food</a></li>
+          <li class="nav-item"><a class="nav-link" href="/menu">Menu</a></li>
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
 
