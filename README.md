@@ -75,10 +75,9 @@ You can preview the production build with `npm run preview`.
 - [ ] Verify layout styling is consisent
 
 ## LAUREN 
-- [ ] Create a contact page
-- [ ] Check usability and accessibility
-- [ ] Verify layout styling is consisent
-- [ ] Food page
+- [x] Check usability and accessibility
+- [x] Verify layout styling is consisent
+- [x] Food page
 
 
 
