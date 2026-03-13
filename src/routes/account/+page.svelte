@@ -51,6 +51,10 @@
 
 {/if}
 
+<a href="/tests">
+    <h1>Tests</h1>
+</a>
+
 <style>
 
     .form-style {

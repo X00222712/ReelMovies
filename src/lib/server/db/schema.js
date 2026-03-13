@@ -1,21 +1,19 @@
 import { primaryKey } from 'drizzle-orm/gel-core';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { user } from './auth.schema';
 
-export const task = sqliteTable('task', {
-	id: text('id')
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	title: text('title').notNull(),
-	priority: integer('priority').notNull().default(1)
-});
+// Start of Glen's DB work
+
+
+
+// End of Glen's work
+
 
 export const food = sqliteTable('food', {
-
-  id: integer().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-
-  price: integer().notNull(), 
-  image: text()
-  
+	id: integer().primaryKey({ autoIncrement: true }),
+	name: text().notNull(),
+	price: integer().notNull(),
+	image: text()
 });
 
+export * from './auth.schema';
