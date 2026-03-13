@@ -1,50 +1,34 @@
 <script>
+
   import MovieCard from '$lib/components/MovieCard.svelte';
+
+  export let data;
+
+  let movies = data.movies;
 
   let search = "";
   let selectedGenre = "All";
   let selectedRating = "All";
 
-  // Mock data (replace later with DB)
-  let movies = [
-  {
-    id: 1,
-    title: "Interstellar",
-    genre: "Sci-Fi",
-    rating: "PG-13",
-    poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg"
-  },
-  {
-    id: 2,
-    title: "The Batman",
-    genre: "Action",
-    rating: "PG-13",
-    poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
-  },
-  {
-    id: 3,
-    title: "Coco",
-    genre: "Animation",
-    rating: "G",
-    poster: "https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg"
-  }
-];
+  const genres = ["All", ...data.genres.map(g => g.name)];
+  const ratings = ["All", ...data.ratings.map(r => r.rating)];
 
-  const genres = ["All", "Action", "Sci-Fi", "Animation"];
-  const ratings = ["All", "G", "PG", "PG-13", "R"];
 
-  $: filteredMovies = movies.filter((movie) => {
-    const matchesSearch =
-      movie.title.toLowerCase().includes(search.toLowerCase());
+ $: filteredMovies = movies.filter((movie) => {
 
-    const matchesGenre =
-      selectedGenre === "All" || movie.genre === selectedGenre;
+  const matchesSearch =
+    movie.title.toLowerCase().includes(search.toLowerCase());
 
-    const matchesRating =
-      selectedRating === "All" || movie.rating === selectedRating;
+  const matchesGenre =
+    selectedGenre === "All" || movie.genre.includes(selectedGenre);
 
-    return matchesSearch && matchesGenre && matchesRating;
-  });
+  const matchesRating =
+    selectedRating === "All" || movie.rating === selectedRating;
+
+  return matchesSearch && matchesGenre && matchesRating;
+
+});
+
 </script>
 
 <div class="container py-5">
