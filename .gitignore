@@ -24,5 +24,3 @@ vite.config.ts.timestamp-*
 test-results
 # SQLite
 *.db
-.env
-.env

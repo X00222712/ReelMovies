@@ -9,3 +9,4 @@ npm install
 if exist .\local.db rm .\local.db
 
 npm run db:push
+npm run dev
