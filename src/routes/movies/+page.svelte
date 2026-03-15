@@ -11,14 +11,16 @@
   let movies = data.movies
   console.log(movies)
 
-  const genres = ["All", "Action", "Sci-Fi", "Animation"];
-  const ratings = ["All", "G", "PG", "PG-13", "R"];
+
+  const genres = ["All", ...data.genres];
+  const ratings = ["All", ...data.ratings];
 
   let filteredMovies = $derived(movies.filter((movie) => {
     const matchesSearch =
         movie.title.toLowerCase().includes(search.toLowerCase());
 
     const matchesGenre =
+
         selectedGenre === "All" || movie.genre === selectedGenre;
 
     const matchesRating = 
