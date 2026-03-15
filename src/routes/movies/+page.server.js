@@ -1,4 +1,4 @@
-import db from '$lib/server/db';
+import db from "$lib/server/db";
 
 export function load() {
 
@@ -8,7 +8,7 @@ export function load() {
       movies.title,
       movies.rating,
       movies.poster,
-      GROUP_CONCAT(genres.name, ', ') as genre
+      GROUP_CONCAT(genres.name, ', ') AS genre
     FROM movies
     LEFT JOIN movie_genres ON movies.id = movie_genres.movie_id
     LEFT JOIN genres ON genres.id = movie_genres.genre_id
@@ -25,7 +25,7 @@ export function load() {
 
   return {
     movies,
-    genres,
-    ratings
+    genres: genres.map(g => g.name),
+    ratings: ratings.map(r => r.rating)
   };
 }
