@@ -1,4 +1,3 @@
-import { auth } from "$lib/server/auth";
 import { assert } from "node:console"
 
 export function TestResults(amountOfTests)
@@ -24,60 +23,73 @@ export function TestResults(amountOfTests)
 
 export function TestCase(data, expected)
 {
-    assert('object' === typeof data);
-// This is the test
-    this.data = data;
-    this.expected = expected
-
-    this.testNumber = -1;
-    this.message = "No message added";
-    this.result = false;
+    assert('object' === typeof data)
+// ----------------------------
+// This is the test          //
+// ----------------------------
+    this.data = data         //
+    this.expected = expected //
+// ----------------------------
+    this.testNumber = -1
+    this.message = "No message added"
+    this.result = false
 
     this.setTestNumber = (testNumber) => {
-        assert('number' === typeof testNumber);
-        this.testNumber = testNumber ?? -1;
+        assert('number' === typeof testNumber)
+        this.testNumber = testNumber ?? -1
     }
-    this.addMessage = (message) => { this.message = message; }
-    this.passedTest = () => { this.result = true; }
+    this.addMessage = (message) => { this.message = message }
+    this.passedTest = () => { this.result = true }
 }
 
-export async function runTest(testData) {
+export async function runTest(testData, testCallback) {
     let testResult = new TestResults(testData.length)
     for(let index = 0; index < testData.length; index++) {
         let testCase = testData[index]
+        testCase.setTestNumber(index+1)
         
         try {
             // Check if the test result is expected
+            let result = await testCallback(testCase.data);
 
-            let name = testCase.data.name
-            let email = testCase.data.email
-            let password = testCase.data.password
-
-            let result = await auth.api.signUpEmail({
-                body : {
-                    name,
-                    email,
-                    password
-                }
-            })
-            console.log("RESULT OF API", result)
-            testResult.passedTest(testCase)
+            // Uncomment to see the result of the callback
+            // console.log("RESULT OF callback", result)
+            // console.log("EXPECTED", testCase.expected)
+            // console.log("Equal", result === testCase.expected)
+            // console.log("Equal", result == testCase.expected)
+            console.log(('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
+            console.log(result, testCase.expected)
+            if (('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
+            {
+                testCase.addMessage(result)
+                testCase.passedTest()
+                testResult.passedTest(testCase)
+            }
+            else
+            {
+                testCase.addMessage(result)
+                testResult.failedTest(testCase)
+            }
 
         } catch (error)
         {
-            // Test has failed
-            if (testCase.expected === error.message)
-                {
-                    console.log("PASSED")
-                    testResult.passedTest(testCase)
-                }
-            else {
-                console.log("FAILED")
-                testResult.failedTest(testCase)
-
-                console.log(error.message)
-                console.log(typeof error.message, typeof testCase.expected)
+            // console.log(('object' === typeof testCase.expected && testCase.expected.includes(error.message)) || ('string' === typeof testCase.expected && error.message === testCase.expected))
+            // console.log(error, testCase.expected)   
+            if (('object' === typeof testCase.expected && testCase.expected.includes(error.message)) || ('string' === typeof testCase.expected && error.message === testCase.expected))
+            {
+                testCase.addMessage(error.message)
+                testCase.passedTest()
+                testResult.passedTest(testCase)
             }
+            else
+            {
+                testCase.addMessage(error.message)
+                testResult.failedTest(testCase)
+            }
+            // Uncomment to see index and error messages
+            console.log(typeof error.message, typeof testCase.expected)
+            console.log(error.message == testCase.expected)
+            console.log(index, `"${error.message}"`, " :: ", `"${testCase.expected}"`)
         }
     };
     return testResult;

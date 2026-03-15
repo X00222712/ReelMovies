@@ -1,7 +1,7 @@
 import { undefined } from 'zod'
 import { usersDataAccess } from '../data-access/users-data-access.js'
 // Utils
-import { NotFoundError, ValidationError } from '../utils/errors.js'
+import { NotFoundError, ValidationError, AlreadyExists } from '../utils/errors.js'
 import { genCookieUserSession } from '../utils/secure-number.js'
     // Validation
 
@@ -26,27 +26,11 @@ export const usersService = {
     {
         const userId = await usersDataAccess.getUserIdFromName(username);
         if (-1 === userId)
-        { return "NO SIGNIN" }
+        { throw new NotFoundError("Username or password wrong") }
         const userPas = await usersDataAccess.getUserPasswordFromId(userId);
         if (-1 === userPas)
-        { return "NO SIGNIN" }
+        { throw new NotFoundError("Username or password wrong") }
 
-        // New user token
-        if (userpassword === userPas)
-        {
-            const shaCookie = await genCookieUserSession(username, userpassword)
-            // Session Already Found
-            if(!await usersDataAccess.startNewUserSession(userId, shaCookie))
-                {
-                    console.log("3")
-                    await usersDataAccess.endUserSessionIds(userId);;
-                    // Session Already Found ABORT
-                    if(!await usersDataAccess.startNewUserSession(userId, shaCookie))
-                        { return "SAF"; }
-                }
-            return shaCookie;
-        }
-        return "NO SIGNIN";
     },
 
     async signoutUser(userCookie)
@@ -58,8 +42,7 @@ export const usersService = {
         // Validated username and password
         // TODO
         if(await usersDataAccess.userRegistered(username))
-            { return "TAKEN" }
+            { throw new AlreadyExists("Username Already exits")}
         await usersDataAccess.addUser(username, password);
-        return "OK"
     }
 }

@@ -1,20 +1,72 @@
 import { runTest, TestCase } from "$lib/server/utils/tests";
-import { json } from "@sveltejs/kit";
-import test from "node:test";
 
-export async function GET() {
+import { validateInsertUser } from "$lib/server/db/validation";
+import { usersService } from "$lib/server/services/users-service";
+
+import { json } from "@sveltejs/kit";
+import { auth } from "$lib/server/auth";
+import test from "node:test";
+import { ValidationError } from "$lib/server/utils/errors";
+import { ZodError } from "zod";
+
+export async function GET( { cookies } ) {
     // Load test data
+    let userSigninCookie = cookies.get("better-auth.session_token")
+    // console.log(userSigninCookie)
+
     let testData = [
-        new TestCase({ name : "Glen", email : "a@a.ie", password : "Hashed" }, ""),
-        new TestCase({ name : "Glen", email : "a@a.ie", password : "Hashed" }, ""),
-        new TestCase({ name : "Glen", email : "a", password : "Hashed" }, "[body.email] Invalid email address"),
-        new TestCase({ name : "Glen", email : "a@a", password : "Hashed" }, "[body.email] Invalid email address"),
-        new TestCase({ name : "", email : "a@a", password : "Hashed" }, "[body.email] Invalid email address"),
-        new TestCase({ name : "", email : "", password : "Hashed" }, "[body.email] Invalid email address; [body.password] Too small: expected string to have >=1 characters"),
-        new TestCase({ name : "", email : "", password : "" }, "[body.name] Invalid input: expected string, received null; [body.email] Invalid input: expected string, received null; [body.password] Invalid input: expected string, received null"),
-        new TestCase({ name : null, email : null, password : null }, "Password too short")
+
+        new TestCase({name : "Glen", email : "use@test.ie", password : "Password123"}, ["name : Glen, email : use@test.ie", "User already exists. Use another email."]),
+        new TestCase({name : "Glen", email : "use@test.ie", password : "Password123"}, "User already exists. Use another email."),
+        new TestCase({name : "hi", email : "test@test.ie", password : "Password123"}, "Username must be at least 4 characters"),
+        new TestCase({name : "12345678901234567890123", email : "test@test.ie", password : "Password123"}, "User already exists. Use another email."),
+        new TestCase({name : "Glen", email : "test", password : "Password123"}, "Must be a valid email"),
+        new TestCase({name : "Glen", email : "test@test", password : "Password123"}, "Must be a valid email"),
+        new TestCase({name : null, email : "test@test.ie", password : "Password123"}, "Invalid input: expected string, received null"),
+        new TestCase({name : "", email : "test@test.ie", password : "Password123"}, "Username cannot be null Username must be at least 4 characters"),
+        new TestCase({name : "Glen", email : null, password : "Password123"}, "Invalid input: expected string, received null"),
+        new TestCase({name : "Glen", email : "", password : "Password123"}, "Email Cannot be null Must be a valid email"),
+        new TestCase({name : "Glen", email : "test@test.ie", password : null}, "Cannot read properties of undefined (reading 'run')"),
+        new TestCase({name : "Glen", email : "test@test.ie", password : ""}, "Cannot read properties of undefined (reading 'run')"),
+
     ]
-    let testResult = await runTest(testData);
+    let testResult = await runTest(testData, async (data) => {
+            let name = data.name
+            let email = data.email
+            let password = data.password
+
+            try
+            { validateInsertUser.parse(data); }
+            catch (error)
+            {
+                let errorOut = error.message
+                if(error instanceof ZodError)
+                    {
+                        let errors = JSON.parse(error.message)
+                        errorOut = ""
+                        errors.forEach(errorEvent => {
+                            errorOut += errorEvent.message + " "
+                        });
+
+                    }
+                let errorMessage = errorOut.trim()
+                throw new ValidationError(errorMessage)
+            }
+
+
+            let result = await auth.api.signUpEmail({
+                body : {
+                    name,
+                    email,
+                    password
+                }
+            })
+            // console.log(result)
+
+            // Restore to original usertoken
+            cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
+            return `name : ${result.user.name}, email : ${result.user.email}`;
+    });
     return json({ name : "accountSignup", data : testResult }, {status : 200});
 
 }

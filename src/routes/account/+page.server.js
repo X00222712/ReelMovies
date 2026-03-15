@@ -1,8 +1,6 @@
 import { usersService } from "$lib/server/services/users-service";
 import { json } from "@sveltejs/kit";
 
-import { newAccount } from "./test";
-
 
 export async function load( { cookies } ) {
     let userToken = cookies.get("userToken");
@@ -20,10 +18,7 @@ export const actions = {
     {
         let userToken =  cookies.get("userToken")
         cookies.set("userToken", null, {path : "/"});
-
-        if (usersService.signoutUser(userToken))
-            { return { status : 409 }; }
-
+        usersService.signoutUser(userToken)
         return {status : 200}
     }
 }
