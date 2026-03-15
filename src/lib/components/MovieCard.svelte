@@ -7,10 +7,10 @@
   <div class="poster-wrapper">
     <img src={movie.poster} alt={movie.title} />
     <div class="rating-badge">
-      {movie.rating}
+      {movie.ageRating}
     </div>
     <div class="overlay">
-      <a href="/tickets" class="btn btn-ticket">Book Tickets</a>
+      <a href="/purchase/tickets?movie={movie.title}" class="btn btn-ticket">Book Tickets</a>
     </div>
   </div>
   <div class="movie-info">

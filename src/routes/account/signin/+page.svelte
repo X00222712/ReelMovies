@@ -1,0 +1,66 @@
+<script>
+	import { enhance } from '$app/forms';
+    let { data, form } = $props();
+    let signedIn = $state(false);
+
+</script>
+
+<div>
+    <form class="rounded-4 w-75 mx-auto my-5 text-center" method="post" action="?/signin" style="box-shadow: 0 0 25px;">
+        <h2 class="py-3">Sign into ReelMovies</h2>
+
+        {#if 200 != form?.status && form != null}
+                    <strong><p class="text-danger fs-5">Username or password incorrect</p></strong>
+        {/if}
+        <div class="form-group d-flex flex-column align-items-center">
+            <input
+                class="form-control my-2"
+                type="text" 
+                placeholder="Username"
+                name="username" 
+                id="username"
+                autocomplete="off"
+                required
+                style="box-shadow: 0 0 5px;"
+            />
+            <input
+                class="form-control my-5"
+                type="text"
+                placeholder="Password"
+                name="password"
+                id="password"
+                autocomplete="off"
+                required
+                style="box-shadow: 0 0 5px;"
+            />
+
+            <div class="d-flex flex-column w-100 align-items-center">
+                <button class="btn btn-success my-3 w-75" type="submit">Sign in</button>
+                <button class="btn btn-secondary my-3 ">
+                    <a style="color:aliceblue; text-decoration: none;" href="/account/signup">Create new account</a>
+                </button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<style>
+    input {
+        border: 0px;
+        border-bottom: 3px solid #0000AA;
+        width: 50%;
+    }
+    button {
+        width: 50%;
+    }
+
+    @media (max-width: 576px) {
+        input {
+            border: 0px;
+            border-bottom: 3px solid #0000AA;
+            width: 100%;
+        }
+    }
+</style>
+

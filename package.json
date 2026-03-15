@@ -45,6 +45,8 @@
 	"dependencies": {
 		"better-sqlite3": "^12.6.2",
 		"bootstrap": "^5.3.8",
-		"bootstrap-icons": "^1.13.1"
+		"bootstrap-icons": "^1.13.1",
+		"drizzle-zod": "^0.8.3",
+		"zod": "^4.3.6"
 	}
 }

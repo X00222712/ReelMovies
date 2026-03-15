@@ -1,72 +1,130 @@
 <script>
+	import { onMount } from "svelte";
+
     // Maybe make logic to personalise movies
     // TODO
         // Make a recommended DB for easy modifycation
         // Make it a recommended element not a recommended movie element.
-    let rec_movies = [
-        {ID : 0, active : true, poster : "SpiderMan.jpeg", name : "Spider Man", description : "Peter parker gets biten by a spider and becomes spider man, a hero"},
-        {ID : 1, active : false, poster : "Lorax", name : "The lorax", description : "The lorax is a movie about saving the enviorment. A young boy wonders from the city to an old run down house where he hears stories about how trees were everywhere, the mysterious man has more then just stories for the boy..."},
-        {ID : 2, active : false, poster : "NONE", name : "NONE", description : "NONE"},
-        {ID : 3, active : false, poster : "SpiderMan.jpeg", name : "Some filler information", description : "Need to make a proper DB or data."}
-    ]
-    const poster = import.meta.glob(['$lib/assets/movie_poster/**.jpeg', '$lib/assets/movie_poster/**.webp'], {eager : true, query: "?url", import: "default"});
-    const noPoster = "no_poster_found.webp";
+    let { recMovies } = $props();
+    let movies = $state();
+
+    onMount(async () =>
+    {
+        let data = await fetch(
+            "/movies/",
+            {
+                method : "POST",
+                body : JSON.stringify({ info: "recommened movies" }),
+                headers:
+                {
+                    "Content-Type": "application/json",
+                },
+            }
+        ).then(
+            response => response.json()
+        )
+        movies = data.movies
+    })
 
 </script>
 
 <!-- Made with the help of documentation -->
 <!-- https://getbootstrap.com/docs/5.0/components/carousel/ -->
 
-<div id="movieCarousel" class="carousel slide" data-bs-ride="carousel">
+<div id="movieCarousel" class="carousel carousel-dark slide my-5" data-bs-ride="carousel" style="box-shadow: 0 0px 25px;">
     <div class="carousel-indicators">
-        {#each rec_movies as movie}
+        {#each recMovies as movie}
             {#if true === movie.active}
-                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" class="active" aria-label="Movie slider {movie.name}"></button>
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" class="active" aria-label="Movie slider {movie.title}"></button>
             {:else}
-                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" aria-label="Movie slider {movie.name}"></button>
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" aria-label="Movie slider {movie.title}"></button>
             {/if}
         {/each}
     </div>
 
     <div class="carousel-inner">
-        {#each rec_movies as movie, i}
-            {#if poster['/src/lib/assets/movie_poster/' + movie.poster] === undefined}
+        <div class="mt-5" style="height: 40rem; margin-inline: 15%;">
 
-                <div class="carousel-item {movie.active ? 'active' : ''}">
-                    <div class="d-flex bg-primary w-100" style="height: 32rem;">
-                        <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + noPoster]} alt='promotional poster {movie.name}'>
-                        <div class="m-5">
-                            <h2>{movie.name}</h2>
+            {#each movies as movie, i}
+
+                <div class="carousel-item {movie.active ? 'active' : ''}" style="transition: 1.2s ease;">
+                    <div class="d-flex flex-md-row flex-column w-100">
+                        <div class="ms-3 mb-2 d-flex flex-column align-items-center">
+                            <img
+                                src="{movie.poster}"
+                                alt="{movie.title} poster"
+                                class="rounded col-3 align-self-center align-self-md-left mb-md-0 ms-md-3"
+                                style="width: 200px; height: 320px; object-fit: cover; box-shadow: 0 0 15px black;"
+                            />
+
+                            <h2 class="m-0 px-3 mt-4" style="width: fit-content;">⭐ {movie.rating} / 10</h2>
+
+                        </div>
+                            <!-- class="d-block my-auto py-4 mx-auto mx-md-5" -->
+                            <!-- style="max-height: 25rem; margin-left: 10%" -->
+
+                        <div class="px-4">
+                            <div>
+                                <h2>{movie.title}</h2>
+                                <div class="d-flex gap-4 mt-2">
+                                    <p
+                                        class="rounded-pill px-2 py-1 fw-bolder text-white"
+                                        style="background: var(--accent); font-size: 0.75rem; width:fit-content; height:fit-content"
+                                    >
+                                        {movie.ageRating}
+                                    </p>
+                                    <p class="fs-5">
+                                        {movie.runtime}
+                                    </p>
+                                </div>
+                            </div>
                             <p>{movie.description}</p>
                         </div>
                     </div>
                 </div>
+                
+            {/each}
 
-            {:else}
-
-                <div class="carousel-item {movie.active ? 'active' : ''}">
-                    <div class="d-flex bg-primary w-100" style="height : 32rem">
-                        <img class="d-block my-auto" style="max-height: 25rem; margin-left: 10%" src={poster['/src/lib/assets/movie_poster/' + movie.poster]} alt='promotional poster {movie.name}'>
-                        <div class="m-5">
-                            <h2>{movie.name}</h2>
-                            <p>{movie.description}</p>
-                        </div>
-                    </div>
-                </div>
-
-            {/if}
-        {/each}
+        </div>
     </div>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon " aria-hidden="true" alt="Previous"></span>
+    <button class="carousel-control-prev" type="button" data-bs-target="#movieCarousel" data-bs-slide="prev" style="box-shadow: 5px 0 15px -5px;">
+        <span class="carousel-control-prev-icon" aria-hidden="true" alt="Previous"></span>
 <!-- prevents werning about no content -->
         <span class="visually-hidden">Previous</span>
     </button>
     
-    <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#movieCarousel" data-bs-slide="next" style="box-shadow: -5px 0 15px -5px;">
         <span class="carousel-control-next-icon text-danger" aria-hidden="true"></span>
 <!-- prevents werning about no content -->
         <span class="visually-hidden">Next</span>
     </button>
 </div>
+
+<style>
+    .carousel-control-prev {
+        opacity: 100%;
+        transition: 0.6s ease;
+        background-color: #444;
+        filter: none;
+    }
+    .carousel-control-next {
+        opacity: 100%;
+        transition: 0.6s ease;
+        background-color: #444;
+        filter: none;
+    }
+
+
+    .carousel-control-prev:hover {
+        transition: 0.6s ease;
+        background-color: #242424;
+        filter: none;
+    }
+    .carousel-control-next:hover {
+        transition: 0.6s ease;
+        background-color: #242424;
+        filter: none;
+    }
+
+</style>

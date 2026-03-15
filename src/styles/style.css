@@ -1,0 +1,23 @@
+.RM-BKB {
+    background-color: #70d6ff;
+    color: #003459;
+
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.RM-BKG {
+    background-color: #50C050;
+    color: #003459;
+
+    border-top: 1px solid black;
+    border-bottom: 2px solid black;
+}
+
+.RM-BKP {
+    background-color: #fd82d4;
+    color: #003459;
+    
+    border-top: 1px solid black;
+    border-bottom: 2px solid black;
+}
