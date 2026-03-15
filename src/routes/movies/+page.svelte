@@ -12,8 +12,8 @@
   console.log(movies)
 
 
-  const genres = ["All", ...data.genres];
-  const ratings = ["All", ...data.ratings];
+  const genres = ["All"];
+  const ratings = ["All"];
 
   let filteredMovies = $derived(movies.filter((movie) => {
     const matchesSearch =
