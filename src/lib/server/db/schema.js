@@ -1,21 +1,18 @@
-import { primaryKey } from 'drizzle-orm/gel-core';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
-export const task = sqliteTable('task', {
-	id: text('id')
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	title: text('title').notNull(),
-	priority: integer('priority').notNull().default(1)
+export const movies = sqliteTable("movies", {
+  id: integer("id").primaryKey(),
+  title: text("title"),
+  rating: text("rating"),
+  poster: text("poster")
 });
 
-export const food = sqliteTable('food', {
-
-  id: integer().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-
-  price: integer().notNull(), 
-  image: text()
-  
+export const genres = sqliteTable("genres", {
+  id: integer("id").primaryKey(),
+  name: text("name")
 });
 
+export const movieGenres = sqliteTable("movie_genres", {
+  movieId: integer("movie_id"),
+  genreId: integer("genre_id")
+});

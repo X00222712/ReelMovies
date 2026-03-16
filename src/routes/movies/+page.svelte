@@ -1,33 +1,35 @@
 <script>
   import MovieCard from '$lib/components/MovieCard.svelte';
 
+  let { data } = $props();
+
   let search = $state("");
   let selectedGenre = $state("All");
   let selectedRating = $state("All");
 
-  let {data} = $props();
+  let movies = data.movies;
 
-  // replace with requests to POST
-  let movies = data.movies
-  console.log(movies)
+  const genres = ["All", ...data.genres];
 
+  const ratings = ["All","G","PG","PG-13","R"];
 
-  const genres = ["All"];
-  const ratings = ["All"];
+  let filteredMovies = $derived(
+    movies.filter((movie) => {
 
-  let filteredMovies = $derived(movies.filter((movie) => {
-    const matchesSearch =
+      const matchesSearch =
         movie.title.toLowerCase().includes(search.toLowerCase());
 
-    const matchesGenre =
+      const matchesGenre =
+        selectedGenre === "All" ||
+        movie.genres?.includes(selectedGenre);
 
-        selectedGenre === "All" || movie.genre === selectedGenre;
+      const matchesRating =
+        selectedRating === "All" ||
+        movie.rating === selectedRating;
 
-    const matchesRating = 
-        selectedRating === "All" || movie.ageRating === selectedRating;
-
-    return matchesSearch && matchesGenre && matchesRating;
-  }));
+      return matchesSearch && matchesGenre && matchesRating;
+    })
+  );
 </script>
 
 <div class="container py-5">
