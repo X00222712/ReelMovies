@@ -3,11 +3,11 @@ import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const food = sqliteTable('food', {
 
-  id: integer("id").primaryKey({ autoIncrement: true }),
-  name: text("name").notNull(),
+  id: integer().primaryKey({ autoIncrement: true }),
+  name: text().notNull(),
 
-  price: integer("price").notNull(), 
-  image: text("img")
+  price: integer().notNull(), 
+  image: text()
   
 });
 
