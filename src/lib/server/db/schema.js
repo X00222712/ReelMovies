@@ -4,7 +4,21 @@ import { user } from './auth.schema';
 
 // Start of Glen's DB work
 
+export const admins = sqliteTable('admins', {
+	id: integer().primaryKey({autoIncrement : true}),
+    userId: integer("user_id", { mode : "number"})
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	privilage: integer({ mode: 'boolean' }).default(false).notNull()
+})
 
+export const rewardPoints = sqliteTable("rewardpoints", {
+	userId: integer("user_id", { mode : "number"})
+		.notNull()
+		.primaryKey()
+		.references(() => user.id, { onDelete: "cascade" }),
+	points: integer({mode : "number"}).default(0)
+})
 
 // End of Glen's work
 

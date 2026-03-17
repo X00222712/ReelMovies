@@ -2,24 +2,11 @@ import { usersService } from "$lib/server/services/users-service";
 import { json } from "@sveltejs/kit";
 
 
-export async function load( { cookies } ) {
-    let userToken = cookies.get("userToken");
-    let signedIn = true;
+export async function load( { cookies, locals } ) {
+    let signedIn = false;
 
-    if (String.undefined === userToken || null === userToken || "null" === userToken)
-        { signedIn = false; }
-    else { signedIn = true; }
+    if (locals?.user)
+        { signedIn = true }
 
     return { signedIn: signedIn}
 }
-
-export const actions = {
-    signout: async ({ request, cookies }) =>
-    {
-        let userToken =  cookies.get("userToken")
-        cookies.set("userToken", null, {path : "/"});
-        usersService.signoutUser(userToken)
-        return {status : 200}
-    }
-}
-

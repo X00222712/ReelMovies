@@ -6,7 +6,7 @@
 {#if signedIn}
 
     <div class="d-flex justify-content-end">
-        <form  method="post" action="?/signout">
+        <form  method="post" action="/account/signout">
             <button class="btn btn-secondary m-2" type="submit" id>sign out</button>
         </form>
     </div>

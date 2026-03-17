@@ -1,13 +1,14 @@
-import { runTest, TestCase } from "$lib/server/utils/tests";
-
-import { validateInsertUser } from "$lib/server/db/validation";
-import { usersService } from "$lib/server/services/users-service";
-
-import { json } from "@sveltejs/kit";
-import { auth } from "$lib/server/auth";
-import test from "node:test";
-import { ValidationError } from "$lib/server/utils/errors";
+// Third part
 import { ZodError } from "zod";
+import { auth } from "$lib/server/auth";
+import { json } from "@sveltejs/kit";
+
+// Ours
+import { usersService } from "$lib/server/services/users-service";
+import { runTest, TestCase } from "$lib/server/utils/tests";
+import { validateUser } from "$lib/server/db/validation";
+import { ValidationError } from "$lib/server/utils/errors";
+
 
 export async function GET( { cookies } ) {
     // Load test data
@@ -26,8 +27,8 @@ export async function GET( { cookies } ) {
         new TestCase({name : "", email : "test@test.ie", password : "Password123"}, "Username cannot be null Username must be at least 4 characters"),
         new TestCase({name : "Glen", email : null, password : "Password123"}, "Invalid input: expected string, received null"),
         new TestCase({name : "Glen", email : "", password : "Password123"}, "Email Cannot be null Must be a valid email"),
-        new TestCase({name : "Glen", email : "test@test.ie", password : null}, "Cannot read properties of undefined (reading 'run')"),
-        new TestCase({name : "Glen", email : "test@test.ie", password : ""}, "Cannot read properties of undefined (reading 'run')"),
+        new TestCase({name : "Glen", email : "test@test.ie", password : null}, "Invalid input: expected string, received null"),
+        new TestCase({name : "Glen", email : "test@test.ie", password : ""}, "Password Cannot be null Password must be at least 6 characters"),
 
     ]
     let testResult = await runTest(testData, async (data) => {
@@ -36,7 +37,7 @@ export async function GET( { cookies } ) {
             let password = data.password
 
             try
-            { validateInsertUser.parse(data); }
+            { validateUser.parse( { name, email, password } ); }
             catch (error)
             {
                 let errorOut = error.message

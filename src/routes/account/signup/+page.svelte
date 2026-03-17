@@ -10,8 +10,8 @@
     <form class="rounded-4 w-75 mx-auto my-5 text-center" method="post" action="?/signup" style="box-shadow: 0 0 25px;">
         <h2 class="py-3">Sign up for ReelMovies</h2>
 
-        {#if form?.error && form != null}
-                    <strong><p class="text-warning fs-5">{form?.status}</p></strong>
+        {#if form?.error}
+            <strong><p class="text-danger fs-5">{form?.message}</p></strong>
         {/if}
         <div class="form-group d-flex flex-column mx-3 align-items-center">
             <input
@@ -20,7 +20,7 @@
                 placeholder="Username"
                 name="username" 
                 id="username"
-                autocomplete="off"
+                autocomplete="on"
                 required
                 style="box-shadow: 0 0 5px;"
             />
@@ -30,7 +30,7 @@
                 placeholder="Email"
                 name="email" 
                 id="email"
-                autocomplete="off"
+                autocomplete="on"
                 required
                 style="box-shadow: 0 0 5px;"
             />
