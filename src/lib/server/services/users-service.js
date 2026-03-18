@@ -19,8 +19,6 @@ export const usersService = {
     async getUser(userID)
     {
         const validated = idSchema.parse({id : userID})
-        const data = await usersDataAccess.getUser(validated)
-        console.log("DATA", data)
-        return
+        return await usersDataAccess.getUser(validated)
     }
 }

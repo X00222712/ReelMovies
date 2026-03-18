@@ -1,10 +1,12 @@
 <script>
     let { data, form } = $props();
-    const user = $state(data.user)
+    const user = data.user
     const signedIn = data.signedIn;
+
 </script>
 
-<div class="">
+
+<div>
     {#if signedIn}
 
         <div class="mx-2 d-flex justify-content-between align-items-center">
@@ -14,13 +16,23 @@
             </form>
         </div>
 
+        <div class="m-5">
+            <h3><strong>User details</strong></h3>
+            <p class="ms-3">
+                <strong>Usename</strong> : {user.name}
+            </p>
+            <p class="ms-3">
+                <strong>Email</strong> : {user.email}
+            </p>
+        </div>
+
 
         <div class="w-100 mx-auto d-block d-md-flex justify-content-center row">
 
             <form class="col-12 col-md-4 col-lg-3 form-style" method="post" action="?/changePW" style="box-shadow: 0 0 25px;">
 
                 {#if "pw" === form?.for}
-                    <p class="fw-bold fs-5 text-danger text-center">{form.message}</p>
+                    <p class="fw-bold fs-5 text-center {form?.good ? 'text-success' : 'text-danger'}">{form.message}</p>
                 {/if}
 
                 <label class="fs-4 fw-bold" for="password">change password</label>

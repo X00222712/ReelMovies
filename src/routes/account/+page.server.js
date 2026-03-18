@@ -11,12 +11,14 @@ import { validateUserName, validateUserPassword } from "$lib/server/db/validatio
 
 export async function load( { locals } ) {
     let signedIn = false;
+    let user;
     if (locals.user?.name) {
         signedIn = true
-        const user = await usersService.getUser(Number(locals.user.id));
+        user = await usersService.getUser(Number(locals.user.id));
     }
+    else user = {name:null, email:null}
 
-    return { signedIn: signedIn, user : locals.user}
+    return { signedIn: signedIn, user : user}
 }
 
 
@@ -28,10 +30,21 @@ export const actions = {
         const confirmPassword = data.get("confirmPassword") ?? "";
         if (newPassword !== confirmPassword && newPassword + confirmPassword !== "") { return fail(400, {for: "pw", message : "Wrong password" }) }
 
-        try { const validated = validateUserPassword.parse({password : newPassword}) }
+        let validated;
+        try { validated = validateUserPassword.parse({password : newPassword}) }
         catch (error) {
             const firstError = JSON.parse(error.message)[0]
-            return fail(400, { for : "pw", message : firstError.message})
+            return fail(400, { for : "pw", message : "Failed to validate password : " + firstError.message})
+        }
+
+        try {
+            const validatedPassword = await auth.api.verifyPassword({
+                body : { password },
+                headers : request.headers
+            })
+        }
+        catch (error) {
+            return fail(400, {for: "pw", message: "Not your password"})
         }
 
         try {
@@ -44,9 +57,11 @@ export const actions = {
             })
         } catch (error)
         {
+            console.log(error)
             if (error instanceof APIError) return fail(400, {for: "pw", message : error.message || "Could not change password"})
             return fail(500, {for: "pw", massage : "Internal error"})
         }
+        return {good: true, for: "pw", message : "Password changed" }
     },
 
     changeUN : async ({ request }) => {
