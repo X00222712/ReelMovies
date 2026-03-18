@@ -8,6 +8,9 @@ import { auth } from "$lib/server/auth";
 import { usersService } from "$lib/server/services/users-service";
 import { validateUserLogin } from "$lib/server/db/validation";
 
+export async function load( { locals } ) {
+    if (locals.user?.name) { return redirect(308, "/account") }
+}
 
 export const actions = {
     signin: async ({ request, cookies }) =>
@@ -44,6 +47,6 @@ export const actions = {
             if (error instanceof ZodError) return fail(401, {error : true, message : "Details are wrong, try again" })
             return fail(500, {error : true, message : "Unexpected error"})
         }
-        redirect(303, "/account");
+        return redirect(303, "/account");
     }
 }

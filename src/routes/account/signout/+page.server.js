@@ -5,9 +5,7 @@ import { auth } from '$lib/server/auth';
 
 // Is the user not signed in, then redirect
 export const load = async ( { locals } ) => {
-	if (!locals.user) {
-		return redirect(302, '/');
-	}
+	if (!locals.user) { return redirect(302, '/'); }
 };
 
 export const actions = {

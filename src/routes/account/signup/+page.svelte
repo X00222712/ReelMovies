@@ -36,7 +36,7 @@
             />
             <input
                 class="form-control my-3"
-                type="text"
+                type="password"
                 placeholder="Password"
                 name="password"
                 id="password"
@@ -46,7 +46,7 @@
             />
             <input
                 class="form-control my-3"
-                type="text"
+                type="password"
                 placeholder="Confirm Password"
                 name="confirmPassword"
                 id="confirmPassword"
@@ -55,11 +55,11 @@
                 style="box-shadow: 0 0 5px;"
             />
 
-            <div class="d-flex flex-column align-items-center w-100" style="max-width: 250px;">
-                <button class="btn btn-success w-75 my-3" type="submit">Create account</button>
+            <div class="d-flex flex-column align-items-center w-100" style="max-width: 300px;">
+                <button class="btn btn-success w-100 my-3" type="submit">Create account</button>
                 
                 <a style="color: aliceblue; text-decoration: none;" href="/account/signin" class="w-100">
-                    <button class="btn btn-secondary my-3">
+                    <button class="btn btn-secondary my-3 w-75">
                         Sign In
                     </button>
                 </a>

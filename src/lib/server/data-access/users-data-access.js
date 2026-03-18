@@ -1,7 +1,11 @@
+// Third party
 import { eq } from "drizzle-orm";
-import { user } from "../db/auth.schema";
 import { db } from "../db/index"
+import { user } from "../db/auth.schema";
+
+// Ours
 import { rewardPoints } from "../db/schema";
+
 
 // This was done in the svelte labs
 // The name does not matter all that does
@@ -9,6 +13,12 @@ import { rewardPoints } from "../db/schema";
 const rewardPointsData = {
     userId : rewardPoints.userId,
     points : rewardPoints.points
+}
+
+const userData = {
+    id : user.id,
+    name : user.name,
+    email : user.email
 }
 
 export const usersDataAccess = {
@@ -20,5 +30,10 @@ export const usersDataAccess = {
     async insertUserPoints(userID)
     {
         await db.insert(rewardPoints).values({userId : userID})
+    },
+    async getUser(userID)
+    {
+        const result = await db.select(userData).from(user).where(eq(userID.id, user.id)).limit(1)
+        return result[0] ?? null
     }
 };

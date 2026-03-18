@@ -9,10 +9,12 @@ import { usersService } from "$lib/server/services/users-service";
 import { validateUser } from "$lib/server/db/validation";
 import { ValidationError } from "$lib/server/utils/errors";
 
-
+export async function load( { locals } ) {
+    if (locals.user?.name) { return redirect(308, "/account") }
+}
 
 export const actions = {
-    signup: async ({request, cookies}) =>
+    signup: async ({ request }) =>
     {
         const data = await request.formData();
         const name = data.get("username")

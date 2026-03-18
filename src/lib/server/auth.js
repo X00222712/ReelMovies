@@ -15,5 +15,15 @@ export const auth = betterAuth({
 	},
 	database: drizzleAdapter(db, { provider: 'sqlite' }),
 	emailAndPassword: { enabled: true },
+	user : {
+		deleteUser : {
+			enabled : true,
+			sendDeleteAccountVerification: false
+		},
+		changeEmail : {
+			enabled : true,
+			updateEmailWithoutVerification: true
+		}
+	},
 	plugins: [sveltekitCookies(getRequestEvent)] // make sure this is the last plugin in the array
 });
