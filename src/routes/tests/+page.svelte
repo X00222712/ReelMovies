@@ -30,7 +30,7 @@
         <!-- Signup test -->
         <div class="col-12 my-3 text-center border border-dark p-2 rounded-3">
             <div class="d-flex justify-content-between mx-4 m-3">
-                <h3 class="mx-2">Signup</h3>
+                <h3 class="mx-2">SignUp</h3>
                 <div>
                     <button value="/account/signup/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
                 </div>
@@ -48,20 +48,23 @@
         </div>
 
         <!-- Signin test -->
-        <div class="col-12 text-center border border-dark p-2 rounded-3">
+        <div class="col-12 my-3 text-center border border-dark p-2 rounded-3">
             <div class="d-flex justify-content-between mx-4 m-3">
-                <h3 class="mx-2">Signin</h3>
+                <h3 class="mx-2">SignIn</h3>
                 <div>
-                    <button value="/account/signup/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
+                    <button value="/account/signIn/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
                 </div>
             </div>
         
-            <div  class="d-flex justify-content-around">
-                <p>Tests : {testResults.accountSignin?.testCount ?? 'N/A'}</p>
-                <p class="fw-bold text-success">Passed : {testResults.accountSignin?.passed ?? 0}</p>
-                <p class="fw-bold text-danger">failed : {testResults.accountSignin?.failed ?? 0}</p>
+            <div class="d-flex justify-content-around">
+                <p>Tests : {testResults.accountSignIp?.testCount ?? 'N/A'}</p>
+                <p class="fw-bold text-success">Passed : {testResults.accountSignIp?.passed ?? 0}</p>
+                <p class="fw-bold text-danger">failed : {testResults.accountSignIp?.failed ?? 0}</p>
             </div>
-            <button value="/account/signin/test" class="btn btn-success p-1" type="button" onclick={runTest}>Run tests</button>
+            <!-- Tests -->
+            {#if (testResults.accountSignIp?.testCount ?? 0) > 0}
+                <TestResults testResults={testResults["accountSignIp"]}/>
+            {/if}
         </div>
     </div>
 

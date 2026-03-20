@@ -16,7 +16,7 @@ export const actions = {
     signin: async ({ request, cookies }) =>
     {
         const data = await request.formData();
-        const email = data.get("email");
+        const email = data.get("email").toLowerCase();
         const password = data.get("password");
 
         try {
