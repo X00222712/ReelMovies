@@ -38,3 +38,17 @@ INSERT INTO account (id, account_id, provider_id, user_id, password, created_at,
     VALUES (4, 4, 'credential', 4, 'd7d827ae5dd0b41356937e4d40d2c557:14717e34907753a3849cae8a5c5a2b05c689e84e2402159d42943e53e8167385c84a62770a8150c4d0674024e34d5fc0eb81fbd326288bafc9bad841f7c5beb4', 1774013978005, 1774013978005);
 
 INSERT INTO rewardpoints VALUES (4, 400);
+
+
+
+-- Testing accounts for signup test
+-- Password : password123
+INSERT INTO user
+    VALUES (5, 'Glen', 'glen@test.ie', 0, 1774013978005, 1774013978005);
+INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at)
+    VALUES (5, 5, 'credential', 5, 'de1b06a616a60c21a20fed51812d97f5:709bd40f64fef4426c8d49e0fcb166eba5b810ff6cf921a6e6ee3c39f705145237f7ace0e87f4a35719041ba782cc655ee0a20fc1065b1068aa1c45d8999ece4', 1774013978005, 1774013978005);
+
+INSERT INTO user
+    VALUES (6, 'Glen', 'GLEN@test.com', 0, 1774013978005, 1774013978005);
+INSERT INTO account (id, account_id, provider_id, user_id, password, created_at, updated_at)
+    VALUES (6, 6, 'credential', 6, 'de1b06a616a60c21a20fed51812d97f5:709bd40f64fef4426c8d49e0fcb166eba5b810ff6cf921a6e6ee3c39f705145237f7ace0e87f4a35719041ba782cc655ee0a20fc1065b1068aa1c45d8999ece4', 1774013978005, 1774013978005);

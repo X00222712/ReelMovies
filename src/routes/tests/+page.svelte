@@ -1,7 +1,8 @@
 <script>
 	import TestResults from "$lib/components/TestResults.svelte";
 
-    let testResults = {}
+    let {form} = $props()
+    let testResults = $state({})
 
     async function runTest( element )
     {
@@ -14,12 +15,23 @@
         }
         catch (error) 
         { alert(error.message + "\nSomething went wrong when running the test for\n" + element.target.value) }
-        // console.log("RESULTS", testResults)
+        console.log("RESULTS", testResults)
     }
 
 </script>
 
 <h1 class="text-center pt-4">Tests</h1>
+
+<!-- DB is hard to setup, button that'll call an API to run all setup for testing-->
+<div class="d-flex flex-column gap-1 m-3 ms-5 align-items-center" style="width: fit-content;">
+    <p class="m-0">Only run if DB was removed/reset</p>
+    
+    <form method="post" action="?/makeDB" class="w-75">
+        <button type="submit" class="btn btn-danger w-100">Setup DB</button>
+    </form>
+    
+        <!-- <p><strong>{form?.message}</strong></p> -->
+</div>
 
 <!-- Tests -->
 <!-- Signup -->
@@ -52,18 +64,18 @@
             <div class="d-flex justify-content-between mx-4 m-3">
                 <h3 class="mx-2">SignIn</h3>
                 <div>
-                    <button value="/account/signIn/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
+                    <button value="/account/signin/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
                 </div>
             </div>
         
             <div class="d-flex justify-content-around">
-                <p>Tests : {testResults.accountSignIp?.testCount ?? 'N/A'}</p>
-                <p class="fw-bold text-success">Passed : {testResults.accountSignIp?.passed ?? 0}</p>
-                <p class="fw-bold text-danger">failed : {testResults.accountSignIp?.failed ?? 0}</p>
+                <p>Tests : {testResults.accountSignIn?.testCount ?? 'N/A'}</p>
+                <p class="fw-bold text-success">Passed : {testResults.accountSignIn?.passed ?? 0}</p>
+                <p class="fw-bold text-danger">failed : {testResults.accountSignIn?.failed ?? 0}</p>
             </div>
             <!-- Tests -->
-            {#if (testResults.accountSignIp?.testCount ?? 0) > 0}
-                <TestResults testResults={testResults["accountSignIp"]}/>
+            {#if (testResults.accountSignIn?.testCount ?? 0) > 0}
+                <TestResults testResults={testResults["accountSignIn"]}/>
             {/if}
         </div>
     </div>

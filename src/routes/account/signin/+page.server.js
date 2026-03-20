@@ -19,12 +19,16 @@ export const actions = {
         const email = data.get("email").toLowerCase();
         const password = data.get("password");
 
+        let validatedEmail;
+        let validatedPw;
         try {
             // Verify all inputs
-            validateUserLogin.parse({
+            const validated = validateUserLogin.parse({
                 email : email,
                 password
             })
+            validatedEmail = validated.email
+            validatedPw = validated.password
         } catch (error)
         {
             console.log(error)
@@ -35,14 +39,15 @@ export const actions = {
             // All inputs verified, add user
             await auth.api.signInEmail({
                 body : {
-                    email,
-                    password,
+                    email : validatedEmail,
+                    password : validatedPw,
                     callbackURL : '/auth/verification-success'
                 }
             })
         }
         catch (error)
         {
+            console.log(error)
             if (error instanceof APIError) return fail(400, {error : true, message : error.message || "Signin failed"})
             if (error instanceof ZodError) return fail(401, {error : true, message : "Details are wrong, try again" })
             return fail(500, {error : true, message : "Unexpected error"})
