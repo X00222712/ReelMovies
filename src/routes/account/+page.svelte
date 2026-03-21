@@ -25,7 +25,30 @@
                 <strong>Email</strong> : {user.email}
             </p>
         </div>
+        
+        {#if user?.admin}
+            <div class="row col-md d-flex flex-wrap justify-content-between gap-4 gap-md-0 mx-1 py-3">
+                
+                <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="/admin-panel">
+                    <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
+                        <p class="m-0 fw-bold fs-3">Control Panel</p>
+                    </div>
+                </a>
 
+                <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="#">
+                    <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
+                        <p class="m-0 fw-bold fs-3">N/A</p>
+                    </div>
+                </a>
+
+
+                <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="/tests">
+                    <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
+                        <p class="m-0 fw-bold fs-3">Tests</p>
+                    </div>
+                </a>
+            </div>
+        {/if}
 
         <div class="w-100 mx-auto d-block d-md-flex justify-content-center row">
 
@@ -74,11 +97,6 @@
                 <button class="btn btn-danger m-2" type="submit" id="deleteUser" style="width: fit-content;">Delete account</button>
             </form>
         </div>
-
-        <a href="/tests">
-            <h1>Tests</h1>
-        </a>
-
     {:else}
 
         <div class="p-4 d-flex d-flex justify-content-between">
@@ -108,6 +126,15 @@
 
         }
 
+    .admin-panel-item {
+        transition: 0.3s ease;
+        box-shadow: 0 -5px 15px 5px #97c7ff
+    }
+    .admin-panel-item:hover {
+        transform: translateY(-3px);
+        scale: 101%;
+        box-shadow: 0 5px 18px 7px #8198ff
+    }
     @media (max-width: 768px)
     {
         .form-style {

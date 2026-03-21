@@ -1,7 +1,7 @@
 
 -- DB setup for accounts
 
--- password : ITSupport
+-- password : ITSuport
 INSERT INTO user
     VALUES (1, 'IT Admin', 'itsuper@reelmovies.ie', 1, 1774013978005, 1774013978005);
 
@@ -41,7 +41,7 @@ INSERT INTO rewardpoints VALUES (4, 400);
 
 
 
--- Testing accounts for signup test
+-- Testing accounts for signin test
 -- Password : password123
 INSERT INTO user
     VALUES (5, 'Glen', 'glen@test.ie', 0, 1774013978005, 1774013978005);

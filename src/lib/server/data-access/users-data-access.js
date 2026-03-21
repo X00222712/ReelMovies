@@ -4,7 +4,7 @@ import { db } from "../db/index"
 import { user } from "../db/auth.schema";
 
 // Ours
-import { rewardPoints } from "../db/schema";
+import { admins, rewardPoints } from "../db/schema";
 
 
 // This was done in the svelte labs
@@ -18,7 +18,9 @@ const rewardPointsData = {
 const userData = {
     id : user.id,
     name : user.name,
-    email : user.email
+    email : user.email,
+    admin : admins.admin,
+    privilage : admins.privilage
 }
 
 export const usersDataAccess = {
@@ -33,7 +35,9 @@ export const usersDataAccess = {
     },
     async getUser(userID)
     {
-        const result = await db.select(userData).from(user).where(eq(userID.id, user.id)).limit(1)
+        const result = await db.select(userData).from(user)
+        .leftJoin( admins, eq(user.id, admins.id) )
+        .where(eq(userID.id, user.id)).limit(1)
         return result[0] ?? null
     }
 };

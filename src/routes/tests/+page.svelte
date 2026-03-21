@@ -22,17 +22,6 @@
 
 <h1 class="text-center pt-4">Tests</h1>
 
-<!-- DB is hard to setup, button that'll call an API to run all setup for testing-->
-<div class="d-flex flex-column gap-1 m-3 ms-5 align-items-center" style="width: fit-content;">
-    <p class="m-0">Only run if DB was removed/reset</p>
-    
-    <form method="post" action="?/makeDB" class="w-75">
-        <button type="submit" class="btn btn-danger w-100">Setup DB</button>
-    </form>
-    
-        <!-- <p><strong>{form?.message}</strong></p> -->
-</div>
-
 <!-- Tests -->
 <!-- Signup -->
 <div class="px-4 pb-5 w-100 p-2">

@@ -9,6 +9,7 @@ export async function POST( { cookie, request } )
 
     if ("recommened movies" === reqContent.info)
         {
+            status = 200
             let movies = await moviesService.getAllMovies();
             movies = movies.filter((movie, i) => { return i < 5; })
             movies.forEach( (movie, i) => {
