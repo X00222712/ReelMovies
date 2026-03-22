@@ -41,14 +41,10 @@ You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 
-## DB and Node setup
-Run the file `setup.bat` or `setup.sh`
-
 
 # TODO
 
 ## GLEN
-### Iteration 1
 - [X] Create the home page
     - [X] Use cookies to get user data
     - [X] Reward point recommendation element
@@ -79,10 +75,6 @@ Run the file `setup.bat` or `setup.sh`
     - [X]  Create seat bookings DBL
     - [ ]  Create movie times DB
     - [ ]  Create seat bookings DB
-### Iteration 2
-
-- [ ] User accounts and authorisation
-
 
 ## ALEX
 - [X] Create navigation bar

@@ -7,11 +7,11 @@
     import 'bootstrap/dist/css/bootstrap.min.css';
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-    onMount( async () => {
-        if (browser) {
-            await import('bootstrap');
-        }
-    })
+	onMount( async () => {
+		if (browser) {
+			await import('bootstrap');
+		}
+	})
 
     let { children } = $props();
 
@@ -42,7 +42,7 @@
   <nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
     <div class="container jusify-content-between px-0">
 
-      <a class="navbar-brand fw-bold text-white ms-1" href="/">
+      <a class="navbar-brand fw-bold text-white" href="/">
         ReelMovies
       </a>
 

@@ -1,6 +1,11 @@
 <script>
-    let { rewardItems } = $props();
+    let { rewardItems, userToken } = $props();
     const menu = import.meta.glob(['$lib/assets/menu/**.jpeg', '$lib/assets/menu/**.webp', '$lib/assets/menu/*/*.png'], {eager : true, query: "?url", import: "default"});
+
+    async function redeemPoint(id) {
+
+        console.log(rsp);
+    }
 
 </script>
 
