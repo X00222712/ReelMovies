@@ -42,7 +42,8 @@ export function TestCase(data, expected)
     this.passedTest = () => { this.result = true }
 }
 
-export async function runTest(testData, testCallback) {
+export async function runTest(testData, testCallback, customSuccessCheck = null) {
+    let shouldCustomSuccessCheck = customSuccessCheck !== null
     let testResult = new TestResults(testData.length)
     for(let index = 0; index < testData.length; index++) {
         let testCase = testData[index]
@@ -57,9 +58,24 @@ export async function runTest(testData, testCallback) {
             // console.log("EXPECTED", testCase.expected)
             // console.log("Equal", result === testCase.expected)
             // console.log("Equal", result == testCase.expected)
-            console.log(('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
-            console.log(result, testCase.expected)
-            if (('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
+            // console.log("EXPECTED :", typeof result)
+            // console.log("EXPECTED :", typeof testCase.expected)
+            if (shouldCustomSuccessCheck)
+            {
+                if (customSuccessCheck(testCase.expected, result))
+                {
+                    testCase.addMessage(result)
+                    testCase.passedTest()
+                    testResult.passedTest(testCase)
+                }
+                else
+                {
+                    testCase.addMessage(result)
+                    testResult.failedTest(testCase)
+                }
+            }
+
+            else if (('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
             {
                 testCase.addMessage(result)
                 testCase.passedTest()

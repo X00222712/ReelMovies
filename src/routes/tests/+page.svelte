@@ -66,8 +66,31 @@
                 <TestResults testResults={testResults["accountSignIp"]}/>
             {/if}
         </div>
+
     </div>
 
+    <h2>Movies</h2>
+    <div class="d-block">
+                <!-- Signin test -->
+        <div class="col-12 my-3 text-center border border-dark p-2 rounded-3">
+            <div class="d-flex justify-content-between mx-4 m-3">
+                <h3 class="mx-2">Movie filter</h3>
+                <div>
+                    <button value="/movies/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
+                </div>
+            </div>
+        
+            <div class="d-flex justify-content-around">
+                <p>Tests : {testResults.movieSearchTest?.testCount ?? 'N/A'}</p>
+                <p class="fw-bold text-success">Passed : {testResults.movieSearchTest?.passed ?? 0}</p>
+                <p class="fw-bold text-danger">failed : {testResults.movieSearchTest?.failed ?? 0}</p>
+            </div>
+            <!-- Tests -->
+            {#if (testResults.movieSearchTest?.testCount ?? 0) > 0}
+                <TestResults testResults={testResults["movieSearchTest"]}/>
+            {/if}
+        </div>
+    </div>
 
 </div>
 
