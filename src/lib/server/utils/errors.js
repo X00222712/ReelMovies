@@ -14,13 +14,6 @@ export class NotFoundError extends Error {
     }
 }
 
-export class AlreadyExists extends Error {
-    constructor(message) {
-        super(message);
-        this.name = 'AlreadyExists';
-    }
-}
-
 export class ForbiddenError extends Error {
     constructor(message) {
         super(message);
