@@ -20,5 +20,14 @@ export const usersService = {
     {
         const validated = idSchema.parse({id : userID})
         return await usersDataAccess.getUser(validated)
+    },
+
+    async getUsersPageByID(userID, pagesize)
+    {
+        const validatedId = idSchema.parse({id : userID})
+        // Must be fix the same validation check as ID
+        const validatedPageSize = idSchema.parse({id : pagesize})
+        // const validatedPageSize = pageSize
+        return await usersDataAccess.getUsersPageByID(validatedId.id, validatedPageSize.id)
     }
 }

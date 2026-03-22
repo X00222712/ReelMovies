@@ -1,5 +1,5 @@
 // Third party
-import { eq } from "drizzle-orm";
+import { eq, gte } from "drizzle-orm";
 import { db } from "../db/index"
 import { user } from "../db/auth.schema";
 
@@ -19,6 +19,7 @@ const userData = {
     id : user.id,
     name : user.name,
     email : user.email,
+    RMPoints : rewardPoints.points,
     admin : admins.admin,
     privilage : admins.privilage
 }
@@ -38,6 +39,16 @@ export const usersDataAccess = {
         const result = await db.select(userData).from(user)
         .leftJoin( admins, eq(user.id, admins.id) )
         .where(eq(userID.id, user.id)).limit(1)
+        .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         return result[0] ?? null
+    },
+
+    async getUsersPageByID(userID, pagesize)
+    {
+        const result = await db.select(userData).from(user)
+        .leftJoin( admins, eq(user.id, admins.id) )
+        .leftJoin( rewardPoints , eq(admins.id, rewardPoints.userId) )
+        .where(gte(user.id, userID)).limit(pagesize)
+        return result
     }
 };

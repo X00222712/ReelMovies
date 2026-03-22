@@ -19,7 +19,7 @@ async function makeAccounts(cookies)
             body:  {
                 name : "IT Admin",
                 email : 'itsuper@reelmovies.ie',
-                password: "ITSuport"
+                password: "ITSupport"
         }})
         await db.insert(admins).values({userId: 1, id: 1, admin: 1, privilage: 1})
         await db.insert(rewardPoints).values({userId: 1, points: 100000})

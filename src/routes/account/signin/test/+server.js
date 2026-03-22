@@ -26,6 +26,8 @@ export async function GET( { request, cookies } )
 
         // Store cookie
         let userSigninCookie = cookies.get("better-auth.session_token")
+        // Set cookie to nothing to prevent log out
+        cookies.set("better-auth.session_token", "", path="/")
         try {
             const validated = validateUserLogin.parse({
                 email : data.email,
@@ -43,11 +45,13 @@ export async function GET( { request, cookies } )
                 }
             })
             const headers = request.headers
-            console.log(signin)
+
+            // Sign new account out to prevent a pile up of sessions
             headers.cookie = `better-auth.session_token=${signin.token}`
             await auth.api.signOut({
                 headers: headers
             })
+            // Restore cookie to regain session
             cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
             return "Signed In"
         }
