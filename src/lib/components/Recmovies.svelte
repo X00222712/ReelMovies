@@ -23,7 +23,6 @@
         ).then(
             response => response.json()
         )
-        
         movies = data.movies
     })
 
