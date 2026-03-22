@@ -6,17 +6,26 @@
 
   <div class="poster-wrapper">
     <img src={movie.poster} alt={movie.title} />
+
     <div class="rating-badge">
-      {movie.ageRating}
+      {movie.rating}
     </div>
+
     <div class="overlay">
-      <a href="/purchase/tickets?movie={movie.title}" class="btn btn-ticket">Book Tickets</a>
+      <a href="/purchase/tickets?movie={movie.title}" class="btn btn-ticket">
+        Book Tickets
+      </a>
     </div>
   </div>
+
   <div class="movie-info">
     <h5>{movie.title}</h5>
-    <span class="genre">{movie.genre}</span>
+
+    <span class="genre">
+      {movie.genres?.join(", ")}
+    </span>
   </div>
+
 </div>
 
 <style>

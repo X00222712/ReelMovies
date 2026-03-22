@@ -1,4 +1,6 @@
-  // Mock data (replace later with DB)
+import { db } from "../db/index"
+
+// Mock data (replace later with DB)
 const movies = [
     {
         id: 1,
