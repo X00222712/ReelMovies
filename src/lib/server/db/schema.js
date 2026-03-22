@@ -2,25 +2,6 @@ import { primaryKey } from 'drizzle-orm/gel-core';
 import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { user } from './auth.schema';
 
-// Start of Alex's work
-export const movies = sqliteTable("movies", {
-  id: integer("id").primaryKey(),
-  title: text("title"),
-  rating: text("rating"),
-  poster: text("poster")
-});
-
-export const genres = sqliteTable("genres", {
-  id: integer("id").primaryKey(),
-  name: text("name")
-});
-
-export const movieGenres = sqliteTable("movie_genres", {
-  movieId: integer("movie_id"),
-  genreId: integer("genre_id")
-});
-// End of alex's work
-
 // Start of Glen's DB work
 
 export const admins = sqliteTable('admins', {
@@ -50,3 +31,21 @@ export const food = sqliteTable('food', {
 });
 
 export * from './auth.schema';
+
+// Start of Alex's work
+export const movies = sqliteTable("movies", {
+  id: integer("id").primaryKey(),
+  title: text("title"),
+  rating: text("rating"),
+  poster: text("poster")
+});
+
+export const genres = sqliteTable("genres", {
+  id: integer("id").primaryKey(),
+  name: text("name")
+});
+
+export const movieGenres = sqliteTable("movie_genres", {
+  movieId: integer("movie_id"),
+  genreId: integer("genre_id")
+});
