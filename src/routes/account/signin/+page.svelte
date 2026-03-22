@@ -9,23 +9,24 @@
     <form class="rounded-4 w-75 mx-auto my-5 text-center" method="post" action="?/signin" style="box-shadow: 0 0 25px;">
         <h2 class="py-3">Sign into ReelMovies</h2>
 
-        {#if 200 != form?.status && form != null}
-                    <strong><p class="text-danger fs-5">Username or password incorrect</p></strong>
+        {console.log("FORM DATA", form)}
+        {#if form?.error}
+            <strong><p class="text-danger fs-5">{form.message}</p></strong>
         {/if}
         <div class="form-group d-flex flex-column align-items-center">
             <input
                 class="form-control my-2"
-                type="text" 
-                placeholder="Username"
-                name="username" 
+                type="email" 
+                placeholder="Email"
+                name="email" 
                 id="username"
-                autocomplete="off"
+                autocomplete="on"
                 required
                 style="box-shadow: 0 0 5px;"
             />
             <input
                 class="form-control my-5"
-                type="text"
+                type="password"
                 placeholder="Password"
                 name="password"
                 id="password"
@@ -34,11 +35,13 @@
                 style="box-shadow: 0 0 5px;"
             />
 
-            <div class="d-flex flex-column w-100 align-items-center">
-                <button class="btn btn-success my-3 w-75" type="submit">Sign in</button>
-                <button class="btn btn-secondary my-3 ">
-                    <a style="color:aliceblue; text-decoration: none;" href="/account/signup">Create new account</a>
-                </button>
+            <div class="d-flex flex-column align-items-center w-100" style="max-width: 300px;">
+                <button class="btn btn-success my-3 w-100" type="submit">Sign in</button>
+                <a style="color: aliceblue; text-decoration: none;" href="/account/signup" class="w-100">
+                    <button class="btn btn-secondary my-3 w-75">
+                        Create new account
+                    </button>
+                </a>
             </div>
 
         </div>
