@@ -32,6 +32,7 @@ export const food = sqliteTable('food', {
 
 export * from './auth.schema';
 
+// Start of Alex's work
 export const movies = sqliteTable("movies", {
   id: integer("id").primaryKey(),
   title: text("title"),
