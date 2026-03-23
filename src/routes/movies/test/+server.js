@@ -1,10 +1,9 @@
 import { json } from "@sveltejs/kit";
-
 import { runTest, TestCase } from "$lib/server/utils/tests";
 
 // DB
-import { db } from "$lib/server/db";
-import { movies, genres, movieGenres } from "$lib/server/schema";
+import { db } from "$lib/server/db/db";
+import { movies, genres, movieGenres } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function GET() {
@@ -100,8 +99,20 @@ export async function GET() {
       return matchesSearch && matchesGenre && matchesRating;
     });
 
-    return filtered.map(m => m.title);
+    const data = filtered.map(m => {return m.title})
+    if (0 === data.length)
+      { return "No movies found." }
+
+    return data;
+  },
+  (expected, result) => {
+    let passed = true
+    expected.forEach(element => {
+      if (!result.includes(element)) passed = false
+    });
+    return passed
   });
+
 
   return json(
     { name: "movieSearchTest", data: testResult },
