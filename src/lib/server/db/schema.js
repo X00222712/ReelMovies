@@ -32,7 +32,7 @@ export const food = sqliteTable('food', {
 
 export * from './auth.schema';
 
-// Start of Alex's work
+// Start of Alex's movies db
 export const movies = sqliteTable("movies", {
   id: integer("id").primaryKey(),
   title: text("title"),
@@ -48,4 +48,14 @@ export const genres = sqliteTable("genres", {
 export const movieGenres = sqliteTable("movie_genres", {
   movieId: integer("movie_id"),
   genreId: integer("genre_id")
+});
+
+// Start of Alex's Contact us DB
+
+export const contacts = sqliteTable("contacts", {
+  id: integer("id").primaryKey(),
+  name: text("name"),
+  email: text("email"),
+  message: text("message"),
+  createdAt: text("created_at").default(new Date().toISOString())
 });
