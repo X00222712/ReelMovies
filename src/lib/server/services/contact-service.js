@@ -1,6 +1,9 @@
 import { createContact } from "$lib/server/data-access/contact-data-access";
 import { Resend } from "resend";
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { RESEND_API_KEY } from "$reelmovies/.env";
+
+const resend = new Resend(RESEND_API_KEY);
+
 export async function submitContactForm({ name, email, message }) {
 
   if (!name || !email || !message) {
@@ -11,7 +14,7 @@ export async function submitContactForm({ name, email, message }) {
 
   const { error } = await resend.emails.send({
     from: "ReelMovies <onboarding@resend.dev>",
-    to: ["your@email.com"],
+    to: ["alexdaly03@outlook.ie"],
     subject: `New Contact Message from ${name}`,
     html: `
       <h3>New Message</h3>
