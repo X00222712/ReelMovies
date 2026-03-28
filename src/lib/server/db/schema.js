@@ -1,5 +1,5 @@
 import { primaryKey } from 'drizzle-orm/gel-core';
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { user } from './auth.schema';
 
 // Start of Glen's DB work
@@ -37,7 +37,9 @@ export const movies = sqliteTable("movies", {
   id: integer("id").primaryKey(),
   title: text("title"),
   rating: text("rating"),
-  poster: text("poster")
+  poster: text("poster"),
+  ratingScore: real("ratingScore"),
+  description: text("description"),
 });
 
 export const genres = sqliteTable("genres", {

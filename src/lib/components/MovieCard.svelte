@@ -14,8 +14,16 @@
     </div>
   </div>
   <div class="movie-info">
-    <h5>{movie.title}</h5>
-    <span class="genre">{movie.genre}</span>
+  <h5>{movie.title}</h5>
+  <span class="genre">
+    {movie.genre}
+  </span>
+  <div class="rating-score">
+    {movie.ratingScore}
+  </div>
+  <p class="description">
+    {movie.description}
+  </p>
   </div>
 </div>
 
@@ -109,4 +117,16 @@
   box-shadow: 0 10px 20px rgba(108,99,255,0.35);
 }
 
+.rating-score {
+  font-size: 0.85rem;
+  color: #ffd166;
+  margin-top: 6px;
+}
+
+.description {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 6px;
+  line-height: 1.3;
+}
 </style>
