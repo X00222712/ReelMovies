@@ -1,17 +1,35 @@
-import { createContact } from "$lib/server/data-access/contact-data-access";
+/*
+
+Author : Alex Daly
+
+Description
+API to send an email to a user about their contact form details
+
+*/
+
+// Third part
+import { json } from "@sveltejs/kit";
 import { Resend } from "resend";
-const resend = new Resend(process.env.RESEND_API_KEY);
-export async function submitContactForm({ name, email, message }) {
+// Ours
+import { createContact } from "$lib/server/data-access/contact-data-access";
+import { RESEND_API_KEY } from '$env/static/private';
+
+const resend = new Resend(RESEND_API_KEY);
+export async function POST({ request }) {
+  const data = await request.json()
+  const name = data.name
+  const email = data.email
+  const message = data.message
 
   if (!name || !email || !message) {
     throw new Error("All fields required");
   }
 
-  createContact({ name, email, message });
+  await createContact({ name, email, message });
 
   const { error } = await resend.emails.send({
     from: "ReelMovies <onboarding@resend.dev>",
-    to: ["your@email.com"],
+    to: [email],
     subject: `New Contact Message from ${name}`,
     html: `
       <h3>New Message</h3>
@@ -22,8 +40,9 @@ export async function submitContactForm({ name, email, message }) {
   });
 
   if (error) {
+    console.log(error)
     throw new Error("Email failed to send");
   }
 
-  return { success: true };
+  return json({ success: true }, {status : 200});
 }
