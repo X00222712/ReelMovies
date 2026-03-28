@@ -1,5 +1,14 @@
+/*
+Author : Glen Johnston
+Created : Feb / 2026
+
+Description
+
+All user data access other than better auth stuff
+*/
+
 // Third party
-import { eq, gte } from "drizzle-orm";
+import { eq, gte} from "drizzle-orm";
 import { db } from "../db/index"
 import { user } from "../db/auth.schema";
 
@@ -30,11 +39,11 @@ export const usersDataAccess = {
         const result = await db.select(rewardPointsData).from(rewardPoints).where(eq(userID.id, rewardPoints.userId)).limit(1)
         return result[0] ?? null
     },
-    async insertUserPoints(userID)
-    {
-        await db.insert(rewardPoints).values({userId : userID})
-    },
-    async getUser(userID)
+
+    async insertUserPoints(userID, points)
+        { await db.insert(rewardPoints).values({userId : userID, points : points}) },
+
+        async getUser(userID)
     {
         const result = await db.select(userData).from(user)
         .leftJoin( admins, eq(user.id, admins.id) )
@@ -47,8 +56,9 @@ export const usersDataAccess = {
     {
         const result = await db.select(userData).from(user)
         .leftJoin( admins, eq(user.id, admins.id) )
-        .leftJoin( rewardPoints , eq(admins.id, rewardPoints.userId) )
+        .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         .where(gte(user.id, userID)).limit(pagesize)
+        console.log(result)
         return result
     }
 };

@@ -1,3 +1,15 @@
+/*
+
+Author : Glen Johnston
+Create : 23 / Mar / 2026
+
+Description
+
+Admin panel functions and data
+
+*/
+
+
 import { usersService } from "$lib/server/services/users-service"
 
 export async function load() {

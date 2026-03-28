@@ -2,7 +2,10 @@
 import { db } from '$lib/server/db';
 import { auth } from '$lib/server/auth';
 import { fail, json, redirect } from '@sveltejs/kit';
+
+// Ours
 import { admins, rewardPoints } from '$lib/server/db/schema';
+import { usersService } from '$lib/server/services/users-service';
 
 export async function load( { locals } )
 {
@@ -32,7 +35,7 @@ async function makeAccounts(cookies)
                 password: "reelmovies"
         }})
         await db.insert(admins).values({userId: 2, id: 2, admin: 1, privilage: 0})
-        await db.insert(rewardPoints).values({userId: 2, points: 0})
+        await db.insert(rewardPoints).values({userId: 2})
 
 
         // password : password123
@@ -52,7 +55,8 @@ async function makeAccounts(cookies)
                 email : 'Alex@test.ie',
                 password: "SuperCool"
         }})
-        await db.insert(rewardPoints).values({userId: 4, points: 400})
+        usersService.insertUserPoints(4, 400)
+        // await db.insert(rewardPoints).values({userId: 4, points: 400})
 
         // password : password123
         await auth.api.signUpEmail({
@@ -61,6 +65,7 @@ async function makeAccounts(cookies)
                 email : 'glen@test.ie',
                 password: "password123"
         }})
+        await db.insert(rewardPoints).values({userId: 5})
 
         // password : password123
         await auth.api.signUpEmail({
@@ -69,7 +74,8 @@ async function makeAccounts(cookies)
                 email : 'GLEN@test.com',
                 password: "password123"
         }})
-    
+        await db.insert(rewardPoints).values({userId: 6})
+
         cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
         return true
     } catch (error)

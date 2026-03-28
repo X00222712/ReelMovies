@@ -10,10 +10,11 @@ export const usersService = {
         const validated = idSchema.parse({id : userID})
         return await usersDataAccess.getUserPoints(validated)
     },
-    async insertUserPoints(userID)
+    async insertUserPoints(userID, points = 0)
     {
-        const validated = idSchema.parse({id : userID})
-        return await usersDataAccess.insertUserPoints(validated.id)
+        const validatedId = idSchema.parse({id : userID})
+        const validatedPoints = idSchema.parse({id : points})
+        return await usersDataAccess.insertUserPoints(validatedId.id, validatedPoints.id)
     },
 
     async getUser(userID)
