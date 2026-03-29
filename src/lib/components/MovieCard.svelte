@@ -1,46 +1,50 @@
 <script>
+  // Author: Alex D
   export let movie;
 </script>
-
 <div class="movie-card">
-
   <div class="poster-wrapper">
     <img src={movie.poster} alt={movie.title} />
+
     <div class="rating-badge">
-      {movie.ageRating}
+      {movie.rating || movie.rating || "N/A"}
     </div>
     <div class="overlay">
-      <a href="/purchase/tickets?movie={movie.title}" class="btn btn-ticket">Book Tickets</a>
+      <a href={`/movies/${movie.id}`} class="btn btn-ticket">
+        View Details
+      </a>
     </div>
   </div>
   <div class="movie-info">
-  <h5>{movie.title}</h5>
-  <span class="genre">
-    {movie.genre}
-  </span>
-  <div class="rating-score">
-    {movie.ratingScore}
-  </div>
-  <p class="description">
-    {movie.description}
-  </p>
-  </div>
-</div>
+    <h5>{movie.title}</h5>
+    <div class="genres">
+      {#if movie.genres && movie.genres.length > 0}
+        {#each movie.genres.slice(0, 2) as g}
+          <span class="genre">{g}</span>
+        {/each}
+      {:else}
+        <span class="genre">No Genre</span>
+      {/if}
+    </div>
 
+  </div>
+
+</div>
 <style>
 
 .movie-card {
-  background: rgba(28, 37, 65, 0.75);
-  backdrop-filter: blur(14px);
+  background: linear-gradient(145deg, rgba(28,37,65,0.85), rgba(11,19,43,0.85));
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
-  transition: all 0.35s ease;
+  transition: all 0.4s ease;
+  position: relative;
 }
 
 .movie-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 45px rgba(0,0,0,0.5);
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.7);
 }
 
 .poster-wrapper {
@@ -52,22 +56,33 @@
   width: 100%;
   height: 340px;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.5s ease;
 }
 
 .movie-card:hover img {
-  transform: scale(1.08);
+  transform: scale(1.1);
+}
+
+.poster-wrapper::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.8),
+    rgba(0,0,0,0.1)
+  );
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.55);
   display: flex;
   justify-content: center;
   align-items: center;
   opacity: 0;
   transition: 0.3s ease;
+  z-index: 2;
 }
 
 .movie-card:hover .overlay {
@@ -76,14 +91,15 @@
 
 .rating-badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 12px;
+  right: 12px;
   background: var(--accent);
-  padding: 4px 10px;
-  border-radius: 20px;
+  padding: 5px 12px;
+  border-radius: 30px;
   font-size: 0.75rem;
   font-weight: 600;
   color: white;
+  z-index: 3;
 }
 
 .movie-info {
@@ -91,42 +107,34 @@
 }
 
 .movie-info h5 {
-  color: #ffffff;
-  font-size: 1rem;
+  color: #fff;
+  font-size: 1.05rem;
   font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .genre {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.7);
-  background: rgba(255,255,255,0.05);
-  padding: 3px 8px;
-  border-radius: 8px;
+  display: inline-block;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.08);
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-right: 4px;
 }
 
 .btn-ticket {
+  background: var(--accent);
   border-radius: 30px;
+  padding: 8px 20px;
   font-weight: 600;
-  padding: 8px 18px;
-  transition: 0.3s ease;
+  color: white;
+  transition: all 0.3s ease;
 }
 
 .btn-ticket:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(108,99,255,0.35);
-}
-
-.rating-score {
-  font-size: 0.85rem;
-  color: #ffd166;
-  margin-top: 6px;
-}
-
-.description {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.7);
-  margin-top: 6px;
-  line-height: 1.3;
+  background: var(--accent-hover);
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(108,99,255,0.5);
 }
 </style>

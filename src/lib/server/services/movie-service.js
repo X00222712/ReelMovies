@@ -1,3 +1,4 @@
+// Author: Alex D
 import { db } from "$lib/server/db";
 import { movies, genres, movieGenres } from "$lib/server/db/schema.js";
 import { eq } from "drizzle-orm";

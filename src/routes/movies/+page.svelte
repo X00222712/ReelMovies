@@ -1,3 +1,4 @@
+<!-- Author: Alex D -->
 <script>
   import MovieCard from '$lib/components/MovieCard.svelte';
 

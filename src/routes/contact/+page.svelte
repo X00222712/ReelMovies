@@ -1,3 +1,4 @@
+<!-- Author: Alex D -->
 <script>
   let name = "";
   let email = "";

@@ -1,3 +1,4 @@
+//  Author: Alex D
 import { moviesService } from "$lib/server/services/movie-service";
 import { json } from "@sveltejs/kit";
 

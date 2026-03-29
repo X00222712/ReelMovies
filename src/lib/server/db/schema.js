@@ -48,8 +48,8 @@ export const genres = sqliteTable("genres", {
 });
 
 export const movieGenres = sqliteTable("movie_genres", {
-  movieId: integer("movie_id"),
-  genreId: integer("genre_id")
+  movieId: integer("movie_id").notNull(),
+  genreId: integer("genre_id").notNull()
 });
 
 // Start of Alex's Contact us DB

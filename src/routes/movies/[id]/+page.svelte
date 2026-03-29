@@ -1,0 +1,132 @@
+<!-- Author: Alex D -->
+<script>
+  let { data } = $props();
+</script>
+
+{#if data.movie}
+  <h1>{data.movie.title}</h1>
+{:else}
+  <p style="color:white;">Movie not found</p>
+{/if}
+
+<div class="details-container">
+
+  <div class="details-card">
+
+    <div class="poster">
+      <img src={movie.poster} alt={movie.title} />
+    </div>
+
+    <div class="info">
+
+      <h1>{movie.title}</h1>
+
+      <div class="meta">
+        <span class="badge">{movie.ageRating}</span>
+        <span class="rating">⭐ {movie.ratingScore}/10</span>
+      </div>
+
+        <div>
+            {#each movie.genre as g}
+                <span>{g}</span>
+            {/each}
+        </div>
+
+      <p class="description">
+        {movie.description}
+      </p>
+
+      <a href="/movies" class="back-btn">← Back to Movies</a>
+
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+
+.details-container {
+  padding: 4rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.details-card {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  background: rgba(28, 37, 65, 0.8);
+  border-radius: 20px;
+  padding: 2rem;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.poster img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+.info h1 {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  background: var(--accent);
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: white;
+}
+
+.rating {
+  color: #ffd166;
+  font-weight: 600;
+}
+
+.genres {
+  margin-bottom: 1rem;
+}
+
+.genre-pill {
+  display: inline-block;
+  margin: 4px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 0.8rem;
+}
+
+.description {
+  color: rgba(255,255,255,0.8);
+  line-height: 1.5;
+  margin-top: 1rem;
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .details-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+</style>

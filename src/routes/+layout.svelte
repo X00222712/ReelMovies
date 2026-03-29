@@ -1,3 +1,4 @@
+<!-- Author: Alex D -->
 <script>
     import favicon from '$lib/assets/favicon.svg';
     import { onMount } from "svelte";
