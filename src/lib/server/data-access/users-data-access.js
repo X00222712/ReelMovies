@@ -8,7 +8,7 @@ All user data access other than better auth stuff
 */
 
 // Third party
-import { eq, gte} from "drizzle-orm";
+import { eq, gte, sql, desc, inArray } from "drizzle-orm";
 import { db } from "../db/index"
 import { user } from "../db/auth.schema";
 
@@ -43,12 +43,12 @@ export const usersDataAccess = {
     async insertUserPoints(userID, points)
         { await db.insert(rewardPoints).values({userId : userID, points : points}) },
 
-        async getUser(userID)
+    async getUser(userID)
     {
         const result = await db.select(userData).from(user)
         .leftJoin( admins, eq(user.id, admins.id) )
-        .where(eq(userID.id, user.id)).limit(1)
         .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
+        .where(eq(userID.id, user.id)).limit(1)
         return result[0] ?? null
     },
 
@@ -58,7 +58,18 @@ export const usersDataAccess = {
         .leftJoin( admins, eq(user.id, admins.id) )
         .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         .where(gte(user.id, userID)).limit(pagesize)
-        console.log(result)
         return result
+    },
+
+    async getLastPage(pagesize)
+    {
+        const result = await db.select(userData).from(user)
+        .leftJoin( admins, eq(user.id, admins.id) )
+        .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
+        .orderBy( desc(user.id) )
+        // https://github.com/drizzle-team/drizzle-orm/discussions/457
+        .limit(pagesize)
+        // reverse the reversed page
+        return result.reverse()
     }
 };

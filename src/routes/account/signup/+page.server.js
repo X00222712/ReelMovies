@@ -1,10 +1,21 @@
+/*
+
+Author : Glen Johnston
+Create : Feb / 2026
+
+Description
+
+Handle user signup requests
+
+*/
+
 // third part
 import { fail, redirect, json } from "@sveltejs/kit";
 import { ZodError } from "zod";
 import { APIError } from "better-auth";
 import { auth } from "$lib/server/auth";
 
-// Out stuff
+// Our stuff
 import { usersService } from "$lib/server/services/users-service";
 import { validateUser } from "$lib/server/db/validation";
 import { ValidationError } from "$lib/server/utils/errors";
@@ -27,9 +38,9 @@ export const actions = {
         try {
             if (password !== confirmPassword) { throw new ValidationError("Passwords don't match") }
             validatedData = validateUser.parse({ name, email, password })
+            
         } catch(error) {
-            console.log(error.message)
-            return fail(400, {error: true, message : "Details not valid"})
+            return fail(400, {error: true, message : JSON.parse(error.message)[0]?.message || "Details not valid"})
         }
 
         // Create user

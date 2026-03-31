@@ -30,5 +30,11 @@ export const usersService = {
         const validatedPageSize = idSchema.parse({id : pagesize})
         // const validatedPageSize = pageSize
         return await usersDataAccess.getUsersPageByID(validatedId.id, validatedPageSize.id)
+    },
+
+    // Used in paging
+    async getLastPage(pagesize) {
+        return await usersDataAccess.getLastPage(pagesize)
     }
+
 }

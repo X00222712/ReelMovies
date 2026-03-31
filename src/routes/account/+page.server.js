@@ -14,7 +14,13 @@ export async function load( { locals } ) {
     let user;
     if (locals.user?.name) {
         signedIn = true
-        user = await usersService.getUser(Number(locals.user.id));
+        try
+            {
+                console.log(Number(locals.user.id))
+                user = await usersService.getUser(Number(locals.user.id));
+            }
+        catch
+            { redirect(308, "/account/signout") }
     }
     else user = {name:null, email:null}
 

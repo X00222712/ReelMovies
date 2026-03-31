@@ -1,3 +1,15 @@
+/*
+
+Author : Glen Johnston
+Create : 17 / Mar / 2026
+
+Description
+
+This file is to setup the DB and any setup value's for testing should be initislied in here
+either by using proper channels or be checking that all the code works and can not fail.
+
+*/
+
 // Third part
 import { db } from '$lib/server/db';
 import { auth } from '$lib/server/auth';

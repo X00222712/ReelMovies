@@ -14,6 +14,7 @@ export async function POST( { cookie, request } )
             movies = movies.filter((movie, i) => { return i < 5; })
             movies.forEach( (movie, i) => {
                 movie.active = i === 0
+                movie.index = i
             });
 
             content = {movies : movies}

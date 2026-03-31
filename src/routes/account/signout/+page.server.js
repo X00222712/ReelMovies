@@ -4,8 +4,13 @@ import { auth } from '$lib/server/auth';
 
 
 // Is the user not signed in, then redirect
-export const load = async ( { locals } ) => {
+export const load = async ( { locals , request} ) => {
 	if (!locals.user) { return redirect(302, '/'); }
+    await auth.api.signOut({
+        headers: request.headers
+    });
+    return redirect(302, '/');
+
 };
 
 export const actions = {
@@ -13,8 +18,8 @@ export const actions = {
     default: async ({ request }) =>
     {
         await auth.api.signOut({
-			headers: request.headers
-		});
+            headers: request.headers
+        });
 		return redirect(302, '/');
     }
 }

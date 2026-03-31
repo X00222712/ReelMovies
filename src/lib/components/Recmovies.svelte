@@ -5,12 +5,11 @@
     // TODO
         // Make a recommended DB for easy modifycation
         // Make it a recommended element not a recommended movie element.
-    let { recMovies } = $props();
     let movies = $state();
 
     onMount(async () =>
     {
-        let data = await fetch(
+        let response = await fetch(
             "/movies/",
             {
                 method : "POST",
@@ -20,9 +19,9 @@
                     "Content-Type": "application/json",
                 },
             }
-        ).then(
-            response => response.json()
         )
+        const data = await response.json()
+        console.log(data)
         movies = data.movies
     })
 
@@ -33,11 +32,11 @@
 
 <div id="movieCarousel" class="carousel carousel-dark slide my-5" data-bs-ride="carousel" style="box-shadow: 0 0px 25px;">
     <div class="carousel-indicators">
-        {#each recMovies as movie}
+        {#each movies as movie}
             {#if true === movie.active}
-                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" class="active" aria-label="Movie slider {movie.title}"></button>
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.index}" class="active" aria-label="Movie slider {movie.title}"></button>
             {:else}
-                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.ID}" aria-label="Movie slider {movie.title}"></button>
+                <button type="button" data-bs-target="#movieCarousel" data-bs-slide-to="{movie.index}" aria-label="Movie slider {movie.title}"></button>
             {/if}
         {/each}
     </div>

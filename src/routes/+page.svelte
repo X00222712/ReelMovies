@@ -8,7 +8,6 @@
     let logged = userData.logged;
     let RMPoints = userData.RMPoints;
 
-    let recMovies = data.recMovies;
     let rewardItems = data.rewards;
 </script>
 
@@ -46,4 +45,4 @@
     {/if}
 </div>
 
-<Recmovies { recMovies }/>
+<Recmovies/>
