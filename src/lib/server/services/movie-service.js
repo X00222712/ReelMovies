@@ -3,6 +3,14 @@ import { db } from "$lib/server/db";
 import { movies, genres, movieGenres } from "$lib/server/db/schema.js";
 import { eq } from "drizzle-orm";
 
+export async function getMovieById(id) {
+  const result = await db
+    .select()
+    .from(movies)
+    .where(eq(movies.id, id));
+
+  return result[0];
+}
 export const moviesService = {
   async getAllMovies() {
 
