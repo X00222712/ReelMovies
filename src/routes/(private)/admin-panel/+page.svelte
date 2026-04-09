@@ -158,15 +158,16 @@ Admin panel front end for CRUD of different features
                     </div>
                 </div>
 
+                <!-- Edit -->
                 <div class="col-12 col-md-5 col-lg-4 mx-1 my-4 my-md-0">
                     <div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
                         
                         <h3 class="text-center">Edit account</h3>
 
                         <div>
-
+                    <!-- Error message -->
                             <div>
-                                {#if form?.edits.error}
+                                {#if form?.edits?.error}
                                 <div class="col-12 col-md-6 mx-auto">
                                     <div class="text-center border border-danger border-3 mx-auto">
                                         <p class="m-2">{form?.edits.message}</p>
@@ -212,19 +213,19 @@ Admin panel front end for CRUD of different features
                         <div>
 
                             <div>
-                                {#if form?.edits.error}
+                                {#if form?.deleted?.message}
                                 <div class="col-12 col-md-6 mx-auto">
                                     <div class="text-center border border-danger border-3 mx-auto">
-                                        <p class="m-2">{form?.edits.message}</p>
+                                        <p class="m-2">{form?.deleted.message}</p>
                                     </div>
                                 </div>
                                 {/if}
                             </div>
 
-                            <form action="?/deleteAccount">
+                            <form action="?/deleteAccount" method="POST">
                             
                                 <div>
-                                    <input type="text" placeholder="email">
+                                    <input type="text" name="email" id="email" placeholder="email">
                                 </div>
 
                                 <button class="btn btn-danger m-2" type="submit">Delete accountn</button>

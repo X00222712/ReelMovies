@@ -16,6 +16,9 @@ export const validateUserLogin = z.object({
     password: z.string().nonempty("Password Cannot be null").min(8, 'Password must be at least 7 characters').max(64, "Name is too long must be under 64 characters"),
 });
 
+export const validateUserEmail = z.object({
+    email: z.string().nonempty("Email Cannot be null").email('Must be a valid email'),
+});
 export const validateUserPassword = z.object({
     password: z.string().nonempty("Password Cannot be null").min(8, 'Password must be at least 7 characters').max(64, "Name is too long must be under 64 characters"),
 })

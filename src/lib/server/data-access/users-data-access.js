@@ -46,16 +46,23 @@ export const usersDataAccess = {
     async getUser(userID)
     {
         const result = await db.select(userData).from(user)
-        .leftJoin( admins, eq(user.id, admins.id) )
+        .leftJoin( admins, eq(user.id, admins.userId) )
         .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         .where(eq(userID.id, user.id)).limit(1)
         return result[0] ?? null
     },
 
+    async getUserByEmail(userEmail)
+    {
+        const result = await db.select( { id : user.id } )
+        .from(user)
+        .where( eq(userEmail, user.email) )
+    },
+
     async getUsersPageByID(userID, pagesize)
     {
         const result = await db.select(userData).from(user)
-        .leftJoin( admins, eq(user.id, admins.id) )
+        .leftJoin( admins, eq(user.id, admins.userId) )
         .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         .where(gte(user.id, userID)).limit(pagesize)
         return result
@@ -64,7 +71,7 @@ export const usersDataAccess = {
     async getLastPage(pagesize)
     {
         const result = await db.select(userData).from(user)
-        .leftJoin( admins, eq(user.id, admins.id) )
+        .leftJoin( admins, eq(user.id, admins.userId) )
         .leftJoin( rewardPoints , eq(user.id, rewardPoints.userId) )
         .orderBy( desc(user.id) )
         // https://github.com/drizzle-team/drizzle-orm/discussions/457
@@ -81,5 +88,44 @@ export const usersDataAccess = {
             .where( eq(userId, admins.userId) )
             .limit(1)
         return result;
-    }
+    },
+
+    async Insertadmins(userId, admin, priv)
+        {
+            await db.insert(admins)
+            .values({
+                userId : userId,
+                admin : admin,
+                privilage : priv
+            })
+        },
+
+    async setAdmin(userId)
+        {
+            await db.update(admins)
+            .set({ admin : true })
+            .where( eq(userId, admins.userId) )
+        },
+
+    async setPrivilage(userId)
+        {
+            await db.update(admins)
+            .set({ admin : true, privilage : true })
+            .where( eq(userId, admins.userId) )
+        },
+
+        async removeAdmin(userId)
+        {
+            await db.update(admins)
+            .set({ admin : false, privilage : false })
+            .where( eq(userId, admins.userId) )
+        },
+
+    async removePrivilage(userId)
+        {
+            await db.update(admins)
+            .set({ privilage : false })
+            .where( eq(userId, admins.userId) )
+        },
+
 };

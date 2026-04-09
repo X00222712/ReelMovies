@@ -14,7 +14,7 @@ import { auth } from "$lib/server/auth"
 import { fail, redirect } from '@sveltejs/kit';
 
 // ours
-import { idSchema, validateUser } from "$lib/server/db/validation"
+import { idSchema, validateUser, validateUserEmail } from "$lib/server/db/validation"
 import { usersService } from "$lib/server/services/users-service"
 
 export async function load({ locals }) {
@@ -41,7 +41,8 @@ export async function load({ locals }) {
         }
 
     console.log(access)
-    if (false === access.admin)
+    console.log(1 > access.length)
+    if (1 > access.length || false === access?.admin)
         { return redirect(302, '/') }
 
     // Validate maybe in the future
@@ -55,11 +56,10 @@ export const actions = {
         const username = data.get("username")
         const email = data.get("email")
         const password = data.get("password")
-        const reelpoints = Number(data.get("RM points"))
+        const reelpoints = Number(data.get("RM points")) ?? 0
 
         const admin = data.get("admin")
         const privilaged = data.get("privilaged")
-        console.log(admin, privilaged)
 
         // Declare all expected values
         let newUser = {
@@ -91,7 +91,6 @@ export const actions = {
 
         let CreatedUser;
         try {
-            console.log(password.length)
             CreatedUser = await auth.api.signUpEmail({
                 body : {
                     name : validatedUser.name,
@@ -99,8 +98,6 @@ export const actions = {
                     password : validatedUser.password,
                 },
             })
-            // Restore the user's session token
-            cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
         }
         catch (error)
         {
@@ -115,21 +112,28 @@ export const actions = {
 
         try
         {
+            const userId = Number(CreatedUser.user.id)
             // Add RM points of the user
-            console.log(ValidatedRMPoints)
-            console.log(Number(ValidatedRMPoints.id))
-            // usersService.insertUserPoints(CreatedUser.user.id)
+            await usersService.insertUserPoints(userId, Number(ValidatedRMPoints.id))
 
+            // Add privilage
+            console.log(userId)
+            if ("on" == privilaged)
+                { await usersService.Insertadmins(userId, true, true) }
             // Add admin
-            // Add IT privilage
+            else if ("on" === admin)
+                { await usersService.Insertadmins(userId, true, false) }
 
         }
         catch (error)
         {
+            console.log(error)
             newUser = {
                 error : true,
-                message : `Account Creation failed to insert extra info - ${JSON.parse(error)[0].message}`
+                message : `Account Creation failed to insert extra info`
             }
+            // Restore the user's session token
+            cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
             return fail(400, { newUser })
         }
 
@@ -137,9 +141,11 @@ export const actions = {
         // Signout to remove session token from new user
         try
         {
-            auth.api.signOut({
+            await auth.api.signOut({
                 headers : { cookie : CreatedUser.token }
             })
+            // Restore the user's session token
+            cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
         }
         catch (error)
         {
@@ -147,6 +153,8 @@ export const actions = {
                 error : true,
                 message : `Account created, but failed with ${error.message}`
             }
+            // Restore the user's session token
+            cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
             return fail(400, { newUser })
         }
 
@@ -163,12 +171,48 @@ export const actions = {
         return { edits }
     },
 
-    async deleteAccount()
+    async deleteAccount( { request, cookies } )
     {
-        deleted = {
-            error : true,
-            message : "Not implemented"
+        console.log("1")
+        const data = await request.formData()
+        const email = data.get("email")
+        let deleted = {
+            error : false,
+            message : "Account deleted"
         }
+        console.log("1")
+
+        let validatedId;
+        try
+        {
+            const validatedEmail = validateUserEmail.parse({email}).email
+            const userId = await usersService.getUserByEmail(validatedEmail)
+            validatedId = idSchema.parse(userId)
+            console.log("1")
+        }
+        catch (error)
+        {
+            console.log(error)
+            deleted = {
+                error : true,
+                message : `Unable to find user ${email}`
+            }
+            return { deleted }
+        }
+
+        try
+        {
+            await usersService.deleteAccount(validateUser, "Admin delete", cookies.get("better-"))
+        }
+        catch (error)
+        {
+            console.log(error)
+            deleted = {
+                error : true,
+                message : "Failed to delete user"
+            }
+        }
+        console.log("1")
         return { deleted }
     }
 
