@@ -1,10 +1,13 @@
 <!-- Author: Alex D -->
 <script>
   let { data } = $props();
+  
+  const movie = data.movie
+
 </script>
 
-{#if data.movie}
-  <h1>{data.movie.title}</h1>
+{#if movie}
+  <h1>{movie.title}</h1>
 {:else}
   <p style="color:white;">Movie not found</p>
 {/if}
