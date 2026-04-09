@@ -57,8 +57,8 @@ export async function runTest(testData, testCallback) {
             // console.log("EXPECTED", testCase.expected)
             // console.log("Equal", result === testCase.expected)
             // console.log("Equal", result == testCase.expected)
-            console.log(('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
-            console.log(result, testCase.expected)
+            // console.log(('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
+            // console.log(result, testCase.expected)
             if (('object' === typeof testCase.expected && testCase.expected.includes(result)) || ('string' === typeof testCase.expected && result === testCase.expected))
             {
                 testCase.addMessage(result)

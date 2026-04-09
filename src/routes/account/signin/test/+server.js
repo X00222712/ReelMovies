@@ -1,10 +1,18 @@
-// Must make tests when I get the change
-import { runTest, TestCase, TestResults } from "$lib/server/utils/tests";
-import { json } from "@sveltejs/kit";
-import { APIError } from "better-auth/api";
-import { validateUserLogin } from "$lib/server/db/validation";
-import { ZodError } from "zod";
+/*
+
+Author : Glen Johnston
+
+*/
+
+// Third party
 import { auth } from "$lib/server/auth";
+import { APIError } from "better-auth/api";
+import { json } from "@sveltejs/kit";
+import { ZodError } from "zod";
+
+// Ours
+import { runTest, TestCase, TestResults } from "$lib/server/utils/tests";
+import { validateUserLogin } from "$lib/server/db/validation";
 
 export async function GET( { request, cookies } )
 {
@@ -23,11 +31,10 @@ export async function GET( { request, cookies } )
         new TestCase( {email: "glen@test.ie", password: null}, "Invalid input: expected string, received null" )
     ]
     const results = await runTest(tests, async ( data ) => {
-
         // Store cookie
         let userSigninCookie = cookies.get("better-auth.session_token")
         // Set cookie to nothing to prevent log out
-        cookies.set("better-auth.session_token", "", path="/")
+        cookies.set("better-auth.session_token", "", { path : "/" })
         try {
             const validated = validateUserLogin.parse({
                 email : data.email,
@@ -44,13 +51,10 @@ export async function GET( { request, cookies } )
                     callbackURL : '/auth/verification-success'
                 }
             })
-            const headers = request.headers
+            const headers = { cookie : `better-auth.session_token=${signin.token}` }
 
             // Sign new account out to prevent a pile up of sessions
-            headers.cookie = `better-auth.session_token=${signin.token}`
-            await auth.api.signOut({
-                headers: headers
-            })
+            await auth.api.signOut({ headers })
             // Restore cookie to regain session
             cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
             return "Signed In"
@@ -68,5 +72,6 @@ export async function GET( { request, cookies } )
             }
         }
     })
+
     return json({name: "accountSignIn", data : results}, {status : 200});
 }

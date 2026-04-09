@@ -71,5 +71,15 @@ export const usersDataAccess = {
         .limit(pagesize)
         // reverse the reversed page
         return result.reverse()
+    },
+
+    async canAccessAdmin(userId)
+    {
+        const result = await db
+            .select( { admin : admins.admin, privilage : admins.privilage } )
+            .from( admins )
+            .where( eq(userId, admins.userId) )
+            .limit(1)
+        return result;
     }
 };

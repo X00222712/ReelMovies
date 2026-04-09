@@ -35,6 +35,9 @@ export const usersService = {
     // Used in paging
     async getLastPage(pagesize) {
         return await usersDataAccess.getLastPage(pagesize)
-    }
+    },
+
+    async canAccessAdmin(userId)
+        { return await usersDataAccess.canAccessAdmin(userId) }
 
 }

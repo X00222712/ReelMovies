@@ -9,16 +9,44 @@ Admin panel functions and data
 
 */
 
-
+// Third party
 import { auth } from "$lib/server/auth"
+import { fail, redirect } from '@sveltejs/kit';
+
+// ours
 import { idSchema, validateUser } from "$lib/server/db/validation"
 import { usersService } from "$lib/server/services/users-service"
-import { fail } from "@sveltejs/kit"
 
-export async function load() {
+export async function load({ locals }) {
+    if (!locals.user) { return redirect(302, '/account'); }
+    // Validate the user
+    let validatedId;
+    try
+        { validatedId = idSchema.parse({id : Number(locals.user.id)}).id }
+    catch (error)
+    // This will show an error message,
+    // Could do something better but we only need it to work
+        {
+            console.log(error)
+            return { user : {}, failed : {status : true, message : "Could not validate user"} }
+        }
+
+    let access;
+    try
+        { access = await usersService.canAccessAdmin(validatedId) }
+    catch (error)
+        {
+            console.log(error)
+            return { user : {}, failed : {status : true, message : "Could not validate user"} }
+        }
+
+    console.log(access)
+    if (false === access.admin)
+        { return redirect(302, '/') }
+
     // Validate maybe in the future
     const users = await usersService.getUsersPageByID(1, 4)
-    return { users }
+    return { users, failed : {}}
 }
 
 export const actions = {

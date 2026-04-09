@@ -16,7 +16,7 @@
     let { children } = $props();
 
 
-    let scrolled = false;
+    let scrolled = $state(false);
 
 
     const handleScroll = () => {

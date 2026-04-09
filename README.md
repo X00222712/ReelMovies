@@ -81,8 +81,10 @@ Run the file `setup.bat` or `setup.sh`
     - [ ]  Create seat bookings DB
 ### Iteration 2
 
-- [ ] User accounts and authorisation
-
+- [x] User accounts and authorisation
+- [X] DB setup
+- [X] Admin panel
+- [X] Test cases
 
 ## ALEX
 - [X] Create navigation bar
@@ -123,3 +125,38 @@ To help make this a reference helps
     - Account signin page
     - Purchases page
     - View purchase details page
+
+
+# Information
+
+## Accounts
+
+Username : IT Admin
+Email    : itsuper@reelmovies.ie
+Password : ITSupport
+status   : AP
+
+Username : Admin
+Email    : admin@reelmovies.ie
+Password : reelmovies
+status   : A_
+
+Username : Glen
+Email    : test@test.ie
+Password : password123
+status   : __
+
+Username : Alex
+Email    : Alex@test.ie
+Password : SuperCool
+status   : __
+
+Username : Glen
+Email    : Glen@test.ie
+Password : password123
+status   : __
+
+Username : Glen
+Email    : GLEN@test.com
+Password : password123
+status   : __
