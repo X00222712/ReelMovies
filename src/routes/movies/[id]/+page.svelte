@@ -26,7 +26,7 @@
 
       <div class="meta">
         <span class="badge">{movie.ageRating}</span>
-        <span class="rating">⭐ {movie.ratingScore}/10</span>
+        <span class="rating"> {movie.ratingScore}/10</span>
       </div>
 
         <div>

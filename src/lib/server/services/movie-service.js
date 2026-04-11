@@ -11,9 +11,30 @@ export async function getMovieById(id) {
 
   return result[0];
 }
+export async function addMovie(movie) {
+  const result = await db
+    .insert(movies)
+    .values({
+      title: movie.title,
+      rating: movie.rating,
+      poster: movie.poster,
+      description: movie.description,
+      ratingScore: movie.ratingScore
+    })
+    .returning();
+  return result[0];
+}
+
+export async function deleteMovie(id) {
+  await db
+    .delete(movieGenres)
+    .where(eq(movieGenres.movieId, id));
+  return await db
+    .delete(movies)
+    .where(eq(movies.id, id));
+}
 export const moviesService = {
   async getAllMovies() {
-
     const results = await db
       .select({
         id: movies.id,
@@ -46,7 +67,8 @@ export const moviesService = {
         movieMap[row.id].genre.push(row.genre);
       }
     }
-
+  
     return Object.values(movieMap);
   }
+  
 };
