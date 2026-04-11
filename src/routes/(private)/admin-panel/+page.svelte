@@ -113,7 +113,7 @@ Admin panel front end for CRUD of different features
 
 
                             <div>
-                                {#if form?.newUser.error}
+                                {#if form?.newUser?.error}
                                 <div class="col-12 col-md-6 mx-auto">
                                     <div class="text-center border border-danger border-3 mx-auto">
                                         <p class="m-2">{form?.newUser.message}</p>
@@ -139,7 +139,7 @@ Admin panel front end for CRUD of different features
                                     <input class="w-100" type="text" name="RM points" id="RM points" placeholder="IT Reel Points" required="true">
                                 </div>
 
-                                <div class="createUserForm mx-auto d-flex flex-row gap-4">
+                                <div class="createUserForm mx-auto d-flex flex-column flex-sm-row gap-4">
                                     <div>
                                         <input type="checkbox" name="admin" id="admin" >
                                         <label for="admin">Admin</label>
@@ -149,6 +149,7 @@ Admin panel front end for CRUD of different features
                                         <label for="admin">privilaged</label>
                                     </div>
                                 </div>
+
                                 <div class="buttonStyles mx-auto">
                                     <button class="w-100 btn btn-success" type="submit">Create User</button>
                                 </div>
@@ -167,35 +168,45 @@ Admin panel front end for CRUD of different features
                         <div>
                     <!-- Error message -->
                             <div>
-                                {#if form?.edits?.error}
+                                {#if form?.edits?.error || form?.edits?.success}
                                 <div class="col-12 col-md-6 mx-auto">
-                                    <div class="text-center border border-danger border-3 mx-auto">
+                                    <div class="text-center border {form?.edits?.error ? "border-danger" : "border-warning"} border-3 mx-auto">
                                         <p class="m-2">{form?.edits.message}</p>
                                     </div>
                                 </div>
                                 {/if}
                             </div>
 
-                            <form action="?/editAccounut">
-                                <input type="text" placeholder="email address">
+                            <form action="?/editAccounut" method="POST">
+                                <input class="w-100 my-3" type="text" name="email" id="email" placeholder="email address" required>
 
                                 <div class="my-3">
                                     <div>
-                                        <input type="checkbox" name="" id="">
-                                        <label for="">Change password</label>
+                                        <input class="mx-1" type="checkbox" name="edit RM" id="edit RM">
+                                        <label class="mx-1" for="edit RM">Reel points</label>
                                     </div>
-                                    <input type="number" placeholder="New password">
+                                    <input class="w-100" type="number" name="RM points" id="RM points" placeholder="Amount">
                                 </div>
 
-                                <div class="my-3">
+                                <div>
                                     <div>
-                                        <input type="checkbox" name="" id="">
-                                        <label for="">Reel points</label>
+                                        <input class="mx-1" type="checkbox" name="edit admin" id="edit admin">
+                                        <label class="mx-1" for="edit admin">Edit admins</label>
                                     </div>
-                                    <input type="number" placeholder="Amount">
+                                    <input class="mx-1" type="checkbox" name="admin" id="admin">
+                                    <label class="mx-1" for="admin">Admin</label>
+
+                                    <input class="mx-1" type="checkbox" name="privilaged" id="privilaged">
+                                    <label class="mx-1" for="privilaged">Privilaged</label>
                                 </div>
 
-                                <button class="btn btn-warning m-2" type="submit">Edit account</button>
+                                <div class="my-2">
+                                    <input class="w-100" type="text" name="admin password" id="admin password" placeholder="Your password" required>
+                                </div>
+
+                                <div class="buttonStyles mx-auto">
+                                    <button class="w-100 btn btn-warning m-2" type="submit">Edit account</button>
+                                </div>
 
                             </form>
 
@@ -224,11 +235,17 @@ Admin panel front end for CRUD of different features
 
                             <form action="?/deleteAccount" method="POST">
                             
-                                <div>
-                                    <input type="text" name="email" id="email" placeholder="email">
+                                <div class="my-3">
+                                    <input class="w-100" type="text" name="email" id="email" placeholder="email">
                                 </div>
 
-                                <button class="btn btn-danger m-2" type="submit">Delete accountn</button>
+                                <div class="my-3">
+                                    <input class="w-100" type="text" name="admin password" id="admin password" placeholder="Your password">
+                                </div>
+
+                                <div class="buttonStyles mx-auto">
+                                    <button class="w-100 btn btn-danger m-2" type="submit">Delete account</button>
+                                </div>
 
                             </form>
                         </div>

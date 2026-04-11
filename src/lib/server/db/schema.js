@@ -8,7 +8,8 @@ export const admins = sqliteTable('admins', {
 	id: integer().primaryKey({autoIncrement : true}),
     userId: integer("user_id", { mode : "number"})
 		.notNull()
-		.references(() => user.id, { onDelete: "cascade" }),
+		.references(() => user.id, { onDelete: "cascade" })
+		.unique(),
 	admin: integer({ mode: 'boolean' }).default(false).notNull(),
 	privilage: integer({ mode: 'boolean' }).default(false).notNull()
 })

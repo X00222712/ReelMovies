@@ -10,21 +10,19 @@ import { validateUserName, validateUserPassword } from "$lib/server/db/validatio
 
 
 export async function load( { locals } ) {
-    let signedIn = false;
     let user;
     if (locals.user?.name) {
-        signedIn = true
         try
             {
                 console.log(Number(locals.user.id))
                 user = await usersService.getUser(Number(locals.user.id));
             }
         catch
-            { redirect(308, "/account/signout") }
+            { redirect(308, "/auth/signout") }
     }
-    else user = {name:null, email:null}
+    else { redirect(308, "/auth/signin") }
 
-    return { signedIn: signedIn, user : user}
+    return { user : user }
 }
 
 

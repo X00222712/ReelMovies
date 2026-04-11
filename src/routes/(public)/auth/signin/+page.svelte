@@ -37,7 +37,7 @@
 
             <div class="d-flex flex-column align-items-center w-100" style="max-width: 300px;">
                 <button class="btn btn-success my-3 w-100" type="submit">Sign in</button>
-                <a style="color: aliceblue; text-decoration: none;" href="/account/signup" class="w-100">
+                <a style="color: aliceblue; text-decoration: none;" href="/auth/signup" class="w-100">
                     <button class="btn btn-secondary my-3 w-75">
                         Create new account
                     </button>

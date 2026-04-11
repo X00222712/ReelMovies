@@ -14,8 +14,9 @@ import { auth } from "$lib/server/auth"
 import { fail, redirect } from '@sveltejs/kit';
 
 // ours
-import { idSchema, validateUser, validateUserEmail } from "$lib/server/db/validation"
+import { idSchema, validateUser, validateUserEmail, validateUserPassword } from "$lib/server/db/validation"
 import { usersService } from "$lib/server/services/users-service"
+import { success } from "zod";
 
 export async function load({ locals }) {
     if (!locals.user) { return redirect(302, '/account'); }
@@ -40,8 +41,6 @@ export async function load({ locals }) {
             return { user : {}, failed : {status : true, message : "Could not validate user"} }
         }
 
-    console.log(access)
-    console.log(1 > access.length)
     if (1 > access.length || false === access?.admin)
         { return redirect(302, '/') }
 
@@ -117,7 +116,6 @@ export const actions = {
             await usersService.insertUserPoints(userId, Number(ValidatedRMPoints.id))
 
             // Add privilage
-            console.log(userId)
             if ("on" == privilaged)
                 { await usersService.Insertadmins(userId, true, true) }
             // Add admin
@@ -162,33 +160,117 @@ export const actions = {
         return { newUser }
     },
 
-    async editAccounut()
+    // TODO
+    // Make all fails and successes append to edits
+    // so multiple messages can display
+    async editAccounut( { locals, request, cookies } )
     {
-        edits = {
-            error : true,
-            message : "Not implemented"
-        }
-        return { edits }
-    },
-
-    async deleteAccount( { request, cookies } )
-    {
-        console.log("1")
         const data = await request.formData()
         const email = data.get("email")
-        let deleted = {
+        // Things to edit
+        const RMPCheck = "on" === data.get("edit RM")
+        const adminCheck = "on" === data.get("edit admin")
+        // Admin's password
+        const password = data.get("admin password")
+
+        let edits = {
+            success : false,
             error : false,
-            message : "Account deleted"
+            message : ""
         }
-        console.log("1")
 
         let validatedId;
         try
         {
             const validatedEmail = validateUserEmail.parse({email}).email
             const userId = await usersService.getUserByEmail(validatedEmail)
-            validatedId = idSchema.parse(userId)
-            console.log("1")
+
+            validatedId = Number(idSchema.parse(userId).id)
+        }
+        catch (error)
+        {
+            console.log(error)
+            edits.error = true
+            edits.message = `Unable to find user ${email}`
+            return { edits }
+        }
+
+        // Reel points edit
+        if (RMPCheck)
+        {
+            let validatedRMPoints = 0;
+
+            try
+            {
+                const RMP = Number(data.get("RM points"));
+// Only thing that'll error
+                validatedRMPoints = idSchema.parse({id : RMP}).id
+// I doubt this will ever fail
+                await usersService.updateRMpoints(validatedId, validatedRMPoints)
+                edits.success = true
+                edits.message += "Changed RM points "
+            }
+            catch (error)
+            {
+                console.log(error)
+                edits.error = true
+                edits.message = JSON.parse(error)[0].message
+                return { edits }
+            }
+        }
+
+        else if (adminCheck)
+        {
+
+            const beAdmin = "on" === data.get("admin")
+            const bePrivilaged = "on" === data.get("privilaged")
+
+            try
+                { await usersService.Insertadmins(validatedId, beAdmin, bePrivilaged )}
+            catch
+            {
+                if (beAdmin)
+                    { await usersService.setAdmin(validatedId) }
+                else
+                    { await usersService.removeAdmin(validatedId) }
+                if (bePrivilaged)
+                    { await usersService.setPrivilage(validatedId) }
+                else
+                    { await usersService.removePrivilage(validatedId) }
+            }
+            edits.success = true
+            edits.message += "Changed admin status "
+        }
+    
+        else
+        {
+            edits = {
+                error : true,
+                message : "Not implemented"
+            }
+        }
+
+        return { edits }
+    },
+
+    async deleteAccount( { request, cookies } )
+    {
+        const data = await request.formData()
+        const email = data.get("email")
+        const password = data.get("admin password")
+
+        let deleted = {
+            error : false,
+            message : "Account deleted"
+        }
+
+        let validatedId;
+        try
+        {
+            const validatedEmail = validateUserEmail.parse({email}).email
+            const userId = await usersService.getUserByEmail(validatedEmail)
+
+            validatedId = idSchema.parse(userId).id
         }
         catch (error)
         {
@@ -202,7 +284,9 @@ export const actions = {
 
         try
         {
-            await usersService.deleteAccount(validateUser, "Admin delete", cookies.get("better-"))
+            const token = cookies.get("better-auth.session_token")
+            await usersService.deleteUserData(validatedId, token, password)
+            await usersService.deleteAccount(validatedId, token, password)
         }
         catch (error)
         {
@@ -212,7 +296,6 @@ export const actions = {
                 message : "Failed to delete user"
             }
         }
-        console.log("1")
         return { deleted }
     }
 
