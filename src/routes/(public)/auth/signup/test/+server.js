@@ -28,7 +28,7 @@ export async function GET( { cookies } ) {
         new TestCase({name : "Glen", email : null, password : "Password123"}, "Invalid input: expected string, received null"),
         new TestCase({name : "Glen", email : "", password : "Password123"}, "Email Cannot be null Must be a valid email"),
         new TestCase({name : "Glen", email : "test@test.ie", password : null}, "Invalid input: expected string, received null"),
-        new TestCase({name : "Glen", email : "test@test.ie", password : ""}, "Password Cannot be null Password must be at least 6 characters"),
+        new TestCase({name : "Glen", email : "test@test.ie", password : ""}, "Password Cannot be null Password must be at least 7 characters"),
 
     ]
     let testResult = await runTest(testData, async (data) => {

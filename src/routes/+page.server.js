@@ -24,12 +24,10 @@ export async function load( { cookies, locals, ur } ) {
         let RMPoints = 0
     }
 
-    const recommendedMovies = await recommendedMoviesService.getRecommendedMovies();
     const rewards = await rewardsService.getRecommendedRewards();
     return {
         // Data
         userData : { username, RMPoints, logged},
-        recMovies : recommendedMovies,
         rewards : rewards
 
     };
