@@ -1,8 +1,8 @@
 <!-- Author: Alex D -->
 <script>
   let { data } = $props();
-  
-  const movie = data.movie
+
+  const movie = data.movie;
 
 </script>
 
@@ -26,20 +26,25 @@
 
       <div class="meta">
         <span class="badge">{movie.ageRating}</span>
-        <span class="rating"> {movie.ratingScore}/10</span>
+        <span class="rating"> {movie.ratingScore ? `${movie.ratingScore}/10` : 'N/A'}</span>
       </div>
 
-        <div>
-            {#each movie.genre as g}
-                <span>{g}</span>
-            {/each}
+      {#if movie.genre && movie.genre.length}
+        <div class="genres">
+          {#each movie.genre as g}
+            <span class="genre-pill">{g}</span>
+          {/each}
         </div>
+      {/if}
 
       <p class="description">
         {movie.description}
       </p>
 
-      <a href="/movies" class="back-btn">← Back to Movies</a>
+      <div class="actions">
+        <a href="/movies" class="back-btn">← Back to Movies</a>
+        <a href={`/purchase/tickets?movie=${movie.id}`} class="book-btn">Book tickets →</a>
+      </div>
 
     </div>
 
@@ -117,12 +122,35 @@
 
 .back-btn {
   display: inline-block;
-  margin-top: 1.5rem;
-  color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
   text-decoration: none;
+  font-weight: 700;
 }
 
 .back-btn:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.book-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.book-btn:hover {
   text-decoration: underline;
 }
 
