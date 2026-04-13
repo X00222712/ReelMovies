@@ -11,10 +11,9 @@
     onMount(async () =>
     {
         let data = await fetch(
-            "/movies/",
+            "/movies?type=recommended",
             {
-                method : "POST",
-                body : JSON.stringify({ info: "recommened movies" }),
+                method : "GET",
                 headers:
                 {
                     "Content-Type": "application/json",

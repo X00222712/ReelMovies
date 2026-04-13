@@ -1,3 +1,4 @@
+<!-- Author: Alex D -->
 <script>
   let name = "";
   let rating = 5;
@@ -38,7 +39,6 @@
 
   <h2 class="mb-4 fw-bold">Customer Feedback</h2>
 
-  <!-- Review Form -->
   <div class="card p-4 mb-5 review-form">
     <div class="mb-3">
   <label for="name" class="form-label">Your Name</label>
@@ -82,7 +82,6 @@
     </button>
   </div>
 
-  <!-- Reviews List -->
   <h4 class="mb-3">Recent Reviews</h4>
 
   {#if reviews.length === 0}

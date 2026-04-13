@@ -1,22 +1,19 @@
-import { moviesService } from "$lib/server/services/movie-service"
-import { json } from "@sveltejs/kit"
+//  Author: Alex D
+import { moviesService } from "$lib/server/services/movie-service";
+import { json } from "@sveltejs/kit";
 
-export async function POST( { cookie, request } )
-{
-    const reqContent = await request.json();
-    let content = {};
-    let status = 404;
+export async function GET({ url }) {
 
-    if ("recommened movies" === reqContent.info)
-        {
-            let movies = await moviesService.getAllMovies();
-            movies = movies.filter((movie, i) => { return i < 5; })
-            movies.forEach( (movie, i) => {
-                movie.active = i === 0
-            });
+  const type = url.searchParams.get("type");
 
-            content = {movies : movies}
-        }
+  let movies = await moviesService.getAllMovies();
 
-    return json(content, { status : status});
+  if (type === "recommended") {
+    movies = movies.slice(0, 5).map((movie, i) => ({
+      ...movie,
+      active: i === 0
+    }));
+  }
+
+  return json({ movies }, { status: 200 });
 }
