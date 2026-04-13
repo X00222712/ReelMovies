@@ -41,11 +41,15 @@ You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
 
+## DB and Node setup
+Run the file `setup.bat` or `setup.sh`
+
 
 # TODO
 
 ## GLEN
-- [ ] Create the home page
+### Iteration 1
+- [X] Create the home page
     - [X] Use cookies to get user data
     - [X] Reward point recommendation element
     - [X] Movie recommendation element
@@ -57,27 +61,42 @@ You can preview the production build with `npm run preview`.
         - [X] Create movie recommendation Data Access
         - [ ] Create movie recommendation DB
 
-    - [X] Create signing page
-        - [X] Signin tokens
-        - [X] Signout
-        - [X] Service layers
-        - [X] Data access layer
-        - [ ] DB
+- [X] Create signing page
+    - [X] Signin tokens
+    - [X] Signout
+    - [X] Service layers
+    - [X] Data access layer
+    - [ ] DB
 
-    - [X] Create signup page
-        - [X] Create profiles
-        - [X] Auto login
+- [X] Create signup page
+    - [X] Create profiles
+    - [X] Auto login
+     
+- [X] Create book ticket page
+    - [X]  Create movie select
+    - [X]  Create seat select
+    - [X]  Create movie times DBL
+    - [X]  Create seat bookings DBL
+    - [ ]  Create movie times DB
+    - [ ]  Create seat bookings DB
+### Iteration 2
+
+- [ ] User accounts and authorisation
+
 
 ## ALEX
-- [X] Create a navigation bar
-- [ ] Create a feedback element
-- [ ] Create the layout style
-- [ ] Verify layout styling is consisent
+- [X] Create navigation bar
+- [X] Create footer
+- [X] Create a feedback page
+- [X] Create a contact page
+- [X] Create movie search page
+- [X] Create about us PAGE
+- [X] Create layout style
 
 ## LAUREN 
 - [x] Check usability and accessibility
-- [x] Verify layout styling is consisent
 - [x] Food page
+- [X] Create menu search page
 
 
 

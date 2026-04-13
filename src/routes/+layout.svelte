@@ -1,3 +1,4 @@
+<!-- Author: Alex D -->
 <script>
     import favicon from '$lib/assets/favicon.svg';
     import { onMount } from "svelte";
@@ -7,11 +8,11 @@
     import 'bootstrap/dist/css/bootstrap.min.css';
 	import 'bootstrap-icons/font/bootstrap-icons.min.css';
 
-	onMount( async () => {
-		if (browser) {
-			await import('bootstrap');
-		}
-	})
+    onMount( async () => {
+        if (browser) {
+            await import('bootstrap');
+        }
+    })
 
     let { children } = $props();
 
@@ -42,7 +43,7 @@
   <nav class="navbar navbar-expand-lg sticky-top cinema-nav {scrolled ? 'nav-scrolled' : ''}">
     <div class="container jusify-content-between px-0">
 
-      <a class="navbar-brand fw-bold text-white" href="/">
+      <a class="navbar-brand fw-bold text-white ms-1" href="/">
         ReelMovies
       </a>
 
@@ -60,8 +61,9 @@
 
           <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="/movies">Movies</a></li>
-          <li class="nav-item"><a class="nav-link" href="/food">Food</a></li>
+          <li class="nav-item"><a class="nav-link" href="/menu">Menu</a></li>
           <li class="nav-item"><a class="nav-link" href="/loyalty">Loyalty Program</a></li>
+          <li class="nav-item d-lg-none"><a class="nav-link" href="/account">Account</a></li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
 
           <li class="nav-item">
