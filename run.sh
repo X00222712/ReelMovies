@@ -1,9 +1,8 @@
 # Script for linux
 # Made by Glen
 
-# No npm install
+# If start up gets more complex then add to this file
+# Honestly all setup stuff should be in setup.sh
 
-# Remove DB if it exits
-[ -e local.db ] && rm local.db
-npm run db:push
+# Fancy pants
 npm run dev

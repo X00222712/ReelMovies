@@ -17,7 +17,7 @@
     let { children } = $props();
 
 
-    let scrolled = false;
+    let scrolled = $state(false);
 
 
     const handleScroll = () => {
@@ -132,6 +132,7 @@
           <ul class="list-unstyled">
             <li><a href="/contact" class="footer-link">Contact Us</a></li>
             <li><a href="/feedback" class="footer-link">Feedback</a></li>
+            <li><a href="/setup" class="footer-link">Setup DB</a></li>
           </ul>
         </div>
 
