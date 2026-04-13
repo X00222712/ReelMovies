@@ -94,7 +94,8 @@ Run the file `setup.bat` or `setup.sh`
 - [X] Create layout style
 
 ## LAUREN 
-- [X] Check usability and accessibility
+- [x] Check usability and accessibility
+- [x] Food page
 - [X] Create menu search page
 
 
