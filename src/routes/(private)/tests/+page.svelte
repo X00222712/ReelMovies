@@ -33,7 +33,7 @@
             <div class="d-flex justify-content-between mx-4 m-3">
                 <h3 class="mx-2">SignUp</h3>
                 <div>
-                    <button value="/account/signup/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
+                    <button value="/auth/signup/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
                 </div>
             </div>
         
@@ -53,7 +53,7 @@
             <div class="d-flex justify-content-between mx-4 m-3">
                 <h3 class="mx-2">SignIn</h3>
                 <div>
-                    <button value="/account/signin/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
+                    <button value="/auth/signin/test" class="btn btn-success" type="button" onclick={runTest}>Run tests</button>
                 </div>
             </div>
         
