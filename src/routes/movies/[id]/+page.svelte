@@ -43,7 +43,7 @@
 
       <div class="actions">
         <a href="/movies" class="back-btn">← Back to Movies</a>
-        <a href={'/purchase/tickets?movie=' + (movie.title)} class="book-btn">Book tickets →</a>
+        <a href={`/purchase/tickets?movie=${movie.id}`} class="book-btn">Book tickets →</a>
       </div>
 
     </div>
