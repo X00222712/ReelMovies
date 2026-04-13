@@ -1,3 +1,5 @@
+// Author : Luaren
+
 import { db } from "$lib/server/db";
 
 export async function load() {
