@@ -1,5 +1,5 @@
 <!--
-Author : Glen Johnston
+Author : Glen Johnston (Movie CRUD by Alex D)
 Create : 23 / Mar / 2026
 
 Description
@@ -14,8 +14,8 @@ Admin panel front end for CRUD of different features
 
     const {data, form} = $props()
 
-    let userInfo = $state(data.users)
-    const failed = data?.failed
+    let userInfo = $derived(() => data.users)
+    let failed = $derived(() => data?.failed)
 
     // If 9 in nextId then the next arrow goes to pageId 9
     let nextId = $state(3)
@@ -102,7 +102,179 @@ Admin panel front end for CRUD of different features
                 </div>
             </div>
 
-            <!-- CUD -->
+            <!-- Movies CUD -->
+            <div class="d-block d-md-flex flex-wrap gap-4 justify-content-between mx-3">
+                <!-- Create Movie -->
+                <div class="col-12 col-md-5 col-lg-3 mx-1 my-4 my-md-0">
+                    <div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+                        <h3 class="text-center">Create Movie</h3>
+                        <div>
+                            {#if form?.newMovie?.error}
+                            <div class="col-12 col-md-6 mx-auto">
+                                <div class="text-center border border-danger border-3 mx-auto">
+                                    <p class="m-2">{form?.newMovie.message}</p>
+                                </div>
+                            </div>
+                            {/if}
+                        </div>
+                        <form class="m-3" action="?/createMovie" method="post">
+                            <div class="createUserForm mx-auto">
+                                <input class="w-100" type="text" name="title" id="title" placeholder="Title" required="true">
+                            </div>
+
+                            <div class="createUserForm mx-auto">
+                                <input class="w-100" type="text" name="rating" id="rating" placeholder="Age rating (G/PG/...)" required>
+                            </div>
+
+                            <div class="createUserForm mx-auto">
+                                <input class="w-100" type="text" name="poster" id="poster" placeholder="Poster URL">
+                            </div>
+
+                            <div class="createUserForm mx-auto">
+                                <input class="w-100" type="number" step="0.1" name="ratingScore" id="ratingScore" placeholder="Rating score (e.g. 8.4)">
+                            </div>
+
+                            <div class="createUserForm mx-auto">
+                                <textarea class="w-100" name="description" id="description" placeholder="Description"></textarea>
+                            </div>
+
+                            <div class="createUserForm mx-auto">
+                                <label for="genres_select">Genres (hold CTRL / CMD to select multiple)</label>
+                                <select class="w-100" name="genres" id="genres_select" multiple size="4">
+                                    {#each data.genres as g}
+                                        <option value={g.id}>{g.name}</option>
+                                    {/each}
+                                </select>
+                            </div>
+
+                            <div class="buttonStyles mx-auto">
+                                <button class="w-100 btn btn-success" type="submit">Create Movie</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Edit Movie -->
+                <div class="col-12 col-md-5 col-lg-4 mx-1 my-4 my-md-0">
+                    <div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+                        <h3 class="text-center">Edit Movie</h3>
+
+                        <div>
+                            {#if form?.edits?.error || form?.edits?.success}
+                            <div class="col-12 col-md-6 mx-auto">
+                                <div class="text-center border {form?.edits?.error ? "border-danger" : "border-warning"} border-3 mx-auto">
+                                    <p class="m-2">{form?.edits.message}</p>
+                                </div>
+                            </div>
+                            {/if}
+                        </div>
+                        <form action="?/editMovie" method="POST">
+                            <input class="w-100 my-3" type="number" name="id" id="id" placeholder="Movie ID to edit" required>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_title" id="edit_title">
+                                    <label class="mx-1" for="edit_title">Edit title</label>
+                                </div>
+                                <input class="w-100" type="text" name="title" id="title_edit" placeholder="Title">
+                            </div>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_rating" id="edit_rating">
+                                    <label class="mx-1" for="edit_rating">Edit rating</label>
+                                </div>
+                                <input class="w-100" type="text" name="rating" id="rating_edit" placeholder="Age rating">
+                            </div>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_poster" id="edit_poster">
+                                    <label class="mx-1" for="edit_poster">Edit poster</label>
+                                </div>
+                                <input class="w-100" type="text" name="poster" id="poster_edit" placeholder="Poster URL">
+                            </div>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_ratingScore" id="edit_ratingScore">
+                                    <label class="mx-1" for="edit_ratingScore">Edit rating score</label>
+                                </div>
+                                <input class="w-100" type="number" step="0.1" name="ratingScore" id="ratingScore_edit" placeholder="Rating score">
+                            </div>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_description" id="edit_description">
+                                    <label class="mx-1" for="edit_description">Edit description</label>
+                                </div>
+                                <textarea class="w-100" name="description" id="description_edit" placeholder="Description"></textarea>
+                            </div>
+                            <div class="my-3">
+                                <div>
+                                    <input class="mx-1" type="checkbox" name="edit_genres" id="edit_genres">
+                                    <label class="mx-1" for="edit_genres">Edit genres</label>
+                                </div>
+                                <label for="genres_edit_select">Select genres (multiple)</label>
+                                <select class="w-100" name="genres" id="genres_edit_select" multiple size="4">
+                                    {#each data.genres as g}
+                                        <option value={g.id}>{g.name}</option>
+                                    {/each}
+                                </select>
+                            </div>
+                            <div class="buttonStyles mx-auto">
+                                <button class="w-100 btn btn-warning m-2" type="submit">Edit Movie</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- Delete Movie -->
+                <div class="col-12 col-md-5 col-lg-3 mx-1 my-4 my-md-0">
+                    <div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+                        <h3 class="text-center text-danger">Delete Movie</h3>
+                        <p class="text-danger">Warning - There is no undoing or confirmation</p>
+                        <div>
+                            {#if form?.deleted?.message}
+                            <div class="col-12 col-md-6 mx-auto">
+                                <div class="text-center border border-danger border-3 mx-auto">
+                                    <p class="m-2">{form?.deleted.message}</p>
+                                </div>
+                            </div>
+                            {/if}
+                        </div>
+                        <form action="?/deleteMovie" method="POST">
+                            <div class="my-3">
+                                <input class="w-100" type="number" name="id" id="delete_movie_id" placeholder="Movie ID to delete">
+                            </div>
+                            <div class="buttonStyles mx-auto">
+                                <button class="w-100 btn btn-danger m-2" type="submit">Delete Movie</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compact Genres management -->
+            <div class="my-3 p-2" style="box-shadow: 0 0 5px 1px black; border-radius:6px;">
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <!-- small add form -->
+                    <form method="post" action="?/createGenre" class="d-flex gap-1 align-items-center" style="min-width:220px;">
+                        <input class="form-control form-control-sm" name="name" placeholder="New genre" required />
+                        <button class="btn btn-success btn-sm" type="submit">Add</button>
+                    </form>
+
+                    <!-- inline list (compact) -->
+                    <div class="d-flex gap-2 flex-wrap" style="align-items:center;">
+                        {#each data.genres as g}
+                            <div class="d-flex gap-1 align-items-center" style="padding:2px;">
+                                <form method="post" action="?/editGenre" class="d-flex gap-1 align-items-center">
+                                    <input type="hidden" name="id" value={g.id} />
+                                    <input name="name" value={g.name} class="form-control form-control-sm" style="width:140px;" />
+                                    <button class="btn btn-outline-primary btn-sm" type="submit">Save</button>
+                                </form>
+                                <form method="post" action="?/deleteGenre" onsubmit={(e) => { e.preventDefault(); if (confirm('Delete genre?')) e.target.submit(); }}>
+                                    <input type="hidden" name="id" value={g.id} />
+                                    <button class="btn btn-danger btn-sm" type="submit">Del</button>
+                                </form>
+                            </div>
+                        {/each}
+                    </div>
+                </div>
+            </div>
             <div class="d-block d-md-flex flex-wrap gap-4 justify-content-between mx-3">
                 <!-- Create -->
                 <div class="col-12 col-md-5 col-lg-3 mx-1 my-4 my-md-0">
