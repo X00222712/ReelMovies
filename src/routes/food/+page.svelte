@@ -1,15 +1,16 @@
 
 <script>
-export let data;
-let search = "";
-let selectedCategory = "All";
+let {data} = $props();
+let search = $state("");
+let items = data.food_drink
+let selectedCategory = $state("All");
 const euro = new Intl.NumberFormat('en-IE', {
         style: 'currency',
         currency: 'EUR'
     });
+console.log(items)
 
-
-    $: visibleItems = data.food_drink?.filter(item => {
+    let visibleItems = $derived(items.filter((item) => {
         const term = search.toLowerCase(); 
         const matchesSearch = 
             item.name.toLowerCase().includes(term)
@@ -19,7 +20,7 @@ const euro = new Intl.NumberFormat('en-IE', {
             item.id == selectedCategory.toLowerCase(); 
         
         return matchesSearch && matchesCategory; 
-    }) || [];
+    }) || []);
     
 
 </script>
@@ -69,10 +70,7 @@ const euro = new Intl.NumberFormat('en-IE', {
         border-radius: 30px;
         text-align: center;
         color: white;
-        margin-left: 300px;
-        margin-right: 300px;
-        padding-left: 35px;
-        padding-right: 35px;
+        padding: 0.5rem 2rem;
     }
 
     .table{
