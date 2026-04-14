@@ -49,16 +49,16 @@ export async function load({ locals }) {
     if (1 > access.length || false === access?.admin)
         { return redirect(302, '/') }
 
-        // Validate maybe in the future
-        const users = await usersService.getUsersPageByID(1, 4)
-        // Load genres for admin UI
-        let genres = [];
-        try {
-            genres = await genreService.getAllGenres();
-        } catch (err) {
-            console.log('Failed to load genres', err);
-        }
-        return { users, genres, failed : {} }
+    // Validate maybe in the future
+    const users = await usersService.getUsersPageByID(1, 4)
+    // Load genres for admin UI
+    let genres = [];
+    try {
+        genres = await genreService.getAllGenres();
+    } catch (err) {
+        console.log('Failed to load genres', err);
+    }
+    return { users, genres, failed : {} }
 }
 
 export const actions = {
