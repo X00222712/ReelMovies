@@ -56,7 +56,7 @@
                                 style="width: 200px; height: 320px; object-fit: cover; box-shadow: 0 0 15px black;"
                             />
 
-                            <h2 class="m-0 px-3 mt-4" style="width: fit-content;">⭐ {movie.rating} / 10</h2>
+                            <h2 class="m-0 px-3 mt-4" style="width: fit-content;">⭐ {movie.ratingScore} / 10</h2>
 
                         </div>
                             <!-- class="d-block my-auto py-4 mx-auto mx-md-5" -->

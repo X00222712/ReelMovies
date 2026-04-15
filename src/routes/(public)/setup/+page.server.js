@@ -254,7 +254,7 @@ const movieGenreLink = [
 async function makeMovieGenres() {
     try
     {
-        movieData.forEach(async (element) => {
+        movieGenreLink.forEach(async (element) => {
             await db.insert(movieGenres).values({
                 movieId : element[0],
                 genreId : element[1]

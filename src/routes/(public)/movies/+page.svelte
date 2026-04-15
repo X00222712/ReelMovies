@@ -1,7 +1,7 @@
 <!-- Author: Alex D -->
 
 <!--Below is just test data made measy for me to shnow Mary the card crud -->
- <!--{
+<!--{
   title: "Parasite",
   rating: "PG-13",
   poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
