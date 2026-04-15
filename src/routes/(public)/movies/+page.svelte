@@ -1,4 +1,13 @@
 <!-- Author: Alex D -->
+
+<!--Below is just test data made measy for me to shnow Mary the card crud -->
+ <!--{
+  title: "Parasite",
+  rating: "PG-13",
+  poster: "https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg",
+  description: "A poor family schemes to become employed by a wealthy household by infiltrating their lives, but their deception leads to unexpected and shocking consequences.",
+  ratingScore: 8.6
+}-->
 <script>
   import MovieCard from '$lib/components/MovieCard.svelte';
 
