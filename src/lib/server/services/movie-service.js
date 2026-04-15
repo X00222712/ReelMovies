@@ -62,7 +62,26 @@ export async function deleteMovie(id) {
     .delete(movies)
     .where(eq(movies.id, id));
 }
+
+export async function updateMovie(id, movie) {
+  const result = await db
+    .update(movies)
+    .set({
+      title: movie.title,
+      rating: movie.rating,
+      poster: movie.poster,
+      description: movie.description,
+      ratingScore: movie.ratingScore
+    })
+    .where(eq(movies.id, id))
+    .returning();
+  return result[0];
+}
 export const moviesService = {
+  getMovieById,
+  addMovie,
+  deleteMovie,
+  updateMovie,
   async getAllMovies() {
     const results = await db
       .select({

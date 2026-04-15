@@ -16,6 +16,11 @@ import { fail, redirect } from '@sveltejs/kit';
 // ours
 import { idSchema, validateUser, validateUserEmail, validateUserPassword } from "$lib/server/db/validation"
 import { usersService } from "$lib/server/services/users-service"
+import { moviesService } from "$lib/server/services/movie-service"
+import { genreService } from "$lib/server/services/genre-service"
+import { db } from '$lib/server/db';
+import { movieGenres } from '$lib/server/db/schema.js';
+import { eq } from 'drizzle-orm';
 import { success } from "zod";
 
 export async function load({ locals }) {
@@ -46,7 +51,14 @@ export async function load({ locals }) {
 
     // Validate maybe in the future
     const users = await usersService.getUsersPageByID(1, 4)
-    return { users, failed : {}}
+    // Load genres for admin UI
+    let genres = [];
+    try {
+        genres = await genreService.getAllGenres();
+    } catch (err) {
+        console.log('Failed to load genres', err);
+    }
+    return { users, genres, failed : {} }
 }
 
 export const actions = {
@@ -282,6 +294,8 @@ export const actions = {
             return { deleted }
         }
 
+        
+
         try
         {
             const token = cookies.get("better-auth.session_token")
@@ -297,6 +311,141 @@ export const actions = {
             }
         }
         return { deleted }
+    },
+
+    // Movie CRUD
+    async createMovie({ request }) {
+        const data = await request.formData();
+        const title = String(data.get('title') ?? '').trim();
+        const rating = String(data.get('rating') ?? '').trim();
+        const poster = String(data.get('poster') ?? '').trim();
+        const ratingScore = data.get('ratingScore');
+        const description = String(data.get('description') ?? '').trim();
+        const selectedGenres = (data.getAll('genres') || []).map(x => Number(x)).filter(Boolean);
+
+        const newMovie = { error: false, message: 'Created movie' };
+        if (!title) {
+            newMovie.error = true; newMovie.message = 'Title is required';
+            return fail(400, { newMovie });
+        }
+
+        try {
+            const created = await moviesService.addMovie({ title, rating, poster, description, ratingScore: ratingScore ? Number(ratingScore) : null });
+            newMovie.id = created.id ?? null;
+            newMovie.message = 'Movie created';
+            // insert genre mappings if any
+            if (created?.id && selectedGenres.length) {
+                for (const gid of selectedGenres) {
+                    await db.insert(movieGenres).values({ movieId: created.id, genreId: gid });
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            newMovie.error = true; newMovie.message = `Failed to create movie: ${err.message}`;
+            return fail(500, { newMovie });
+        }
+
+        return { newMovie };
+    },
+
+    async editMovie({ request }) {
+        const data = await request.formData();
+        const id = Number(data.get('id')) || null;
+        const title = String(data.get('title') ?? '').trim();
+        const rating = String(data.get('rating') ?? '').trim();
+        const poster = String(data.get('poster') ?? '').trim();
+        const ratingScore = data.get('ratingScore');
+        const description = String(data.get('description') ?? '').trim();
+        const selectedGenres = (data.getAll('genres') || []).map(x => Number(x)).filter(Boolean);
+
+        const edits = { success: false, error: false, message: '' };
+        if (!id) { edits.error = true; edits.message = 'Movie id required'; return fail(400, { edits }); }
+
+        try {
+            const updated = await moviesService.updateMovie(id, { title, rating, poster, description, ratingScore: ratingScore ? Number(ratingScore) : null });
+            edits.success = true; edits.message = 'Movie updated'; edits.movie = updated;
+            // update genre mappings: remove existing then insert selected
+            if (id) {
+                await db.delete(movieGenres).where(eq(movieGenres.movieId, id));
+                if (selectedGenres.length) {
+                    for (const gid of selectedGenres) {
+                        await db.insert(movieGenres).values({ movieId: id, genreId: gid });
+                    }
+                }
+            }
+        } catch (err) {
+            console.log(err);
+            edits.error = true; edits.message = `Failed to update movie: ${err.message}`;
+            return fail(500, { edits });
+        }
+        return { edits };
+    },
+
+    async deleteMovie({ request }) {
+        const data = await request.formData();
+        const id = Number(data.get('id')) || null;
+        const deleted = { error: false, message: 'Movie deleted' };
+        if (!id) { deleted.error = true; deleted.message = 'Movie id required'; return fail(400, { deleted }); }
+
+        try {
+            await moviesService.deleteMovie(id);
+            deleted.message = 'Movie deleted';
+        } catch (err) {
+            console.log(err);
+            deleted.error = true; deleted.message = `Failed to delete movie: ${err.message}`;
+            return fail(500, { deleted });
+        }
+
+        return { deleted };
+    },
+
+    // Genre CRUD
+    async createGenre({ request }) {
+        const data = await request.formData();
+        const name = String(data.get('name') ?? '').trim();
+        const result = { error: false, message: 'Genre created' };
+        if (!name) { result.error = true; result.message = 'Name is required'; return fail(400, { result }); }
+        try {
+            const created = await genreService.addGenre(name);
+            result.genre = created;
+            result.message = 'Genre created';
+        } catch (err) {
+            console.log(err);
+            result.error = true; result.message = `Failed to create genre: ${err.message}`;
+            return fail(500, { result });
+        }
+        return { result };
+    },
+
+    async editGenre({ request }) {
+        const data = await request.formData();
+        const id = Number(data.get('id')) || null;
+        const name = String(data.get('name') ?? '').trim();
+        const result = { success: false, error: false, message: '' };
+        if (!id || !name) { result.error = true; result.message = 'id and name required'; return fail(400, { result }); }
+        try {
+            const updated = await genreService.updateGenre(id, name);
+            result.success = true; result.message = 'Genre updated'; result.genre = updated;
+        } catch (err) {
+            console.log(err);
+            result.error = true; result.message = `Failed to update genre: ${err.message}`; return fail(500, { result });
+        }
+        return { result };
+    },
+
+    async deleteGenre({ request }) {
+        const data = await request.formData();
+        const id = Number(data.get('id')) || null;
+        const result = { error: false, message: 'Genre deleted' };
+        if (!id) { result.error = true; result.message = 'id required'; return fail(400, { result }); }
+        try {
+            await genreService.deleteGenre(id);
+            result.message = 'Genre deleted';
+        } catch (err) {
+            console.log(err);
+            result.error = true; result.message = `Failed to delete genre: ${err.message}`; return fail(500, { result });
+        }
+        return { result };
     }
 
 }
