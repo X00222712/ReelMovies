@@ -63,3 +63,46 @@ export const contacts = sqliteTable("contacts", {
   message: text("message"),
   createdAt: text("created_at").default(new Date().toISOString())
 });
+
+// Start of Alex's and Glen's bookings and screenings system DB
+
+export const screens = sqliteTable("screens", {
+  id: integer("id").primaryKey(),
+  name: text("name"),
+  capacity: integer("capacity"),
+});
+
+export const seats = sqliteTable("seats", {
+  id: integer("id").primaryKey(),
+  screenId: integer("screen_id").notNull(),
+  row: text("row"),
+  number: integer("number"),
+});
+
+export const screenings = sqliteTable("screenings", {
+  id: integer("id").primaryKey(),
+  movieId: integer("movie_id").notNull(),
+  screenId: integer("screen_id").notNull(),
+  startTime: text("start_time"),
+  endTime: text("end_time"),
+  price: real("price"),
+});
+
+export const bookings = sqliteTable("bookings", {
+  id: integer("id").primaryKey(),
+  screeningId: integer("screening_id").notNull(),
+  userId: integer("user_id"),
+  totalPrice: real("total_price"),
+  status: text("status"), 
+  reservedAt: text("reserved_at").default(new Date().toISOString()),
+  cancelledAt: text("cancelled_at"),
+  seatsCount: integer("seats_count")
+});
+
+export const bookingSeats = sqliteTable("booking_seats", {
+  id: integer("id").primaryKey(),
+  bookingId: integer("booking_id").notNull(),
+  seatId: integer("seat_id"),
+  seatLabel: text("seat_label"),
+  price: real("price")
+});
