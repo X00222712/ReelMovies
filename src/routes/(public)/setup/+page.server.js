@@ -25,68 +25,46 @@ export async function load( { locals } )
         { redirect(307, "/account") }
 }
 
+const usersInformation = [
+    // Username, email, password, RMpoints, [admin, privilage]
+    ["IT Admin", 'itsuper@reelmovies.ie', "ITSupport", 100000, [1, 1]],
+    ["Admin", 'admin@reelmovies.ie', "reelmovies", 0, [1, 0]],
+    ["Glen", 'test@test.ie', "password123", 200, [0, 0]],
+    ["Alex", 'Alex@test.ie', "SuperCool", 400, [0, 0]],
+    ["Glen", 'glen@test.ie', "password123", 0, [0, 0]],
+    ["Glen", 'GLEN@test.com', "password123", 0, [0, 0]],
+]
+
 async function makeAccounts(cookies)
 {
 	let userSigninCookie = cookies.get("better-auth.session_token")
     try {
-        // password : ITSupport
-        await auth.api.signUpEmail({
-            body:  {
-                name : "IT Admin",
-                email : 'itsuper@reelmovies.ie',
-                password: "ITSupport"
-        }})
-        await db.insert(admins).values({userId: 1, id: 1, admin: 1, privilage: 1})
-        await db.insert(rewardPoints).values({userId: 1, points: 100000})
 
-        // password : reelmovies
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Admin",
-                email : 'admin@reelmovies.ie',
-                password: "reelmovies"
-        }})
-        await db.insert(admins).values({userId: 2, id: 2, admin: 1, privilage: 0})
-        await db.insert(rewardPoints).values({userId: 2})
+        usersInformation.forEach(async (element, index) => {
+            console.log(index, element)
 
+            const newUser = await auth.api.signUpEmail({
+                body : {
+                    name : element[0],
+                    email : element[1],
+                    password : element[2]
+                }
+            })
 
-        // password : password123
-        let user = await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'test@test.ie',
-                password: "password123"
-        }})
-        console.log("USER", user)
-        await db.insert(rewardPoints).values({userId: 3, points: 200})
+            const userId = newUser.user.id
 
-        // password : SuperCool
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Alex",
-                email : 'Alex@test.ie',
-                password: "SuperCool"
-        }})
-        usersService.insertUserPoints(4, 400)
-        // await db.insert(rewardPoints).values({userId: 4, points: 400})
+            await usersService.insertUserPoints(Number(userId), element[3])
 
-        // password : password123
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'glen@test.ie',
-                password: "password123"
-        }})
-        await db.insert(rewardPoints).values({userId: 5})
+            if (element[4][0])
+            { await db.insert(admins).values({userId, admin: element[4][0], privilage: element[4][1]}) }
 
-        // password : password123
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'GLEN@test.com',
-                password: "password123"
-        }})
-        await db.insert(rewardPoints).values({userId: 6})
+            // Signout
+            await auth.api.signOut({
+                headers : { cookies : `better-auth.session_token=${newUser.token}` }
+            })
+
+        });
+
 
         cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
         return true
