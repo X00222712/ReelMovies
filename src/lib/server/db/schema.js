@@ -64,45 +64,52 @@ export const contacts = sqliteTable("contacts", {
   createdAt: text("created_at").default(new Date().toISOString())
 });
 
+
 // Start of Alex's and Glen's bookings and screenings system DB
 
 export const screens = sqliteTable("screens", {
   id: integer("id").primaryKey(),
   name: text("name"),
-  capacity: integer("capacity"),
-});
-
-export const seats = sqliteTable("seats", {
-  id: integer("id").primaryKey(),
-  screenId: integer("screen_id").notNull(),
-  row: text("row"),
-  number: integer("number"),
+  // This will be "AAAAA AAAAAAA\nAAAAAAA AAAAA" 
+  seats: text("capacity"),
 });
 
 export const screenings = sqliteTable("screenings", {
-  id: integer("id").primaryKey(),
-  movieId: integer("movie_id").notNull(),
-  screenId: integer("screen_id").notNull(),
-  startTime: text("start_time"),
-  endTime: text("end_time"),
-  price: real("price"),
+    id: integer("id").primaryKey(),
+
+    startTime: text("start_time"),
+    endTime: text("end_time"),
+    price: real("price"),
+
+    // Links
+    screenId: integer("screen_id").notNull(),
+    movieId: integer("movie_id").notNull(),
+
 });
 
 export const bookings = sqliteTable("bookings", {
-  id: integer("id").primaryKey(),
-  screeningId: integer("screening_id").notNull(),
-  userId: integer("user_id"),
-  totalPrice: real("total_price"),
-  status: text("status"), 
-  reservedAt: text("reserved_at").default(new Date().toISOString()),
-  cancelledAt: text("cancelled_at"),
-  seatsCount: integer("seats_count")
+    id: integer("id").primaryKey(),
+
+    userId: integer("user_id"),
+    totalPrice: real("total_price"),
+    status: text("status"), 
+    reservedAt: integer("reserved_at", { mode: "timestamp_ms" })
+    .default(new Date())
+    .notNull(),
+    cancelledAt: integer("cancelled_at", { mode: "timestamp_ms" }).default(0),
+
+    // Links
+        // Showings should have screen ID in them.
+    showingId: integer("showing_id").notNull(),
 });
 
-export const bookingSeats = sqliteTable("booking_seats", {
-  id: integer("id").primaryKey(),
-  bookingId: integer("booking_id").notNull(),
-  seatId: integer("seat_id"),
-  seatLabel: text("seat_label"),
-  price: real("price")
+export const bookedSeats = sqliteTable("booked_seats", {
+    id: integer("id").primaryKey(),
+
+    seat: text("seat"),
+
+    // Links
+      // A showing is linking a screen showing's booked seats rather than a screens
+    showingId: integer("showing_id").notNull(),
+    bookingId: integer("booking_id").notNull(),
 });
