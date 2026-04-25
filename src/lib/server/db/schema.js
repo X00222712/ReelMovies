@@ -64,6 +64,7 @@ export const contacts = sqliteTable("contacts", {
   createdAt: text("created_at").default(new Date().toISOString())
 });
 
+
 // Start of Alex's and Glen's bookings and screenings system DB
 export const screens = sqliteTable('screens', {
 	id: integer('id').primaryKey({ autoIncrement: true }),
