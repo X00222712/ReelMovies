@@ -1,80 +1,113 @@
-import { moviesService } from "$lib/server/services/movie-service";
+import { fail, redirect } from '@sveltejs/kit';
+import { db } from '$lib/server/db';
+import { movies, screens, screenings, bookings } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 
-export async function load( { cookie } ) {
-    const movies = await moviesService.getAllMovies();
-    const times = {
-        "Interstellar" : [
-            {
-                screen: "screen 1",
-                time: "9 AM"
-            },
-            {
-                screen: "screen 2",
-                time: "11:15 AM"
-            }
-        ],
-        "The Batman" : [
-            {
-                screen: "screen 2",
-                time: "9 AM"
-            },
-            {
-                screen: "screen 2",
-                time: "13:15 PM"
-            }
-        ],
-        "Coco" : [
-            {
-                screen: "screen 1",
-                time: "11:15 AM"
-            },
-            {
-                screen: "screen 2",
-                time: "19:30 PM"
-            }
-        ]
-    };
-    const screens = {
-        "screen 1" : {
-            seats : [
-                "SSSSSDDDD",
-                "SSSSSSSSS",
-                "RRRRRRRRR",
-                "VVVVVVVVV",
-                "RRRRRRRRR"
-            ],
-            taken : [
-                "0,7",
-                "0,8",
-                "1,1",
-                "1,2",
-                "1,4",
-                "1,5",
-                "1,8",
-                "3,3",
-                "4,7",
-            ]
-        },
-        "screen 2" : {
-            seats : [
-                "SSSSSDDDD",
-                "SSSSSSSSS",
-                "RRRRRRRRR",
-                "VVVVVVVVV",
-                "VVVVVVVVV"
-            ],
-            taken : [
-                "0,7",
-                "0,8",
-                "1,1",
-                "1,2",
-                "1,4",
-                "1,5",
-                "1,8",
-                "3,3",
-                "4,7",
-            ]
-        }
-    }
-    return { movies : movies, movieTimes : times, screens : screens}
+const seatPrices = {
+	S: 5.99,
+	R: 7.99,
+	V: 9.99,
+	D: 5.99
+};
+
+export async function load() {
+	const screeningRows = await db
+		.select({
+	        id: screenings.id,
+	        date: screenings.date,
+	        time: screenings.time,
+	        movieId: movies.id,
+			movieTitle: movies.title,
+			poster: movies.poster,
+			description: movies.description,
+			ageRating: movies.rating,
+			ratingScore: movies.ratingScore,
+			screenId: screens.id,
+			screenName: screens.name,
+			screenSeats: screens.seats
+		})
+		.from(screenings)
+		.innerJoin(movies, eq(screenings.movieId, movies.id))
+		.innerJoin(screens, eq(screenings.screenId, screens.id));
+
+	const bookingRows = await db.select().from(bookings);
+
+	const takenSeatsByScreening = {};
+
+	for (const booking of bookingRows) {
+		if (!takenSeatsByScreening[booking.screeningId]) {
+			takenSeatsByScreening[booking.screeningId] = [];
+		}
+
+		const bookedSeats = JSON.parse(booking.seats);
+		takenSeatsByScreening[booking.screeningId].push(...bookedSeats);
+	}
+
+	const screeningData = screeningRows.map((screening) => ({
+		...screening,
+		screenSeats: screening.screenSeats.split('|'),
+		takenSeats: takenSeatsByScreening[screening.id] ?? []
+	}));
+
+	return {
+		screenings: screeningData
+	};
 }
+
+export const actions = {
+	book: async ({ request, locals }) => {
+		if (!locals.user) {
+			throw redirect(303, '/auth/signin');
+		}
+
+		const data = await request.formData();
+
+		const screeningId = Number(data.get('screeningId'));
+		const selectedSeats = data.getAll('selectedSeats');
+		const paymentMethod = data.get('paymentMethod');
+
+		if (!screeningId) {
+			return fail(400, { message: 'Please select a screening.' });
+		}
+
+		if (selectedSeats.length === 0) {
+			return fail(400, { message: 'Please select at least one seat.' });
+		}
+
+		if (!paymentMethod) {
+			return fail(400, { message: 'Please select a payment method.' });
+		}
+
+		const [screening] = await db
+			.select({
+				screenSeats: screens.seats
+			})
+			.from(screenings)
+			.innerJoin(screens, eq(screenings.screenId, screens.id))
+			.where(eq(screenings.id, screeningId));
+
+		if (!screening) {
+			return fail(404, { message: 'Screening not found.' });
+		}
+
+		const seatLayout = screening.screenSeats.split('|');
+
+		let totalPrice = 0;
+
+		for (const seat of selectedSeats) {
+			const [row, col] = seat.split(',').map(Number);
+			const seatType = seatLayout[row][col];
+			totalPrice += seatPrices[seatType] ?? 0;
+		}
+
+		await db.insert(bookings).values({
+			userId: Number(locals.user.id),
+			screeningId,
+			seats: JSON.stringify(selectedSeats),
+			paymentMethod,
+			totalPrice
+		});
+
+		throw redirect(303, '/purchase/payment');
+	}
+};
