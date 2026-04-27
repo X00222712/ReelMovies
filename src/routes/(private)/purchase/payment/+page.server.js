@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { movies, screens, screenings, bookings } from '$lib/server/db/schema';
+import { movies, screens, screenings, bookings, rewardPoints } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 const seatPrices = {
@@ -110,6 +110,22 @@ export const actions = {
 			paymentMethod,
 			totalPrice
 		});
+
+		const userId = Number(locals.user.id);
+		const pointsEarned = Math.floor(totalPrice * 10);
+
+		const [pointsRow] = await db
+			.select()
+			.from(rewardPoints)
+			.where(eq(rewardPoints.userId, userId));
+
+		await db
+			.update(rewardPoints)
+			.set({
+				points: (pointsRow?.points ?? 0) + pointsEarned
+		})
+			.where(eq(rewardPoints.userId, userId));
+
 
 		throw redirect(303, '/purchase/payment/success');
 	}

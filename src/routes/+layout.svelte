@@ -172,6 +172,31 @@
   --text-main: #F5F5F5;
   --text-muted: #B0B3C0;
 }
+
+  :global(body) {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(112, 214, 255, 0.18), transparent 32rem),
+    radial-gradient(circle at top right, rgba(253, 130, 212, 0.12), transparent 28rem),
+    linear-gradient(135deg, #080b12 0%, #111827 45%, #0b132b 100%);
+  background-attachment: fixed;
+  color: white;
+}
+
+:global(body)::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.75), transparent);
+  z-index: -1;
+}
+
+
   .app-wrapper {
     min-height: 100vh;
     display: flex;

@@ -64,7 +64,6 @@ export const actions = {
 
 		const screeningId = Number(data.get('screeningId'));
 		const selectedSeats = data.getAll('selectedSeats');
-		const paymentMethod = data.get('paymentMethod');
 
 		if (!screeningId) {
 			return fail(400, { message: 'Please select a screening.' });
@@ -74,40 +73,11 @@ export const actions = {
 			return fail(400, { message: 'Please select at least one seat.' });
 		}
 
-		if (!paymentMethod) {
-			return fail(400, { message: 'Please select a payment method.' });
-		}
-
-		const [screening] = await db
-			.select({
-				screenSeats: screens.seats
-			})
-			.from(screenings)
-			.innerJoin(screens, eq(screenings.screenId, screens.id))
-			.where(eq(screenings.id, screeningId));
-
-		if (!screening) {
-			return fail(404, { message: 'Screening not found.' });
-		}
-
-		const seatLayout = screening.screenSeats.split('|');
-
-		let totalPrice = 0;
-
-		for (const seat of selectedSeats) {
-			const [row, col] = seat.split(',').map(Number);
-			const seatType = seatLayout[row][col];
-			totalPrice += seatPrices[seatType] ?? 0;
-		}
-
-		await db.insert(bookings).values({
-			userId: Number(locals.user.id),
-			screeningId,
-			seats: JSON.stringify(selectedSeats),
-			paymentMethod,
-			totalPrice
+		const params = new URLSearchParams({
+			screeningId: String(screeningId),
+			seats: selectedSeats.join('|')
 		});
 
-		throw redirect(303, '/purchase/payment');
+		throw redirect(303, `/purchase/payment?${params.toString()}`);
 	}
 };

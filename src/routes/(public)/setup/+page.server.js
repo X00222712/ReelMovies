@@ -16,7 +16,7 @@ import { auth } from '$lib/server/auth';
 import { fail, json, redirect } from '@sveltejs/kit';
 
 // Ours
-import {admins, genres, movieGenres, movies, rewardPoints, screens, screenings} from '$lib/server/db/schema';
+import {admins, genres, movieGenres, movies, rewardPoints, screens, screenings, loyaltyRewards} from '$lib/server/db/schema';
 
 import { usersService } from '$lib/server/services/users-service';
 
@@ -248,37 +248,6 @@ async function makeMovieGenres() {
     }
 }
 
-
-export const actions = {
-	default : async ({ request, cookies }) =>
-    {
-        const data = await request.formData();
-        const password = data.get("password")
-        // Temp password
-        if ("RM" !== password) { return fail(424, {failed: true, message : "Password incorrect"}) }
-
-        if (!(await makeAccounts(cookies)))
-            { return fail(400, {failed: true, message : "Failed to create accounts" }) }
-
-        if (!(await makeGenres()))
-            { return fail(400, {failed: true, message : "Failed to create genres" }) }
-
-        if (!(await makeMovies()))
-            { return fail(400, {failed: true, message : "Failed to create movies" }) }
-
-        if (!(await makeMovieGenres()))
-            { return fail(400, {failed: true, message : "Failed to link movies and genres" }) }
-
-        if (!(await makeScreens()))
-            { return fail(400, { failed: true, message: "Failed to create screens" }) }
-
-        if (!(await makeScreenings()))
-            { return fail(400, { failed: true, message: "Failed to create screenings" }) }
-
-        return { failed: false, message : "DB setup" }
-	} 
-}
-
 const screenData = [
 	[1, 'Screen 1', 'SSSSSDDDD|SSSSSSSSS|RRRRRRRRR|VVVVVVVVV|RRRRRRRRR'],
 	[2, 'Screen 2', 'SSSSSDDDD|SSSSSSSSS|RRRRRRRRR|VVVVVVVVV|VVVVVVVVV'],
@@ -379,3 +348,66 @@ async function makeScreenings() {
 		return false;
 	}
 }
+
+const loyaltyRewardData = [
+	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 200, 'foods/popcorn.png'],
+	[2, 'Fanta', 'Free Fanta drink.', 300, 'drinks/fanta.png'],
+	[3, 'Coca Cola', 'Free Coca Cola drink.', 500, 'drinks/coca_cola.png'],
+	[4, 'Free Standard Seat Upgrade', 'Upgrade one saver seat to regular.', 700, null],
+	[5, 'VIP Seat Discount', 'Get a discount on a VIP seat.', 1000, null]
+];
+
+async function makeLoyaltyRewards() {
+	try {
+		for (const reward of loyaltyRewardData) {
+			await db.insert(loyaltyRewards).values({
+				id: reward[0],
+				name: reward[1],
+				description: reward[2],
+				pointsCost: reward[3],
+				image: reward[4]
+			});
+		}
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+export const actions = {
+	default : async ({ request, cookies }) =>
+    {
+        const data = await request.formData();
+        const password = data.get("password")
+        // Temp password
+        if ("RM" !== password) { return fail(424, {failed: true, message : "Password incorrect"}) }
+
+        if (!(await makeAccounts(cookies)))
+            { return fail(400, {failed: true, message : "Failed to create accounts" }) }
+
+        if (!(await makeGenres()))
+            { return fail(400, {failed: true, message : "Failed to create genres" }) }
+
+        if (!(await makeMovies()))
+            { return fail(400, {failed: true, message : "Failed to create movies" }) }
+
+        if (!(await makeMovieGenres()))
+            { return fail(400, {failed: true, message : "Failed to link movies and genres" }) }
+
+        if (!(await makeScreens()))
+            { return fail(400, { failed: true, message: "Failed to create screens" }) }
+
+        if (!(await makeScreenings()))
+            { return fail(400, { failed: true, message: "Failed to create screenings" }) }
+
+        if (!(await makeLoyaltyRewards()))
+	        { return fail(400, { failed: true, message: "Failed to create loyalty rewards" }) }
+
+
+        return { failed: false, message : "DB setup" }
+	} 
+}
+
+

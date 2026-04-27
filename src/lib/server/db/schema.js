@@ -96,3 +96,23 @@ export const bookings = sqliteTable('bookings', {
 	totalPrice: real('total_price').notNull(),
 	createdAt: text('created_at').default(new Date().toISOString())
 });
+
+export const loyaltyRewards = sqliteTable('loyalty_rewards', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull(),
+	description: text('description'),
+	pointsCost: integer('points_cost').notNull(),
+	image: text('image')
+});
+
+export const loyaltyRedemptions = sqliteTable('loyalty_redemptions', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	rewardId: integer('reward_id')
+		.notNull()
+		.references(() => loyaltyRewards.id, { onDelete: 'cascade' }),
+	pointsSpent: integer('points_spent').notNull(),
+	createdAt: text('created_at').default(new Date().toISOString())
+});
