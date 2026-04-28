@@ -46,7 +46,7 @@
 
 			<div class="total-row">
 				<span>Total</span>
-				<strong>&pound;{data.totalPrice}</strong>
+				<strong>&euro;{data.totalPrice}</strong>
 			</div>
 		</div>
 

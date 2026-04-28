@@ -16,6 +16,10 @@ Admin panel front end for CRUD of different features
 
     let userInfo = $state(data.users)
     let genres = $state(data.genres)
+    let movies = $state(data.movies);
+    let screens = $state(data.screens);
+    let screeningTimes = $state(data.screenings);
+
     let failed = $derived(() => data?.failed)
 
     // If 9 in nextId then the next arrow goes to pageId 9
@@ -327,7 +331,16 @@ Admin panel front end for CRUD of different features
                             {/if}
                         </div>
                         <form action="?/editMovie" method="POST">
-                            <input class="w-100 my-3" type="number" name="id" id="id" placeholder="Movie ID to edit" required>
+                            <div class="my-3">
+	                            <label for="edit_movie_id">Movie</label>
+	                            <select class="w-100" name="id" id="edit_movie_id" required>
+	                                <option value="">Select movie</option>
+	                                {#each movies as movie}
+	                                    <option value={movie.id}>{movie.id} - {movie.title}</option>
+	                                {/each}
+	                            </select>
+	                        </div>
+
                             <div class="my-3">
                                 <div>
                                     <input class="mx-1" type="checkbox" name="edit_title" id="edit_title">
@@ -398,7 +411,13 @@ Admin panel front end for CRUD of different features
                         </div>
                         <form action="?/deleteMovie" method="POST">
                             <div class="my-3">
-                                <input class="w-100" type="number" name="id" id="delete_movie_id" placeholder="Movie ID to delete">
+                                <select class="w-100" name="id" id="delete_movie_id" required>
+	                                <option value="">Select movie</option>
+	                                {#each movies as movie}
+		                                <option value={movie.id}>{movie.id} - {movie.title}</option>
+	                                {/each}
+                                </select>
+
                             </div>
                             <div class="buttonStyles mx-auto">
                                 <button class="w-100 btn btn-danger m-2" type="submit">Delete Movie</button>
@@ -437,6 +456,121 @@ Admin panel front end for CRUD of different features
             </div>
 
         </div>
+        <div class="p-2 pt-4 my-4 border border-3 border-dark">
+	<h2>Screening Times</h2>
+	<div class="d-block d-md-flex flex-wrap gap-4 justify-content-between mx-3">
+		<div class="col-12 col-md-5 col-lg-3 mx-1 my-4 my-md-0">
+			<div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+				<h3 class="text-center">Create Screening</h3>
+
+				{#if form?.newScreening?.error}
+					<div class="col-12 col-md-6 mx-auto">
+						<div class="text-center border border-danger border-3 mx-auto">
+							<p class="m-2">{form.newScreening.message}</p>
+						</div>
+					</div>
+				{/if}
+				<form class="m-3" action="?/createScreening" method="post">
+					<div class="createUserForm mx-auto">
+						<select class="w-100" name="movieId" required>
+							<option value="">Select movie</option>
+							{#each movies as movie}
+								<option value={movie.id}>{movie.id} - {movie.title}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="createUserForm mx-auto">
+						<select class="w-100" name="screenId" required>
+							<option value="">Select screen</option>
+							{#each screens as screen}
+								<option value={screen.id}>{screen.id} - {screen.name}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="createUserForm mx-auto">
+						<input class="w-100" type="date" name="date" required>
+					</div>
+					<div class="createUserForm mx-auto">
+						<input class="w-100" type="time" name="time" required>
+					</div>
+					<div class="buttonStyles mx-auto">
+						<button class="w-100 btn btn-success" type="submit">Create Screening</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-5 col-lg-4 mx-1 my-4 my-md-0">
+			<div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+				<h3 class="text-center">Edit Screening</h3>
+
+				{#if form?.screeningEdits?.error || form?.screeningEdits?.success}
+					<div class="col-12 col-md-6 mx-auto">
+						<div class="text-center border {form?.screeningEdits?.error ? 'border-danger' : 'border-warning'} border-3 mx-auto">
+							<p class="m-2">{form.screeningEdits.message}</p>
+						</div>
+					</div>
+				{/if}
+				<form action="?/editScreening" method="POST">
+					<input class="w-100 my-3" type="number" name="id" placeholder="Screening ID to edit" required>
+					<div class="my-3">
+						<label>Movie</label>
+						<select class="w-100" name="movieId" required>
+							<option value="">Select movie</option>
+							{#each movies as movie}
+								<option value={movie.id}>{movie.id} - {movie.title}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="my-3">
+						<label>Screen</label>
+						<select class="w-100" name="screenId" required>
+							<option value="">Select screen</option>
+							{#each screens as screen}
+								<option value={screen.id}>{screen.id} - {screen.name}</option>
+							{/each}
+						</select>
+					</div>
+					<div class="my-3">
+						<label>Date</label>
+						<input class="w-100" type="date" name="date" required>
+					</div>
+
+					<div class="my-3">
+						<label>Time</label>
+						<input class="w-100" type="time" name="time" required>
+					</div>
+					<div class="buttonStyles mx-auto">
+						<button class="w-100 btn btn-warning m-2" type="submit">Edit Screening</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="col-12 col-md-5 col-lg-3 mx-1 my-4 my-md-0">
+			<div class="w-100 p-4" style="box-shadow: 0 0 5px 2px black;">
+				<h3 class="text-center text-danger">Delete Screening</h3>
+				<p class="text-danger">Warning - There is no undoing or confirmation</p>
+				{#if form?.screeningDeleted?.message}
+					<div class="col-12 col-md-6 mx-auto">
+						<div class="text-center border border-danger border-3 mx-auto">
+							<p class="m-2">{form.screeningDeleted.message}</p>
+						</div>
+					</div>
+				{/if}
+				<form action="?/deleteScreening" method="POST">
+					<div class="my-3">
+						<input class="w-100" type="number" name="id" placeholder="Screening ID to delete" required>
+					</div>
+					<div class="buttonStyles mx-auto">
+						<button class="w-100 btn btn-danger m-2" type="submit">Delete Screening</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 
     </div>
 {/if}

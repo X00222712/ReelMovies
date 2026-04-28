@@ -19,8 +19,8 @@ import { usersService } from "$lib/server/services/users-service"
 import { moviesService } from "$lib/server/services/movie-service"
 import { genreService } from "$lib/server/services/genre-service"
 import { db } from '$lib/server/db';
-import { movieGenres } from '$lib/server/db/schema.js';
-import { eq } from 'drizzle-orm';
+import { movieGenres, movies, screens, screenings } from '$lib/server/db/schema.js';
+import { eq, asc } from 'drizzle-orm';
 import { success } from "zod";
 
 export async function load({ locals }) {
@@ -58,8 +58,49 @@ export async function load({ locals }) {
     } catch (err) {
         console.log('Failed to load genres', err);
     }
-    return { users, genres, failed : {} }
-}
+
+    let moviesList = [];
+    let screensList = [];
+    let screeningTimes = [];
+
+    try {
+	    moviesList = await db
+		    .select({
+			    id: movies.id,
+			    title: movies.title
+		    })
+		    .from(movies)
+		    .orderBy(asc(movies.id));
+
+	    screensList = await db
+		    .select({
+			    id: screens.id,
+			    name: screens.name
+		    })
+		    .from(screens)
+		    .orderBy(asc(screens.id));
+
+	    screeningTimes = await db
+		    .select({
+			    id: screenings.id,
+			    movieId: screenings.movieId,
+			    screenId: screenings.screenId,
+			    date: screenings.date,
+			    time: screenings.time,
+			    movieTitle: movies.title,
+			    screenName: screens.name
+		    })
+		    .from(screenings)
+		    .innerJoin(movies, eq(screenings.movieId, movies.id))
+		    .innerJoin(screens, eq(screenings.screenId, screens.id))
+		    .orderBy(asc(screenings.id));
+    } catch (err) {
+	    console.log('Failed to load screening data', err);
+    }
+
+    return {users, genres, movies: moviesList, screens: screensList, screenings: screeningTimes, failed: {}}
+
+    }
 
 export const actions = {
     async createUser( { request, cookies } ) {
@@ -166,16 +207,15 @@ export const actions = {
             // Restore the user's session token
             cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
             return fail(400, { newUser })
-        }
-
+        }  
         // Return expected values even if something goes wrong
         return { newUser }
     },
-
+    
     // TODO
     // Make all fails and successes append to edits
     // so multiple messages can display
-    async editAccounut( { locals, request, cookies } )
+    async editAccount( { locals, request, cookies } )
     {
         const data = await request.formData()
         const email = data.get("email")
@@ -446,6 +486,107 @@ export const actions = {
             result.error = true; result.message = `Failed to delete genre: ${err.message}`; return fail(500, { result });
         }
         return { result };
-    }
+    },
+
+    async createScreening({ request }) {
+	    const data = await request.formData();
+	    const movieId = Number(data.get('movieId'));
+	    const screenId = Number(data.get('screenId'));
+	    const date = String(data.get('date') ?? '').trim();
+	    const time = String(data.get('time') ?? '').trim();
+	    const newScreening = {
+		    error: false,
+		    message: 'Screening created'
+	    };
+
+	    if (!movieId || !screenId || !date || !time) {
+		    newScreening.error = true;
+		    newScreening.message = 'Movie, screen, date and time are required';
+		    return fail(400, { newScreening });
+	    }
+
+	    try {
+		    await db.insert(screenings).values({
+			    movieId,
+			    screenId,
+			    date,
+			    time
+		    });
+	    } catch (err) {
+		    console.log(err);
+		    newScreening.error = true;
+		    newScreening.message = `Failed to create screening: ${err.message}`;
+		    return fail(500, { newScreening });
+	    }
+
+	    return { newScreening };
+    },
+
+    async editScreening({ request }) {
+	    const data = await request.formData();
+	    const id = Number(data.get('id'));
+	    const movieId = Number(data.get('movieId'));
+	    const screenId = Number(data.get('screenId'));
+	    const date = String(data.get('date') ?? '').trim();
+	    const time = String(data.get('time') ?? '').trim();
+	    const screeningEdits = {
+		    success: false,
+		    error: false,
+		    message: ''
+	    };
+
+	    if (!id || !movieId || !screenId || !date || !time) {
+		    screeningEdits.error = true;
+		    screeningEdits.message = 'Screening ID, movie, screen, date and time are required';
+		    return fail(400, { screeningEdits });
+	    }
+
+	    try {
+		    await db
+			    .update(screenings)
+			    .set({
+				    movieId,
+				    screenId,
+				    date,
+				    time
+			    })
+			    .where(eq(screenings.id, id));
+
+		    screeningEdits.success = true;
+		    screeningEdits.message = 'Screening updated';
+	    } catch (err) {
+		    console.log(err);
+		    screeningEdits.error = true;
+		    screeningEdits.message = `Failed to update screening: ${err.message}`;
+		    return fail(500, { screeningEdits });
+	    }
+	    return { screeningEdits };
+    },
+
+    async deleteScreening({ request }) {
+	    const data = await request.formData();
+	    const id = Number(data.get('id'));
+	    const screeningDeleted = {
+		    error: false,
+		    message: 'Screening deleted'
+	    };
+
+	    if (!id) {
+		    screeningDeleted.error = true;
+		    screeningDeleted.message = 'Screening ID required';
+		    return fail(400, { screeningDeleted });
+	    }
+
+	    try {
+		    await db.delete(screenings).where(eq(screenings.id, id));
+	    } catch (err) {
+		    console.log(err);
+		    screeningDeleted.error = true;
+		    screeningDeleted.message = `Failed to delete screening: ${err.message}`;
+		    return fail(500, { screeningDeleted });
+	    }
+
+	    return { screeningDeleted };
+    },
 
 }

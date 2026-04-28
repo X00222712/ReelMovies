@@ -211,7 +211,7 @@
 
 				<div>
 					<p class="summary-label">Total</p>
-					<h3>&pound;{totalPrice}</h3>
+					<h3>&euro;{totalPrice}</h3>
 				</div>
 
 				<button class="btn btn-primary summary-button" type="submit" disabled={selectedSeats.length === 0}>
