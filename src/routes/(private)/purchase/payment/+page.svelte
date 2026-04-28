@@ -67,7 +67,6 @@
 			>
 				<option value="">Choose payment method</option>
 				<option value="card">Card</option>
-				<option value="paypal">PayPal</option>
 				<option value="cash">Pay at cinema</option>
 			</select>
 
