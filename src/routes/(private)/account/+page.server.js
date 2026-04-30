@@ -13,16 +13,13 @@ export async function load( { locals } ) {
     let user;
     if (locals.user?.name) {
         try
-            {
-                console.log(Number(locals.user.id))
-                user = await usersService.getUser(Number(locals.user.id));
-            }
+            { user = await usersService.getUser(Number(locals.user.id)) }
         catch
             { redirect(308, "/auth/signout") }
     }
     else { redirect(308, "/auth/signin") }
 
-    return { user : user }
+    return { user }
 }
 
 

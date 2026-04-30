@@ -20,7 +20,7 @@
 
 	<section class="rewards-grid">
 		{#each data.rewards as reward}
-			<div class="reward-card">
+			<div class="reward-card" id="{reward.name}">
 				<h3>{reward.name}</h3>
 				<p>{reward.description}</p>
 				<strong>{reward.pointsCost} points</strong>

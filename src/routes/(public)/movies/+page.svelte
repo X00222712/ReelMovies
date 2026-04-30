@@ -10,6 +10,7 @@
 }-->
 <script>
   import MovieCard from '$lib/components/MovieCard.svelte';
+  import Recmovies from '$lib/components/Recmovies.svelte';
 
   let { data } = $props();
 
@@ -87,6 +88,4 @@
   </div>
 </div>
 
-<style>
-
-</style>
+<Recmovies/>

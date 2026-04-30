@@ -1,8 +1,8 @@
 <script>
 	const { data, form } = $props();
 
-	let selectedMovieId = $state('');
-	let selectedScreeningId = $state('');
+	let selectedMovieId = $state(data.selection.movieid);
+	let selectedScreeningId = $state(data.selection.screening);
 	let selectedSeats = $state([]);
 
 	let movies = $derived.by(() => {
@@ -185,10 +185,10 @@
 				</div>
 
 				<div class="seat-key">
-					<div><span class="key-seat saver"></span> Saver &pound;5.99</div>
-					<div><span class="key-seat regular"></span> Regular &pound;7.99</div>
-					<div><span class="key-seat vip"></span> VIP &pound;9.99</div>
-					<div><span class="key-seat disabled-seat"></span> Accessible &pound;5.99</div>
+					<div><span class="key-seat saver"></span> Saver &euro;5.99</div>
+					<div><span class="key-seat regular"></span> Regular &euro;7.99</div>
+					<div><span class="key-seat vip"></span> VIP &euro;9.99</div>
+					<div><span class="key-seat disabled-seat"></span> Accessible &euro;5.99</div>
 					<div><span class="key-seat taken"></span> Taken</div>
 					<div><span class="key-seat chosen"></span> Selected</div>
 				</div>

@@ -45,7 +45,7 @@
   <input
     id="name"
     type="text"
-    class="form-control"
+    class="form-control text-white"
     bind:value={name}
     placeholder="Enter your name"
   />
@@ -70,7 +70,7 @@
   <label for="message" class="form-label">Your Review</label>
   <textarea
     id="message"
-    class="form-control"
+    class="form-control text-white"
     rows="3"
     bind:value={message}
     placeholder="Share your experience..."
@@ -96,7 +96,7 @@
           <div class="mb-2 text-warning">
             {"⭐".repeat(review.rating)}
           </div>
-          <p class="mb-0 text-muted">{review.message}</p>
+          <p class="mb-0">{review.message}</p>
         </div>
       </div>
     {/each}
@@ -123,8 +123,9 @@ h2 {
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 18px;
   transition: all 0.35s ease;
-}
 
+  color: antiquewhite;
+}
 
 .review-form {
   padding: 2rem;

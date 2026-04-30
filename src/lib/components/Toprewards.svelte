@@ -1,4 +1,6 @@
 <script>
+	import { redirect } from "@sveltejs/kit";
+
     let { rewardItems } = $props();
     const menu = import.meta.glob(['$lib/assets/menu/**.jpeg', '$lib/assets/menu/**.webp', '$lib/assets/menu/*/*.png'], {eager : true, query: "?url", import: "default"});
 
@@ -12,7 +14,7 @@
             <div class="mt-5 pb-3 mx-auto text-center text-sm-start">
                 <h3 class="m-0">{item.name}</h3>
                 <p><strong>{item.price}RM</strong> points</p>
-                <input id="clickme" type="button" value="Redeem" class="btn btn-warning btn-reedem" onclick={redeemPoint}/>
+                <a href="/loyalty#{item.name}"><input id="redeem{item.name}" type="button" value="Redeem" class="btn btn-warning btn-reedem"/></a>
             </div>
         </div>
         

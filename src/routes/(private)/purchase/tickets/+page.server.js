@@ -10,7 +10,19 @@ const seatPrices = {
 	D: 5.99
 };
 
-export async function load() {
+export async function load({url}) {
+
+	const movieID = Number(url.searchParams.get("movieid")) ?? ''
+	const screentime = /*url.searchParams.get("screening") ??*/ ''
+
+	console.log("TEST :", movieID)
+	// console.log("TEST :", screentime)
+
+	const selectionInfo = {
+		movieid : movieID,
+		screening : screentime
+	}
+
 	const screeningRows = await db
 		.select({
 	        id: screenings.id,
@@ -50,6 +62,7 @@ export async function load() {
 	}));
 
 	return {
+		selection : selectionInfo,
 		screenings: screeningData
 	};
 }
