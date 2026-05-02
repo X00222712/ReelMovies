@@ -35,10 +35,10 @@ export const actions = {
 
         let validatedData;
         // Verify all inputs
+        if (password !== confirmPassword) { return fail(400, { error: true, message : "Passwords don't match" }) }
+        
         try {
-            if (password !== confirmPassword) { throw new ValidationError("Passwords don't match") }
             validatedData = validateUser.parse({ name, email, password })
-            
         } catch(error) {
             return fail(400, {error: true, message : JSON.parse(error.message)[0]?.message || "Details not valid"})
         }

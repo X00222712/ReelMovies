@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { db } from '$lib/server/db';
-import { movies, screens, screenings, bookings } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
+
+import { bookingService } from '$lib/server/services/booking-service';
+import { screenService } from '$lib/server/services/screeningService';
 
 const seatPrices = {
 	S: 5.99,
@@ -24,29 +24,9 @@ export async function load({url, locals}) {
 		screening : screentime
 	}
 
-	// Replace with service layer
-	const screeningRows = await db
-		.select({
-			id: screenings.id,
-			date: screenings.date,
-			time: screenings.time,
-			movieId: movies.id,
-			movieTitle: movies.title,
-			poster: movies.poster,
-			description: movies.description,
-			ageRating: movies.rating,
-			ratingScore: movies.ratingScore,
-			screenId: screens.id,
-			screenName: screens.name,
-			screenSeats: screens.seats
-		})
-		.from(screenings)
-		.innerJoin(movies, eq(screenings.movieId, movies.id))
-		.innerJoin(screens, eq(screenings.screenId, screens.id));
-
-	// Replace with service layer
-	// Fix so only this screening is got
-	const bookingRows = await db.select().from(bookings).where( eq() ) ;
+	const screeningRows = await screenService.getAllScreening()
+	const bookingRows = await bookingService.getAllBookedScreening() ?? []
+    console.log(bookingRows)
 
 	const takenSeatsByScreening = {};
 

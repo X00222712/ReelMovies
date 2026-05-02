@@ -350,9 +350,9 @@ async function makeScreenings() {
 }
 
 const loyaltyRewardData = [
-	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 200, 'foods/popcorn.png'],
-	[2, 'Fanta', 'Free Fanta drink.', 300, 'drinks/fanta.png'],
-	[3, 'Coca Cola', 'Free Coca Cola drink.', 500, 'drinks/coca_cola.png'],
+	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 150, 'foods/popcorn.png'],
+	[2, 'Fanta', 'Free Fanta drink.', 100, 'drinks/fanta.png'],
+	[3, 'Coca Cola', 'Free Coca Cola drink.', 100, 'drinks/coca_cola.png'],
 	[4, 'Free Standard Seat Upgrade', 'Upgrade one saver seat to regular.', 700, null],
 	[5, 'VIP Seat Discount', 'Get a discount on a VIP seat.', 1000, null]
 ];
