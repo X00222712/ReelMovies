@@ -46,6 +46,10 @@
         </div>
     {/if}
 
+    <div>
+        <a href="/account/bookings" class="d-flex justify-content-center text-decoration-none"><button class="w-75 btn text-white p-2 my-4" style="box-shadow: 0 0 15px 1px #eee;" type="button">View my bookings</button></a>
+    </div>
+
     <div class="w-100 mx-auto d-block d-md-flex justify-content-center row">
 
         <form class="col-12 col-md-4 col-lg-3 form-style" method="post" action="?/changePW" style="box-shadow: 0 0 25px;">

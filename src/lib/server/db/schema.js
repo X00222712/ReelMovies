@@ -94,7 +94,13 @@ export const bookings = sqliteTable('bookings', {
 	seats: text('seats').notNull(),
 	paymentMethod: text('payment_method').notNull(),
 	totalPrice: real('total_price').notNull(),
-	createdAt: text('created_at').default(new Date().toISOString())
+	createdAt: text('created_at')
+		.default(new Date().toISOString())
+		.notNull(),
+	updatedAt: text('updated_at')
+		.default(new Date().toString())
+		.$onUpdate(() => new Date().toString())
+		.notNull(),
 });
 
 export const loyaltyRewards = sqliteTable('loyalty_rewards', {

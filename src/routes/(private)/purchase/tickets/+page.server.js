@@ -10,25 +10,27 @@ const seatPrices = {
 	D: 5.99
 };
 
-export async function load({url}) {
+export async function load({url, locals}) {
 
-	const movieID = Number(url.searchParams.get("movieid")) ?? ''
+	if (!locals.user)
+		{ throw redirect(303, '/auth/signin') }
+
+	const movieID = Number(url.searchParams.get("movieid")) ?? 0
 	const screentime = /*url.searchParams.get("screening") ??*/ ''
 
-	console.log("TEST :", movieID)
-	// console.log("TEST :", screentime)
 
 	const selectionInfo = {
 		movieid : movieID,
 		screening : screentime
 	}
 
+	// Replace with service layer
 	const screeningRows = await db
 		.select({
-	        id: screenings.id,
-	        date: screenings.date,
-	        time: screenings.time,
-	        movieId: movies.id,
+			id: screenings.id,
+			date: screenings.date,
+			time: screenings.time,
+			movieId: movies.id,
 			movieTitle: movies.title,
 			poster: movies.poster,
 			description: movies.description,
@@ -42,7 +44,9 @@ export async function load({url}) {
 		.innerJoin(movies, eq(screenings.movieId, movies.id))
 		.innerJoin(screens, eq(screenings.screenId, screens.id));
 
-	const bookingRows = await db.select().from(bookings);
+	// Replace with service layer
+	// Fix so only this screening is got
+	const bookingRows = await db.select().from(bookings).where( eq() ) ;
 
 	const takenSeatsByScreening = {};
 
@@ -69,10 +73,6 @@ export async function load({url}) {
 
 export const actions = {
 	book: async ({ request, locals }) => {
-		if (!locals.user) {
-			throw redirect(303, '/auth/signin');
-		}
-
 		const data = await request.formData();
 
 		const screeningId = Number(data.get('screeningId'));

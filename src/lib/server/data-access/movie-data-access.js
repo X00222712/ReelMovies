@@ -1,42 +1,47 @@
-  // Mock data (replace later with DB)
-const movies = [
-    {
-        id: 1,
-        title: "Interstellar",
-        // https://www.imdb.com/title/tt0816692/
-        description:  "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans.",
-        runtime: "2h 49m",
-        rating: 8.7,
-        genre: "Sci-Fi",
-        ageRating: "PG-13",
-        poster: "https://image.tmdb.org/t/p/w500/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg"
-    },
-    {
-        id: 2,
-        title: "The Batman",
-        // https://www.imdb.com/title/tt1877830/
-        description: "When a sadistic serial killer begins murdering key political figures in Gotham, the Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-        runtime: "2h 56m",
-        rating: 7.8,
-        genre: "Action",
-        ageRating: "PG-13",
-        poster: "https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
-    },
-    {
-    id: 3,
-        title: "Coco",
-        // https://www.imdb.com/title/tt2380307/
-        description: "Aspiring musician Miguel, confronted with his family's ancestral ban on music, enters the Land of the Dead to find his great-great-grandfather, a legendary singer.",
-        runtime: "1h 45m",
-        rating: 8.4,
-        genre: "Animation",
-        ageRating: "G",
-        poster: "https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg"
-    }
-];
+// Author Alex D & Glen J
+
+// third party
+import { eq } from "drizzle-orm";
+import { db } from "../db";
+// Ours
+import { genres, movieGenres, movies } from "../db/schema";
+
+const movieInfo = {
+    id          : movies.id,
+    title       : movies.title,
+    ageRating   : movies.rating,
+    poster      : movies.poster,
+    description : movies.description,
+    ratingScore : movies.ratingScore,
+    genre       : genres.name
+}
 
 export const moviesDataAccess = {
-    async getAllMovies() {
-        return movies;
+    async getMovieById(movieId) {
+        const results = await db.select(movieInfo)
+        .from(movies)
+        .leftJoin(movieGenres, eq(movies.id, movieGenres.movieId))
+        .leftJoin(genres, eq(movieGenres.genreId, genres.id))
+        .where(eq(movies.id, movieId));
+
+        if (!results || results.length === 0) return null;
+
+        const movie = results[0] = {
+            id: results[0].id,
+            title: results[0].title,
+            ageRating: results[0].ageRating || 'N/A',
+            poster: results[0].poster || '/placeholder.jpg',
+            description: results[0].description || 'No description available.',
+            ratingScore: results[0].ratingScore ?? null,
+            genre: []
+        };
+
+        for (const row of results)
+        {
+            if (row.genre && !movie.genre.includes(row.genre))
+                { movie.genre.push(row.genre); }
+        }
+
+        return movie;
     }
 }
