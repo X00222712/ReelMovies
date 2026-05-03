@@ -1,3 +1,5 @@
+// Author : Glen J
+
 // Third part
 import { fail, json, redirect } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth";

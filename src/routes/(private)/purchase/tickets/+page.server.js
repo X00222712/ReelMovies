@@ -1,3 +1,5 @@
+// Author : Alex D & Glen J
+
 import { fail, redirect } from '@sveltejs/kit';
 
 import { bookingService } from '$lib/server/services/booking-service';

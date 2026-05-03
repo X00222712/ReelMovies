@@ -1,6 +1,6 @@
 /*
 
-Author : Glen Johnston
+Author : Alex D & Glen Johnston
 Create : 17 / Mar / 2026
 
 Description
@@ -19,6 +19,8 @@ import { fail, json, redirect } from '@sveltejs/kit';
 import {admins, genres, movieGenres, movies, rewardPoints, screens, screenings, loyaltyRewards} from '$lib/server/db/schema';
 
 import { usersService } from '$lib/server/services/users-service';
+import { bookingService } from '$lib/server/services/booking-service';
+import { tr } from 'zod/v4/locales';
 
 export async function load( { locals } )
 {
@@ -42,7 +44,6 @@ async function makeAccounts(cookies)
     try {
 
         usersInformation.forEach(async (element, index) => {
-            console.log(index, element)
 
             const newUser = await auth.api.signUpEmail({
                 body : {
@@ -376,6 +377,38 @@ async function makeLoyaltyRewards() {
 	}
 }
 
+const bookTickets = [
+    [ 4, 1, [ [0,1], [0,2], [0,3] ], "card", 0, 17.67 ],
+    [ 4, 3, [ [3,0], [3,1], [3,2], [3,3], [3,4], [3,5] ], "card", 44.61, 59.49 ],
+
+    [ 3, 24, [ [0,6], [0,5], [2,7] ], "card", 2, 19.97 ],
+    [ 2, 16, [ [2,9], [2,7], [2,8], [2,6], [2,5] ], "cash", 0, 39.95 ]
+]
+
+async function makeBookings() {
+    for (const booking of bookTickets)
+    {
+        const userId = booking[0]
+        const screeningId = booking[1]
+        const seats = booking[2]
+        const paymentMethod = booking[3]
+        const discount = booking[4]
+        const price = booking[5]
+
+        await bookingService.bookTickets(
+            {
+                userId,
+                screeningId,
+                seats,
+                paymentMethod,
+                discount,
+                price
+            }
+        )   
+    }
+    return tr
+}
+
 export const actions = {
 	default : async ({ request, cookies }) =>
     {
@@ -384,6 +417,7 @@ export const actions = {
         // Temp password
         if ("RM" !== password) { return fail(424, {failed: true, message : "Password incorrect"}) }
 
+        // This will always fail if setup is run more than once
         if (!(await makeAccounts(cookies)))
             { return fail(400, {failed: true, message : "Failed to create accounts" }) }
 
@@ -403,8 +437,10 @@ export const actions = {
             { return fail(400, { failed: true, message: "Failed to create screenings" }) }
 
         if (!(await makeLoyaltyRewards()))
-	        { return fail(400, { failed: true, message: "Failed to create loyalty rewards" }) }
+            { return fail(400, { failed: true, message: "Failed to create loyalty rewards" }) }
 
+        if(!(await makeBookings()))
+            { return fail(400, { failed: true, message: "Failed to create bookings rewards" }) }
 
         return { failed: false, message : "DB setup" }
 	} 

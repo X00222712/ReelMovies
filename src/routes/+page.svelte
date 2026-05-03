@@ -1,3 +1,5 @@
+<!-- Author : Glen J -->
+
 <script>
     import Recmovies from "$lib/components/Recmovies.svelte";
     import Toprewards from "$lib/components/Toprewards.svelte";

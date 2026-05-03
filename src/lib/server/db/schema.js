@@ -93,6 +93,13 @@ export const bookings = sqliteTable('bookings', {
 		.references(() => screenings.id, { onDelete: 'cascade' }),
 	seats: text('seats').notNull(),
 	paymentMethod: text('payment_method').notNull(),
+	paid : integer('paid', {"mode" : "boolean"})
+		.default(false)
+		.notNull(),
+	discount : real('discounts')
+		.default( 0.0 )
+		.notNull(),
+	price: real('price').notNull(),
 	totalPrice: real('total_price').notNull(),
 	createdAt: text('created_at')
 		.default(new Date().toISOString())

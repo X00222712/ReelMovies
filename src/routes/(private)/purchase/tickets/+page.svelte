@@ -1,3 +1,5 @@
+<!-- Author : Alex D & Glen J -->
+
 <script>
 	const { data, form } = $props();
 

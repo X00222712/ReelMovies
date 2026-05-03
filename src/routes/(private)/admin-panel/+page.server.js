@@ -34,7 +34,7 @@ export async function load({ locals }) {
     // Could do something better but we only need it to work
         {
             console.log(error)
-            return { user : {}, failed : {status : true, message : "Could not validate user"} }
+            return redirect(302, '/')
         }
 
     let access;
@@ -43,7 +43,7 @@ export async function load({ locals }) {
     catch (error)
         {
             console.log(error)
-            return { user : {}, failed : {status : true, message : "Could not validate user"} }
+            return redirect(302, '/account')
         }
 
     if (1 > access.length || false === access?.admin)
@@ -64,38 +64,38 @@ export async function load({ locals }) {
     let screeningTimes = [];
 
     try {
-	    moviesList = await db
-		    .select({
-			    id: movies.id,
-			    title: movies.title
-		    })
-		    .from(movies)
-		    .orderBy(asc(movies.id));
+        moviesList = await db
+            .select({
+                id: movies.id,
+                title: movies.title
+            })
+            .from(movies)
+            .orderBy(asc(movies.id));
 
-	    screensList = await db
-		    .select({
-			    id: screens.id,
-			    name: screens.name
-		    })
-		    .from(screens)
-		    .orderBy(asc(screens.id));
+        screensList = await db
+            .select({
+                id: screens.id,
+                name: screens.name
+            })
+            .from(screens)
+            .orderBy(asc(screens.id));
 
-	    screeningTimes = await db
-		    .select({
-			    id: screenings.id,
-			    movieId: screenings.movieId,
-			    screenId: screenings.screenId,
-			    date: screenings.date,
-			    time: screenings.time,
-			    movieTitle: movies.title,
-			    screenName: screens.name
-		    })
-		    .from(screenings)
-		    .innerJoin(movies, eq(screenings.movieId, movies.id))
-		    .innerJoin(screens, eq(screenings.screenId, screens.id))
-		    .orderBy(asc(screenings.id));
+        screeningTimes = await db
+            .select({
+                id: screenings.id,
+                movieId: screenings.movieId,
+                screenId: screenings.screenId,
+                date: screenings.date,
+                time: screenings.time,
+                movieTitle: movies.title,
+                screenName: screens.name
+            })
+            .from(screenings)
+            .innerJoin(movies, eq(screenings.movieId, movies.id))
+            .innerJoin(screens, eq(screenings.screenId, screens.id))
+            .orderBy(asc(screenings.id));
     } catch (err) {
-	    console.log('Failed to load screening data', err);
+        console.log('Failed to load screening data', err);
     }
 
     return {users, genres, movies: moviesList, screens: screensList, screenings: screeningTimes, failed: {}}

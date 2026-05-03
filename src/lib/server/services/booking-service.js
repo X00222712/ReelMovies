@@ -1,10 +1,8 @@
-import { db } from '$lib/server/db';
-import { bookings } from '$lib/server/db/schema';
 import { bookingDataAccess } from '../data-access/booking-data-access';
 
 export const bookingService = {
-	async bookTickets({ userId, screeningId, seats, paymentMethod, totalPrice }) {
-		const [booking] = await bookingDataAccess.bookTickets(userId, screeningId, seats, paymentMethod, totalPrice)
+	async bookTickets({ userId, screeningId, seats, paymentMethod, discount, price }) {
+		const booking = await bookingDataAccess.bookTickets(userId, screeningId, JSON.stringify(seats), paymentMethod, discount, price)
 		return booking
 	},
 

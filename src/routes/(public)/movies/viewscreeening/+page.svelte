@@ -1,3 +1,5 @@
+<!-- Author : Glen J -->
+
 <script>
 
     const {data} = $props()

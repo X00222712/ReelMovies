@@ -1,3 +1,5 @@
+// Author : Alex D
+
 import { fail, redirect } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
 import { movies, screens, screenings, bookings, rewardPoints } from '$lib/server/db/schema';

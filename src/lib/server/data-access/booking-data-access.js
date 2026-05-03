@@ -8,7 +8,9 @@ const bookingInfo = {
     screeningId : bookings.screeningId,
     seats : bookings.seats,
     paymentMethod : bookings.paymentMethod,
-    price : bookings.totalPrice,
+    paid : bookings.paid,
+    price : bookings.price,
+    totalPrice : bookings.totalPrice,
     bookedAt : bookings.createdAt
 }
 
@@ -19,16 +21,18 @@ const screeningSeatInfo = {
 
 export const bookingDataAccess = {
 
-    async bookTickets(userId, screeningId, seats, paymentMethod, totalPrice) {
+    async bookTickets(userId, screeningId, seats, paymentMethod, discount, price) {
+
+        let paid = false
+        if ("card" == paymentMethod)
+            { paid = true }
+
+        const totalPrice = price - discount
+
         const [booking] = await db
             .insert(bookings)
-            .values({
-            userId,
-            screeningId,
-            seats: JSON.stringify(seats),
-            paymentMethod,
-            totalPrice
-        }).returning();
+            .values({ userId, screeningId, seats, paymentMethod, paid, discount, price, totalPrice})
+            .returning();
         return booking;
     },
 

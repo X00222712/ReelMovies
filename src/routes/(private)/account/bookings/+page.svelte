@@ -1,8 +1,9 @@
-<script>
+<!-- Author : Glen J -->
 
+
+<script>
     let { data } = $props();
     const bookings = data.bookings
-    console.log(bookings)
 
 </script>
 
@@ -12,9 +13,7 @@
     <h1>Your Bookings</h1>
 
     <div>
-
         {#if bookings.length}
-
             <!--  -->
             {#each bookings as booking}
 

@@ -1,3 +1,5 @@
+<!-- Author : Alex D -->
+
 <div class="container my-5 text-center">
 	<h2>Payment Successful</h2>
 	<p>Your tickets have been booked successfully.</p>
