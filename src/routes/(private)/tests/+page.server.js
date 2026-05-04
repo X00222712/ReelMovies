@@ -9,12 +9,17 @@ import { redirect } from "@sveltejs/kit"
 export async function load( { locals } ) {
     if (!locals.user?.name) { redirect(308, "/auth/signin") }
 
+    console.log("1")
+
     try
     {
         const access = await usersService.canAccessAdmin(locals.user.id);
+        console.log(access)
+        console.log(access.admin, access.privilage)
 
         if (!access.admin)
-            { redirect(308, "/account") }
+            { throw new Error(`${locals.user.name} is not admin`)  }
+
     }
     catch (error)
     {

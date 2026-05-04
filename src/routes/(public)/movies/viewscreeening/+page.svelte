@@ -22,65 +22,19 @@
 		return Array.from(movieMap.values());
 	});
 
-	let movieScreenings = $derived.by(() => {
-		return data.screenings.filter(
-			(screening) => String(screening.movieId) === String(selectedMovieId)
-		);
-	});
-
-	let selectedScreening = $derived(
-		data.screenings.find((screening) => String(screening.id) === String(selectedScreeningId))
-	);
-
-	const seatPrices = {
-		S: 5.99,
-		R: 7.99,
-		V: 9.99,
-		D: 5.99
-	};
-
-	function movieChanged() {
-		selectedScreeningId = '';
-		selectedSeats = [];
-	}
-
-	function timeChanged() {
-		selectedSeats = [];
+	let selectedScreening = data.screenings[0]
+	const selectedMovie = {
+		id : selectedScreening.movieId,
+		title : selectedScreening.movieTitle,
+		poster : selectedScreening.poster,
+		description : selectedScreening.description,
+		ageRating : selectedScreening.ageRating,
+		ratingScore : selectedScreening.ratingScore
 	}
 
 	function seatTaken(row, col) {
 		return selectedScreening?.takenSeats.includes(`${row+1}, ${col+1}`);
 	}
-
-	function seatSelected(row, col) {
-		return selectedSeats.includes(`${row}, ${col}`);
-	}
-
-	function selectSeat(row, col) {
-		const seat = `${row}, ${col}`;
-
-		if (seatTaken(row, col)) {return;}
-
-		if (seatSelected(row, col)) {
-			selectedSeats = selectedSeats.filter((selectedSeat) => selectedSeat !== seat);
-		} else {
-			selectedSeats = [...selectedSeats, seat];
-		}
-	}
-
-	let totalPrice = $derived.by(() => {
-		if (!selectedScreening) return 0;
-
-		let total = 0;
-
-		for (const seat of selectedSeats) {
-			const [row, col] = seat.split(',').map(Number);
-			const seatType = selectedScreening.screenSeats[row-1][col-1];
-			total += seatPrices[seatType] ?? 0;
-		}
-
-		return total.toFixed(2);
-	});
 </script>
 
 <div class="booking-page">
@@ -88,100 +42,56 @@
 		<p class="eyebrow">Reel Movies</p>
 		<h1>Book Tickets</h1>
 		<p>Choose your movie, pick a showing, select your seats, then continue to payment.</p>
+		<a href="/purchase/tickets?movieid={selectedScreening.movieId}&date={selectedScreening.date}&time={selectedScreening.time}">
+			<p>Book tickets for {selectedScreening.movieTitle}</p>
+		</a>
 	</section>
 
-	{#if form?.message}
-		<p class="alert alert-danger booking-alert">{form.message}</p>
-	{/if}
 
-	<form method="POST" action="?/book">
-		<section class="booking-panel">
-			<div class="selector-grid">
-				<div>
-					<label class="form-label" for="movie">Movie</label>
-					<select
-						id="movie"
-						class="form-select"
-						bind:value={selectedMovieId}
-						onchange={movieChanged}
-						required
-					>
-						<option value="">Select movie</option>
+    {#if selectedScreening}
+        <section class="movie-preview">
+            <img
+                src={selectedScreening.poster}
+                alt="{selectedScreening.movieTitle} poster"
+                class="movie-poster"
+            />
 
-						{#each movies as movie}
-							<option value={movie.id}>{movie.title}</option>
-						{/each}
-					</select>
-				</div>
+            <div class="movie-info">
+                <p class="eyebrow">{selectedScreening.date} at {selectedScreening.time}</p>
+                <h2>{selectedScreening.movieTitle}</h2>
 
-				<div>
-					<label class="form-label" for="screening">Date and time</label>
-					<select
-						id="screening"
-						class="form-select"
-						name="screeningId"
-						bind:value={selectedScreeningId}
-						onchange={timeChanged}
-						required
-						disabled={!selectedMovieId}
-					>
-						<option value="">Select date and time</option>
+                <div class="movie-meta">
+                    <span>{selectedScreening.screenName}</span>
+                    <span>{selectedScreening.ageRating}</span>
+                    <span>{selectedScreening.ratingScore ?? 'N/A'} / 10</span>
+                </div>
 
-						{#each movieScreenings as screening}
-							<option value={screening.id}>
-								{screening.date} at {screening.time} - {screening.screenName}
-							</option>
-						{/each}
-					</select>
-				</div>
-			</div>
-		</section>
+                <p>{selectedScreening.description}</p>
+            </div>
+        </section>
 
-		{#if selectedScreening}
-			<section class="movie-preview">
-				<img
-					src={selectedScreening.poster}
-					alt="{selectedScreening.movieTitle} poster"
-					class="movie-poster"
-				/>
+        <section class="seat-section">
+            <div class="section-heading">
+                <h2>Select Seats</h2>
+                <p>{selectedSeats.length} selected</p>
+            </div>
 
-				<div class="movie-info">
-					<p class="eyebrow">{selectedScreening.date} at {selectedScreening.time}</p>
-					<h2>{selectedScreening.movieTitle}</h2>
+            <div class="screen-label">Screen</div>
 
-					<div class="movie-meta">
-						<span>{selectedScreening.screenName}</span>
-						<span>{selectedScreening.ageRating}</span>
-						<span>{selectedScreening.ratingScore ?? 'N/A'} / 10</span>
-					</div>
+            <table class="seat-map">
+				<thead>
+					<tr>
+						<td class="d-flex fs-5 fw-bold" style="gap: .90rem;">
+							<p class="seat row-label"></p>
+							{#each selectedScreening.screenSeats[0] as i, j}
+									<p class="seat-row">{(j+1)}</p>
+							{/each}
+						</td>
+					</tr>
+				</thead>
 
-					<p>{selectedScreening.description}</p>
-				</div>
-			</section>
-
-			<section class="seat-section">
-				<div class="section-heading">
-					<h2>Select Seats</h2>
-					<p>{selectedSeats.length} selected</p>
-				</div>
-
-				<div class="screen-label">Screen</div>
-
-
-				<table class="seat-map">
-					<thead>
-						<tr>
-							<td class="d-flex fs-5 fw-bold" style="gap: 0.9rem;">
-								<p class="seat row-label"></p>
-								{#each selectedScreening.screenSeats[0] as i, j}
-										<p class="seat-row me-md-2">{(j+1)}</p>
-								{/each}
-							</td>
-						</tr>
-					</thead>
-
-					<tbody>
-						<tr>
+				<tbody>
+					<tr>
 						{#each selectedScreening.screenSeats as row, i}
 							<td class="seat-row">
 								<span class="row-label">{i + 1}</span>
@@ -189,55 +99,32 @@
 								{#each row as seat, j}
 									<button
 										type="button"
-										value="{i+1},{j+1}"
+										value="{i},{j}"
 										class="seat seat-{seat.toLowerCase()} {seatTaken(i, j) ? 'seat-taken' : ''}"
-										class:selected={seatSelected(i+1, j+1)}
-										onclick={() => selectSeat(i+1, j+1)}
+										onclick={() => selectSeat(i, j)}
 										aria-label="row {i + 1} column {j + 1}"
 									></button>
 								{/each}
 							</td>
 						{/each}
-						</tr>
-					</tbody>
-				</table>
+					</tr>
+				</tbody>
+            </table>
 
-				<div class="seat-key">
-					<div><span class="key-seat saver"></span> Saver &euro;5.99</div>
-					<div><span class="key-seat regular"></span> Regular &euro;7.99</div>
-					<div><span class="key-seat vip"></span> VIP &euro;9.99</div>
-					<div><span class="key-seat disabled-seat"></span> Accessible &euro;5.99</div>
-					<div><span class="key-seat taken"></span> Taken</div>
-					<div><span class="key-seat chosen"></span> Selected</div>
-				</div>
-			</section>
+            <div class="seat-key">
+                <div><span class="key-seat saver"></span> Saver</div>
+                <div><span class="key-seat regular"></span> Regular</div>
+                <div><span class="key-seat vip"></span> VIP</div>
+                <div><span class="key-seat disabled-seat"></span> Accessible</div>
+                <div><span class="key-seat taken"></span> Taken</div>
+            </div>
+        </section>
 
-			{#each selectedSeats as seat}
-				<input type="hidden" name="selectedSeats" value={seat} />
-			{/each}
+        {#each selectedSeats as seat}
+            <input type="hidden" name="selectedSeats" value={seat} />
+        {/each}
+    {/if}
 
-			<section class="booking-summary">
-				<div>
-					<p class="summary-label">Movie</p>
-					<h3>{selectedScreening.movieTitle}</h3>
-				</div>
-
-				<div>
-					<p class="summary-label">Seats</p>
-					<h3>{selectedSeats.length}</h3>
-				</div>
-
-				<div>
-					<p class="summary-label">Total</p>
-					<h3>&euro;{totalPrice}</h3>
-				</div>
-
-				<button class="btn btn-primary summary-button" type="submit" disabled={selectedSeats.length === 0}>
-					Proceed to Payment
-				</button>
-			</section>
-		{/if}
-	</form>
 </div>
 
 <style>

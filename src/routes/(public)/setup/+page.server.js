@@ -1,6 +1,6 @@
 /*
 
-Author : Glen Johnston
+Author : Alex D & Glen Johnston
 Create : 17 / Mar / 2026
 
 Description
@@ -16,8 +16,12 @@ import { auth } from '$lib/server/auth';
 import { fail, json, redirect } from '@sveltejs/kit';
 
 // Ours
-import { admins, genres, movieGenres, movies, rewardPoints } from '$lib/server/db/schema';
+import {admins, genres, movieGenres, movies, rewardPoints, screens, screenings, loyaltyRewards} from '$lib/server/db/schema';
+
 import { usersService } from '$lib/server/services/users-service';
+import { bookingService } from '$lib/server/services/booking-service';
+import { tr } from 'zod/v4/locales';
+import { feedbackService } from '$lib/server/services/feedback-service';
 
 export async function load( { locals } )
 {
@@ -25,68 +29,45 @@ export async function load( { locals } )
         { redirect(307, "/account") }
 }
 
+const usersInformation = [
+    // Username, email, password, RMpoints, [admin, privilage]
+    ["IT Admin", 'itsuper@reelmovies.ie', "ITSupport", 100000, [1, 1]],
+    ["Admin", 'admin@reelmovies.ie', "reelmovies", 0, [1, 0]],
+    ["Lauren", 'test@test.ie', "password123", 200, [0, 0]],
+    ["Alex", 'Alex@test.ie', "SuperCool", 400, [0, 0]],
+    ["Glen", 'glen@test.ie', "password123", 0, [0, 0]],
+    ["Bob", 'GLEN@test.com', "password123", 0, [0, 0]],
+]
+
 async function makeAccounts(cookies)
 {
 	let userSigninCookie = cookies.get("better-auth.session_token")
     try {
-        // password : ITSupport
-        await auth.api.signUpEmail({
-            body:  {
-                name : "IT Admin",
-                email : 'itsuper@reelmovies.ie',
-                password: "ITSupport"
-        }})
-        await db.insert(admins).values({userId: 1, id: 1, admin: 1, privilage: 1})
-        await db.insert(rewardPoints).values({userId: 1, points: 100000})
 
-        // password : reelmovies
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Admin",
-                email : 'admin@reelmovies.ie',
-                password: "reelmovies"
-        }})
-        await db.insert(admins).values({userId: 2, id: 2, admin: 1, privilage: 0})
-        await db.insert(rewardPoints).values({userId: 2})
+        usersInformation.forEach(async (element, index) => {
 
+            const newUser = await auth.api.signUpEmail({
+                body : {
+                    name : element[0],
+                    email : element[1],
+                    password : element[2]
+                }
+            })
 
-        // password : password123
-        let user = await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'test@test.ie',
-                password: "password123"
-        }})
-        console.log("USER", user)
-        await db.insert(rewardPoints).values({userId: 3, points: 200})
+            const userId = newUser.user.id
 
-        // password : SuperCool
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Alex",
-                email : 'Alex@test.ie',
-                password: "SuperCool"
-        }})
-        usersService.insertUserPoints(4, 400)
-        // await db.insert(rewardPoints).values({userId: 4, points: 400})
+            await usersService.insertUserPoints(Number(userId), element[3])
 
-        // password : password123
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'glen@test.ie',
-                password: "password123"
-        }})
-        await db.insert(rewardPoints).values({userId: 5})
+            if (element[4][0])
+            { await db.insert(admins).values({userId, admin: element[4][0], privilage: element[4][1]}) }
 
-        // password : password123
-        await auth.api.signUpEmail({
-            body:  {
-                name : "Glen",
-                email : 'GLEN@test.com',
-                password: "password123"
-        }})
-        await db.insert(rewardPoints).values({userId: 6})
+            // Signout
+            await auth.api.signOut({
+                headers : { cookies : `better-auth.session_token=${newUser.token}` }
+            })
+
+        });
+
 
         cookies.set("better-auth.session_token", userSigninCookie, { path : "/" })
         return true
@@ -269,6 +250,199 @@ async function makeMovieGenres() {
     }
 }
 
+const screenData = [
+	[1, 'Screen 1', 'SSSSSDDDD|SSSSSSSSS|RRRRRRRRR|VVVVVVVVV|RRRRRRRRR'],
+	[2, 'Screen 2', 'SSSSSDDDD|SSSSSSSSS|RRRRRRRRR|VVVVVVVVV|VVVVVVVVV'],
+	[3, 'Screen 3', 'SSSSSSSS|RRRRRRRR|RRRRRRRR|VVVVVVVV'],
+	[4, 'Screen 4', 'SSSSSSDD|SSSSSSSS|RRRRRRRR|RRRRRRRR|VVVVVVVV'],
+	[5, 'Screen 5', 'SSSSSSSSSS|RRRRRRRRRR|RRRRRRRRRR|VVVVVVVVVV'],
+	[6, 'Screen 6', 'SSSSDD|SSSSSS|RRRRRR|VVVVVV']
+];
+
+async function makeScreens() {
+	try {
+		for (const screen of screenData) {
+			await db.insert(screens).values({
+				id: screen[0],
+				name: screen[1],
+				seats: screen[2]
+			});
+		}
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+const screeningData = [
+	[1, 1, 1, '2026-05-24', '10:00 AM'],
+	[2, 1, 4, '2026-05-24', '7:30 PM'],
+	[3, 2, 2, '2026-05-24', '11:30 AM'],
+	[4, 2, 5, '2026-05-24', '8:15 PM'],
+	[5, 3, 3, '2026-05-24', '1:00 PM'],
+	[6, 3, 6, '2026-05-24', '9:00 PM'],
+	[7, 4, 1, '2026-05-25', '10:45 AM'],
+	[8, 4, 5, '2026-05-25', '7:45 PM'],
+	[9, 5, 2, '2026-05-25', '12:00 PM'],
+	[10, 5, 4, '2026-05-25', '8:30 PM'],
+	[11, 6, 3, '2026-05-25', '1:30 PM'],
+	[12, 6, 6, '2026-05-25', '9:15 PM'],
+	[13, 7, 1, '2026-05-26', '11:00 AM'],
+	[14, 7, 4, '2026-05-26', '8:00 PM'],
+	[15, 8, 2, '2026-05-26', '12:30 PM'],
+	[16, 8, 5, '2026-05-26', '6:45 PM'],
+	[17, 9, 3, '2026-05-26', '2:00 PM'],
+	[18, 9, 6, '2026-05-26', '9:30 PM'],
+	[19, 10, 1, '2026-05-27', '10:15 AM'],
+	[20, 10, 5, '2026-05-27', '8:20 PM'],
+	[21, 11, 2, '2026-05-27', '11:45 AM'],
+	[22, 11, 6, '2026-05-27', '4:30 PM'],
+	[23, 12, 3, '2026-05-27', '1:15 PM'],
+	[24, 12, 4, '2026-05-27', '7:00 PM'],
+	[25, 13, 1, '2026-05-28', '10:30 AM'],
+	[26, 13, 6, '2026-05-28', '5:00 PM'],
+	[27, 14, 2, '2026-05-28', '12:15 PM'],
+	[28, 14, 5, '2026-05-28', '6:30 PM'],
+	[29, 15, 3, '2026-05-28', '2:15 PM'],
+	[30, 15, 4, '2026-05-28', '7:45 PM'],
+	[31, 16, 1, '2026-05-29', '11:15 AM'],
+	[32, 16, 6, '2026-05-29', '3:45 PM'],
+	[33, 17, 2, '2026-05-29', '1:00 PM'],
+	[34, 17, 5, '2026-05-29', '8:00 PM'],
+	[35, 18, 3, '2026-05-29', '5:30 PM'],
+	[36, 18, 4, '2026-05-29', '9:15 PM'],
+	[37, 19, 1, '2026-05-30', '6:00 PM'],
+	[38, 19, 5, '2026-05-30', '9:00 PM'],
+	[39, 20, 2, '2026-05-30', '5:15 PM'],
+	[40, 20, 6, '2026-05-30', '8:45 PM'],
+	[41, 21, 3, '2026-05-30', '4:45 PM'],
+	[42, 21, 4, '2026-05-30', '8:30 PM'],
+	[43, 22, 1, '2026-06-01', '12:00 PM'],
+	[44, 22, 5, '2026-06-01', '7:30 PM'],
+	[45, 23, 2, '2026-06-01', '1:30 PM'],
+	[46, 23, 6, '2026-06-01', '8:15 PM'],
+	[47, 24, 3, '2026-06-01', '11:00 AM'],
+	[48, 24, 4, '2026-06-01', '5:30 PM'],
+	[49, 25, 1, '2026-06-02', '12:45 PM'],
+	[50, 25, 5, '2026-06-02', '8:45 PM'],
+	[51, 26, 2, '2026-06-02', '2:15 PM'],
+	[52, 26, 6, '2026-06-02', '7:15 PM'],
+	[53, 27, 3, '2026-06-02', '3:30 PM'],
+	[54, 27, 4, '2026-06-02', '9:00 PM']
+];
+
+async function makeScreenings() {
+	try {
+		for (const screening of screeningData) {
+			await db.insert(screenings).values({
+				id: screening[0],
+				movieId: screening[1],
+				screenId: screening[2],
+				date: screening[3],
+				time: screening[4]
+			});
+		}
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+const loyaltyRewardData = [
+	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 150, '/menu/foods/popcorn.png'],
+	[2, 'Fanta', 'Free Fanta drink.', 100, '/menu/drinks/fanta.png'],
+	[3, 'Coca Cola', 'Free Coca Cola drink.', 100, '/menu/drinks/coca_cola.png'],
+	[4, 'Free Standard Seat Upgrade', 'Upgrade one saver seat to regular.', 700, null],
+	[5, 'VIP Seat Discount', 'Get a discount on a VIP seat.', 1000, null]
+];
+
+async function makeLoyaltyRewards() {
+	try {
+		for (const reward of loyaltyRewardData) {
+			await db.insert(loyaltyRewards).values({
+				id: reward[0],
+				name: reward[1],
+				description: reward[2],
+				pointsCost: reward[3],
+				image: reward[4]
+			});
+		}
+
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+const bookTickets = [
+    [ 4, 1, [ '1, 2', '1, 3', '1, 4' ], "card", 0, 17.67 ],
+    [ 4, 3, [  '4, 1', '4, 2', '4, 3', '4, 4', '4, 5', '4, 6' ], "card", 44.61, 59.49 ],
+    [ 3, 24, [ '1, 7', '1, 6', '3, 8' ], "card", 2, 19.97 ],
+    [ 2, 16, [ '3, 9', '3, 8', '3, 7', '3, 6' ], "cash", 0, 39.95 ]
+]
+
+async function makeBookings() {
+
+    try {
+        for (const booking of bookTickets)
+        {
+            const userId = booking[0]
+            const screeningId = booking[1]
+            const seats = booking[2]
+            const paymentMethod = booking[3]
+            const discount = booking[4]
+            const price = booking[5]
+
+            await bookingService.bookTickets(
+                {
+                    userId,
+                    screeningId,
+                    seats,
+                    paymentMethod,
+                    discount,
+                    price
+                }
+            )   
+        }
+    } catch (e)
+    {
+        console.log(e)
+        return false
+    }
+    return true
+}
+
+const feedbacks = [
+    [ 4, 4, "Very lovely place" ],
+    [ 5, 3, "Good sound, bad popcorn" ],
+    [ 6, 5, "Such amazing popcorn, incredible sound and pictures and the screens are always spotless and clean!! The seats are sooo comfy toooo" ],
+    [ 1, 1, "They let a mother and their crying baby and toddler into the screening of black panther, I couldn't sit and enjoy the movie for a second." ]
+]
+
+async function makeFeedback() {
+    
+    try {
+        // I hate ON vs OF
+        for (const feedback of feedbacks)
+        {
+            await feedbackService.addFeedback(
+                feedback[0],
+                feedback[1],
+                feedback[2]
+            )
+    }}
+    catch (e)
+    {
+        console.log(e)
+        return false
+    }
+
+    return true
+}
 
 export const actions = {
 	default : async ({ request, cookies }) =>
@@ -276,8 +450,9 @@ export const actions = {
         const data = await request.formData();
         const password = data.get("password")
         // Temp password
-        if ("RM" !== password) { return fail(401, {failed: true, message : "Password incorrect"}) }
+        if ("RM" !== password) { return fail(424, {failed: true, message : "Password incorrect"}) }
 
+        // This will always fail if setup is run more than once
         if (!(await makeAccounts(cookies)))
             { return fail(400, {failed: true, message : "Failed to create accounts" }) }
 
@@ -290,6 +465,23 @@ export const actions = {
         if (!(await makeMovieGenres()))
             { return fail(400, {failed: true, message : "Failed to link movies and genres" }) }
 
+        if (!(await makeScreens()))
+            { return fail(400, { failed: true, message: "Failed to create screens" }) }
+
+        if (!(await makeScreenings()))
+            { return fail(400, { failed: true, message: "Failed to create screenings" }) }
+
+        if (!(await makeLoyaltyRewards()))
+            { return fail(400, { failed: true, message: "Failed to create loyalty rewards" }) }
+
+        if(!(await makeBookings()))
+            { return fail(400, { failed: true, message: "Failed to create bookings" }) }
+
+        if (!(await makeFeedback()))
+            { return fail(400, { failed: true, message: "Failed to create feeback" }) }
+
         return { failed: false, message : "DB setup" }
 	} 
 }
+
+

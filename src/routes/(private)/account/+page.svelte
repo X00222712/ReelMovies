@@ -1,3 +1,5 @@
+<!-- Author : Glen J -->
+
 <script>
     let { data, form } = $props();
     const user = data.user
@@ -25,26 +27,30 @@
     {#if user?.admin}
         <div class="row col-md d-flex flex-wrap justify-content-between gap-4 gap-md-0 mx-1 py-3">
             
-            <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="/admin-panel">
+            <a class="text-decoration-none text-white col-12 col-md-4 col-lg-3" href="/admin-panel">
                 <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
                     <p class="m-0 fw-bold fs-3">Control Panel</p>
                 </div>
             </a>
 
-            <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="#">
+            <a class="text-decoration-none text-white col-12 col-md-4 col-lg-3" href="/admin-panel/bookings">
                 <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
-                    <p class="m-0 fw-bold fs-3">N/A</p>
+                    <p class="m-0 fw-bold fs-3">Bookings</p>
                 </div>
             </a>
 
 
-            <a class="text-decoration-none text-black col-12 col-md-4 col-lg-3" href="/tests">
+            <a class="text-decoration-none text-white col-12 col-md-4 col-lg-3" href="/tests">
                 <div class="text-center admin-panel-item border border-dark border-2 rounded w-100 h-100">
                     <p class="m-0 fw-bold fs-3">Tests</p>
                 </div>
             </a>
         </div>
     {/if}
+
+    <div>
+        <a href="/account/bookings" class="d-flex justify-content-center text-decoration-none"><button class="w-75 btn text-white p-2 my-4" style="box-shadow: 0 0 15px 1px #eee;" type="button">View my bookings</button></a>
+    </div>
 
     <div class="w-100 mx-auto d-block d-md-flex justify-content-center row">
 

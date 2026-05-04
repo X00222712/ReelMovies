@@ -30,3 +30,7 @@ export const validateUserName = z.object({
 export const idSchema = z.object({
     id: z.number().int().gte(0)
 });
+
+export const validateCost = z.object({
+    cost : z.number().nonnegative()
+})

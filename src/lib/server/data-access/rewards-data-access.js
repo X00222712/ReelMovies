@@ -1,11 +1,41 @@
-const recommendedRewards = [
-    { id : 4, name : "Coca cola", price : 500, image : 'drinks/coca_cola.png' },
-    { id : 5, name : "Fanta", price : 300, image : 'drinks/fanta.png' },
-    { id : 63, name : "Small popcorn", price : 200, image : 'foods/popcorn.png' },
+import { eq } from "drizzle-orm"
+import { db } from "../db"
+import { bookings, loyaltyRewards } from "../db/schema"
+
+const recommendedRewardNames = [
+    'Small Popcorn',
+    'Fanta',
+    'Coca Cola',
 ]
+
+const rewardInfo = {
+    id : loyaltyRewards.id,
+    name : loyaltyRewards.name,
+    description : loyaltyRewards.description,
+    pointsCost : loyaltyRewards.pointsCost,
+    image : loyaltyRewards.image
+}
 
 export const rewardsDataAccess = {
 
+    async getRewardByName( name )
+    {
+        const result = await db
+            .select(rewardInfo)
+            .from(loyaltyRewards)
+            .where( eq( name, loyaltyRewards.name ) )
+        return result[0]
+    },
+
     async getRecommendedRewards()
-        { return recommendedRewards; }
+        {
+            let recommendedRewards = [];
+            for (const rewards of recommendedRewardNames)
+            {
+                const result = await rewardsDataAccess.getRewardByName( rewards )
+                recommendedRewards.push( result )
+            }
+            return recommendedRewards;
+
+        }
 }

@@ -63,3 +63,78 @@ export const contacts = sqliteTable("contacts", {
   message: text("message"),
   createdAt: text("created_at").default(new Date().toISOString())
 });
+
+export const feedback = sqliteTable('feedback', {
+	id: integer("id").notNull().primaryKey(),
+	userId: integer("user_id", { mode : "number"})
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	rating : integer('rating').notNull(),
+	review : text("review")
+})
+
+
+// Start of Alex's and Glen's bookings and screenings system DB
+export const screens = sqliteTable('screens', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull(),
+	seats: text('seats').notNull()
+});
+
+export const screenings = sqliteTable('screenings', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	movieId: integer('movie_id')
+		.notNull()
+		.references(() => movies.id, { onDelete: 'cascade' }),
+	screenId: integer('screen_id')
+		.notNull()
+		.references(() => screens.id, { onDelete: 'cascade' }),
+	date: text('date').notNull(),
+	time: text('time').notNull()
+});
+
+export const bookings = sqliteTable('bookings', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id')
+		.references(() => user.id, { onDelete: 'cascade' }),
+	screeningId: integer('screening_id')
+		.notNull()
+		.references(() => screenings.id, { onDelete: 'cascade' }),
+	seats: text('seats').notNull(),
+	paymentMethod: text('payment_method').notNull(),
+	paid : integer('paid', {"mode" : "boolean"})
+		.default(false)
+		.notNull(),
+	discount : real('discounts')
+		.default( 0.0 )
+		.notNull(),
+	price: real('price').notNull(),
+	totalPrice: real('total_price').notNull(),
+	createdAt: text('created_at')
+		.default(new Date().toISOString())
+		.notNull(),
+	updatedAt: text('updated_at')
+		.default(new Date().toString())
+		.$onUpdate(() => new Date().toString())
+		.notNull(),
+});
+
+export const loyaltyRewards = sqliteTable('loyalty_rewards', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	name: text('name').notNull(),
+	description: text('description'),
+	pointsCost: integer('points_cost').notNull(),
+	image: text('image')
+});
+
+export const loyaltyRedemptions = sqliteTable('loyalty_redemptions', {
+	id: integer('id').primaryKey({ autoIncrement: true }),
+	userId: integer('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	rewardId: integer('reward_id')
+		.notNull()
+		.references(() => loyaltyRewards.id, { onDelete: 'cascade' }),
+	pointsSpent: integer('points_spent').notNull(),
+	createdAt: text('created_at').default(new Date().toISOString())
+});

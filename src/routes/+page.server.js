@@ -1,7 +1,10 @@
+// Author : Glen J
+
 import { usersService } from '$lib/server/services/users-service';
 import { recommendedMoviesService } from '$lib/server/services/recmovies-service';
 import { rewardsService } from '$lib/server/services/rewards-service';
 import { user } from '$lib/server/db/auth.schema';
+import { feedbackService } from '$lib/server/services/feedback-service';
 
 export async function load( { cookies, locals, ur } ) {
     // let userData = await usersService.getUserDetails(userToken);
@@ -25,10 +28,11 @@ export async function load( { cookies, locals, ur } ) {
     }
 
     const rewards = await rewardsService.getRecommendedRewards();
+    const reviews = await feedbackService.getTopFeedback()
     return {
         // Data
         userData : { username, RMPoints, logged},
-        rewards : rewards
-
+        rewards,
+        reviews
     };
 }

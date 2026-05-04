@@ -114,7 +114,7 @@ export const usersDataAccess = {
             .from( admins )
             .where( eq(userId, admins.userId) )
             .limit(1)
-        return result;
+        return result[0];
     },
 
     async Insertadmins(userId, admin, priv)
