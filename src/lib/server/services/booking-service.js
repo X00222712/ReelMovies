@@ -10,5 +10,7 @@ export const bookingService = {
 		{ return await bookingDataAccess.getUserBookings( userId ) },
 
     async getAllBookedScreening( screeningId )
-		{ return await bookingDataAccess.getAllBookedScreening( screeningId ) }
+		{ return await bookingDataAccess.getAllBookedScreening( screeningId ) },
+
+    async getBookedScreening( screeningId )
 };

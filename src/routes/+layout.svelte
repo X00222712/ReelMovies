@@ -108,8 +108,8 @@
             All content is purely illustrative and does not represent real data or services.
           </p>
           <ul>
-            <li><a href="/about" class="footer-link">About us</a></li>
-            <li><a href="/#" class="footer-link">About ReelMovies</a></li>
+            <li><a href="/about-us" class="footer-link">About us</a></li>
+            <li><a href="/about-rm" class="footer-link">About ReelMovies</a></li>
           </ul>
         </div>
 

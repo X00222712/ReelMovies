@@ -52,7 +52,6 @@ export async function GET({ url }) {
     try {
         for (const booking of bookings)
         {
-            // https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
             const screeningInfo = await screenService.getScreeningInfo( booking.screeningId )
             let movie = screeningInfo.movie
             movie.genre = []
@@ -63,11 +62,7 @@ export async function GET({ url }) {
         console.log(e)
         return json( {bookings : [], message: "Unable to get screening info"} , { status: 400});
     }
-    // https://stackoverflow.com/questions/4816099/chrome-sendrequest-error-typeerror-converting-circular-structure-to-json
+
     return json( {bookings : bookingInfo} , { status: 200 });
 }
 
-export async function DELETE( {} ) {
-    console.log("Hi")
-    return redirect(308, "/admin-panel/bookings")
-}

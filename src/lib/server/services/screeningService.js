@@ -15,5 +15,15 @@ export const screenService = {
     async getAllScreening()
     {
         return await screenDataAccess.getAllScreening()
+    },
+
+    async getScreening( screeningId )
+    {
+        return await screenDataAccess.getScreening( screeningId )
+    },
+
+    async getScreeningAt( date, time, movieId )
+    { 
+        return await screenDataAccess.getScreeningAt( date, time, movieId )
     }
 }

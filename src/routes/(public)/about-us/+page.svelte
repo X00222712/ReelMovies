@@ -31,16 +31,24 @@
 </script>
 
 <div class="about-container">
-  <h2 class="text-center mb-4">About Reel Movies</h2>
+  <h2 class="text-center mb-4">About Us</h2>
   <div class="about-card">
     <p class="about-text">
       Welcome to <strong>Reel Movies</strong>, your ultimate destination for all movies.
 
-      We are passionate about bringing you the latest films, screenings, and competitive
-      prices from the world of movie cinemas.
+      We are passionate group about bringing you the a great experience
+      when viewing this cinema site
 
-      Whether you're a casual moviegoer or a die-hard film enthusiast,
-      <strong>Reel Movies</strong> is here to keep you entertained.
+      <br>
+
+      This project is out 2 year project where we are tasked to create a website
+      with purpose to show out team work skills, programming knowledge and styling!
+      
+      <br>
+
+      We faced alot of challanges when making this site, helping us grow, learn and understand
+      from mistakes we made, this has really shown what we as members love to do and what we don't.
+
     </p>
 
     <div class="team-section">

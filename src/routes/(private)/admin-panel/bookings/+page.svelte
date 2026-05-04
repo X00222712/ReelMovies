@@ -4,8 +4,6 @@
     import { onMount } from "svelte";
     import ShowBookings from "$lib/components/ShowBookings.svelte";
 
-    import { goto, invalidateAll } from "$app/navigation";
-
     let {data, form} = $props()
     let bookings = $state([])
 
@@ -21,17 +19,9 @@
             async response => {
                 let res = await response.json()
                 bookings = res.bookings ?? []
-                console.log(res.message)
             }
         )
         searchedEmail = email
-    }
-
-    async function deleteBooking()
-    {
-        await fetch(`/admin-panel/bookings`, { method: "DELETE" } )
-        goto("/admin-panel/bookings").then()
-
     }
 
     onMount( async () => {
@@ -99,40 +89,63 @@
                 <!-- Edit -->
                 <div>
 
-                    <form action="?/editBooking" method="POST">
+                    <form action="?/editBooking" method="POST" class="mt-4">
                         <!-- Mark as paid (card) -->
-                        <input class="visually-hidden" type="email" name="email" id="email" defaultValue={searchedEmail}>
-                        <div>
-                            <div>
-                                <label class="mx-3" for="edit has paid">Edit payment status</label>
-                                <input type="checkbox" name="edit has paid" id="edit has paid">
-                            </div>
+                        <div class="d-flex flex-column flex-md-row gap-3">
+                            <input class="visually-hidden" type="email" name="email" id="email" defaultValue={searchedEmail}>
+                            <input class="visually-hidden" type="number" name="bookingId" id="bookingId" defaultValue="{booking.booking.id}">
 
-                            <div>
-                                <label class="mx-3" for="has paid">Unpaid / Paid</label>
-                                <input type="checkbox" name="has paid" id="has paid">
+                            <div class="mx-auto p-3 rounded" style="width:fit-content; box-shadow: 0 0 15px 2px white;">
+                                <div>
+                                    <label class="mx-3" for="edit has paid">Edit if paid</label>
+                                    <input type="checkbox" name="edit has paid" id="edit has paid">
+                                </div>
+
+                                <div>
+                                    <label class="mx-3" for="has paid">Has paid</label>
+                                    <input type="checkbox" name="has paid" id="has paid">
+                                </div>
+                            </div>
+                            <!-- Set price -->
+                            <div class="mx-auto p-3 rounded" style="width:fit-content; box-shadow: 0 0 15px 2px white;">
+                                <div>
+                                    <label class="mx-3" for="edit price">Edit price</label>
+                                    <input type="checkbox" name="edit price" id="edit price">
+                                </div>
+
+                                <div>
+                                    <input class="px-2 rounded" type="text" name="price" id="price" defaultValue={booking.booking.price}>
+                                </div>
+
+                            </div>
+                            <!-- Set discount -->
+                            <div class="mx-auto p-3 rounded" style="width:fit-content; box-shadow: 0 0 15px 2px white;">
+                                <div>
+                                    <label class="mx-3" for="edit discount">Edit discount</label>
+                                    <input type="checkbox" name="edit discount" id="edit discount">
+                                </div>
+
+                                <div>
+                                    <input class="px-2 rounded" type="text" name="discount" id="discount" defaultValue={booking.booking.discount}>
+                                </div>
+
                             </div>
                         </div>
-                        <!-- Set price -->
-                        <div>
-                            <div>
-                                <label class="mx-3" for="edit price">Edit payment status</label>
-                                <input type="checkbox" name="edit has paid" id="edit price">
-                            </div>
-                        </div>
-                        <!-- Set discount -->
-                        <div></div>
 
-                        <button class="btn btn-warning my-3" type="submit">Confim edits</button>
+                        <button class="btn btn-warning my-5 w-50 mx-auto" style="box-shadow: 0 0 5px 2px gold;" type="submit">Confim edits</button>
                     </form>
 
                 </div>
 
                 <!-- Delete -->
-                <div class="mx-auto" style="width: fit-content;" data-sveltekit-reload>
-                    <p class="fs-4 fw-bold text-danger">There is no unding</p>
-                    <button class="btn btn-danger" onclick={deleteBooking}>Delete booking</button>
-                </div>
+                <form action="?/delete" method="POST" class="mb-5">
+                    <div class="mx-auto" style="width: fit-content;">
+                        <input class="visually-hidden" type="email" name="email" id="email" defaultValue={searchedEmail}>
+                        <input class="visually-hidden" type="number" name="bookingId" id="bookingId" defaultValue="{booking.booking.id}">
+                        <p class="fs-4 fw-bold text-danger">There is no unding</p>
+                        <button class="btn btn-danger" type="submit">Delete booking</button>
+                    </div>
+                </form>
 
             </div>
 

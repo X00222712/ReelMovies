@@ -21,6 +21,7 @@ import {admins, genres, movieGenres, movies, rewardPoints, screens, screenings, 
 import { usersService } from '$lib/server/services/users-service';
 import { bookingService } from '$lib/server/services/booking-service';
 import { tr } from 'zod/v4/locales';
+import { feedbackService } from '$lib/server/services/feedback-service';
 
 export async function load( { locals } )
 {
@@ -32,10 +33,10 @@ const usersInformation = [
     // Username, email, password, RMpoints, [admin, privilage]
     ["IT Admin", 'itsuper@reelmovies.ie', "ITSupport", 100000, [1, 1]],
     ["Admin", 'admin@reelmovies.ie', "reelmovies", 0, [1, 0]],
-    ["Glen", 'test@test.ie', "password123", 200, [0, 0]],
+    ["Lauren", 'test@test.ie', "password123", 200, [0, 0]],
     ["Alex", 'Alex@test.ie', "SuperCool", 400, [0, 0]],
     ["Glen", 'glen@test.ie', "password123", 0, [0, 0]],
-    ["Glen", 'GLEN@test.com', "password123", 0, [0, 0]],
+    ["Bob", 'GLEN@test.com', "password123", 0, [0, 0]],
 ]
 
 async function makeAccounts(cookies)
@@ -351,9 +352,9 @@ async function makeScreenings() {
 }
 
 const loyaltyRewardData = [
-	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 150, 'foods/popcorn.png'],
-	[2, 'Fanta', 'Free Fanta drink.', 100, 'drinks/fanta.png'],
-	[3, 'Coca Cola', 'Free Coca Cola drink.', 100, 'drinks/coca_cola.png'],
+	[1, 'Small Popcorn', 'Free small popcorn with your next movie.', 150, '/menu/foods/popcorn.png'],
+	[2, 'Fanta', 'Free Fanta drink.', 100, '/menu/drinks/fanta.png'],
+	[3, 'Coca Cola', 'Free Coca Cola drink.', 100, '/menu/drinks/coca_cola.png'],
 	[4, 'Free Standard Seat Upgrade', 'Upgrade one saver seat to regular.', 700, null],
 	[5, 'VIP Seat Discount', 'Get a discount on a VIP seat.', 1000, null]
 ];
@@ -378,35 +379,69 @@ async function makeLoyaltyRewards() {
 }
 
 const bookTickets = [
-    [ 4, 1, [ [0,1], [0,2], [0,3] ], "card", 0, 17.67 ],
-    [ 4, 3, [ [3,0], [3,1], [3,2], [3,3], [3,4], [3,5] ], "card", 44.61, 59.49 ],
-
-    [ 3, 24, [ [0,6], [0,5], [2,7] ], "card", 2, 19.97 ],
-    [ 2, 16, [ [2,9], [2,7], [2,8], [2,6], [2,5] ], "cash", 0, 39.95 ]
+    [ 4, 1, [ '1, 2', '1, 3', '1, 4' ], "card", 0, 17.67 ],
+    [ 4, 3, [  '4, 1', '4, 2', '4, 3', '4, 4', '4, 5', '4, 6' ], "card", 44.61, 59.49 ],
+    [ 3, 24, [ '1, 7', '1, 6', '3, 8' ], "card", 2, 19.97 ],
+    [ 2, 16, [ '3, 9', '3, 8', '3, 7', '3, 6' ], "cash", 0, 39.95 ]
 ]
 
 async function makeBookings() {
-    for (const booking of bookTickets)
-    {
-        const userId = booking[0]
-        const screeningId = booking[1]
-        const seats = booking[2]
-        const paymentMethod = booking[3]
-        const discount = booking[4]
-        const price = booking[5]
 
-        await bookingService.bookTickets(
-            {
-                userId,
-                screeningId,
-                seats,
-                paymentMethod,
-                discount,
-                price
-            }
-        )   
+    try {
+        for (const booking of bookTickets)
+        {
+            const userId = booking[0]
+            const screeningId = booking[1]
+            const seats = booking[2]
+            const paymentMethod = booking[3]
+            const discount = booking[4]
+            const price = booking[5]
+
+            await bookingService.bookTickets(
+                {
+                    userId,
+                    screeningId,
+                    seats,
+                    paymentMethod,
+                    discount,
+                    price
+                }
+            )   
+        }
+    } catch (e)
+    {
+        console.log(e)
+        return false
     }
-    return tr
+    return true
+}
+
+const feedbacks = [
+    [ 4, 4, "Very lovely place" ],
+    [ 5, 3, "Good sound, bad popcorn" ],
+    [ 6, 5, "Such amazing popcorn, incredible sound and pictures and the screens are always spotless and clean!! The seats are sooo comfy toooo" ],
+    [ 1, 1, "They let a mother and their crying baby and toddler into the screening of black panther, I couldn't sit and enjoy the movie for a second." ]
+]
+
+async function makeFeedback() {
+    
+    try {
+        // I hate ON vs OF
+        for (const feedback of feedbacks)
+        {
+            await feedbackService.addFeedback(
+                feedback[0],
+                feedback[1],
+                feedback[2]
+            )
+    }}
+    catch (e)
+    {
+        console.log(e)
+        return false
+    }
+
+    return true
 }
 
 export const actions = {
@@ -440,7 +475,10 @@ export const actions = {
             { return fail(400, { failed: true, message: "Failed to create loyalty rewards" }) }
 
         if(!(await makeBookings()))
-            { return fail(400, { failed: true, message: "Failed to create bookings rewards" }) }
+            { return fail(400, { failed: true, message: "Failed to create bookings" }) }
+
+        if (!(await makeFeedback()))
+            { return fail(400, { failed: true, message: "Failed to create feeback" }) }
 
         return { failed: false, message : "DB setup" }
 	} 

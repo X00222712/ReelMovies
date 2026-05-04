@@ -49,17 +49,17 @@
 	}
 
 	function seatTaken(row, col) {
-		return selectedScreening?.takenSeats.includes(`${row},${col}`);
+		return selectedScreening?.takenSeats.includes(`${row+1}, ${col+1}`);
 	}
 
 	function seatSelected(row, col) {
-		return selectedSeats.includes(`${row},${col}`);
+		return selectedSeats.includes(`${row}, ${col}`);
 	}
 
 	function selectSeat(row, col) {
-		const seat = `${row},${col}`;
+		const seat = `${row}, ${col}`;
 
-		if (seatTaken(row, col)) return;
+		if (seatTaken(row, col)) {return;}
 
 		if (seatSelected(row, col)) {
 			selectedSeats = selectedSeats.filter((selectedSeat) => selectedSeat !== seat);
@@ -75,7 +75,7 @@
 
 		for (const seat of selectedSeats) {
 			const [row, col] = seat.split(',').map(Number);
-			const seatType = selectedScreening.screenSeats[row][col];
+			const seatType = selectedScreening.screenSeats[row-1][col-1];
 			total += seatPrices[seatType] ?? 0;
 		}
 
@@ -167,24 +167,40 @@
 
 				<div class="screen-label">Screen</div>
 
-				<div class="seat-map">
-					{#each selectedScreening.screenSeats as row, i}
-						<div class="seat-row">
-							<span class="row-label">{i + 1}</span>
 
-							{#each row as seat, j}
-								<button
-									type="button"
-									value="{i},{j}"
-									class="seat seat-{seat.toLowerCase()} {seatTaken(i, j) ? 'seat-taken' : ''}"
-									class:selected={seatSelected(i, j)}
-									onclick={() => selectSeat(i, j)}
-									aria-label="row {i + 1} column {j + 1}"
-								></button>
-							{/each}
-						</div>
-					{/each}
-				</div>
+				<table class="seat-map">
+					<thead>
+						<tr>
+							<td class="d-flex fs-5 fw-bold" style="gap: 0.9rem;">
+								<p class="seat row-label"></p>
+								{#each selectedScreening.screenSeats[0] as i, j}
+										<p class="seat-row me-md-2">{(j+1)}</p>
+								{/each}
+							</td>
+						</tr>
+					</thead>
+
+					<tbody>
+						<tr>
+						{#each selectedScreening.screenSeats as row, i}
+							<td class="seat-row">
+								<span class="row-label">{i + 1}</span>
+
+								{#each row as seat, j}
+									<button
+										type="button"
+										value="{i+1},{j+1}"
+										class="seat seat-{seat.toLowerCase()} {seatTaken(i, j) ? 'seat-taken' : ''}"
+										class:selected={seatSelected(i+1, j+1)}
+										onclick={() => selectSeat(i+1, j+1)}
+										aria-label="row {i + 1} column {j + 1}"
+									></button>
+								{/each}
+							</td>
+						{/each}
+						</tr>
+					</tbody>
+				</table>
 
 				<div class="seat-key">
 					<div><span class="key-seat saver"></span> Saver &euro;5.99</div>

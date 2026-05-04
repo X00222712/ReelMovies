@@ -18,17 +18,28 @@ export async function load({url, locals}) {
 		{ throw redirect(303, '/auth/signin') }
 
 	const movieID = Number(url.searchParams.get("movieid")) ?? 0
-	const screentime = /*url.searchParams.get("screening") ??*/ ''
+	const screenDate = url.searchParams.get("date") ?? ''
+	const screenTime = url.searchParams.get("time") ?? ''
 
+	let screeningId = ''
+	try {
+		if (screenDate && screenTime)
+		{
+			const screening = await screenService.getScreeningAt( screenDate, screenTime, movieID )
+			screeningId = screening.id
+		}
+	}
+	catch (e) {
+		console.log(e)
+	}
 
 	const selectionInfo = {
 		movieid : movieID,
-		screening : screentime
+		screening : screeningId
 	}
 
 	const screeningRows = await screenService.getAllScreening()
 	const bookingRows = await bookingService.getAllBookedScreening() ?? []
-    console.log(bookingRows)
 
 	const takenSeatsByScreening = {};
 
@@ -54,7 +65,7 @@ export async function load({url, locals}) {
 }
 
 export const actions = {
-	book: async ({ request, locals }) => {
+	book: async ({ request, locals, cookies }) => {
 		const data = await request.formData();
 
 		const screeningId = Number(data.get('screeningId'));
@@ -68,11 +79,11 @@ export const actions = {
 			return fail(400, { message: 'Please select at least one seat.' });
 		}
 
-		const params = new URLSearchParams({
-			screeningId: String(screeningId),
-			seats: selectedSeats.join('|')
-		});
+		const seats = selectedSeats.join('|')
 
-		throw redirect(303, `/purchase/payment?${params.toString()}`);
+		cookies.set('RM-buySreening', screeningId, { path: '/'} )
+		cookies.set('RM-buySeats', seats, { path: '/'} )
+
+		throw redirect(303, `/purchase/payment`);
 	}
 };

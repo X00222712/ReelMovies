@@ -12,17 +12,14 @@ const movieInfo = {
     ageRating   : movies.rating,
     poster      : movies.poster,
     description : movies.description,
-    ratingScore : movies.ratingScore,
-    genre       : genres.name
+    ratingScore : movies.ratingScore
 }
 
 export const moviesDataAccess = {
     async getMovieById(movieId) {
         const results = await db.select(movieInfo)
         .from(movies)
-        .leftJoin(movieGenres, eq(movies.id, movieGenres.movieId))
-        .leftJoin(genres, eq(movieGenres.genreId, genres.id))
-        .where(eq(movies.id, movieId));
+        .where(eq(movieId, movies.id))
 
         if (!results || results.length === 0) return null;
 
@@ -36,11 +33,16 @@ export const moviesDataAccess = {
             genre: []
         };
 
-        for (const row of results)
+        const MovieGenres = await db.select( {genre : genres.name } )
+        .from(movieGenres)
+        .where(eq(movieGenres.movieId, movie.id))
+        .innerJoin(genres, eq( genres.id, movieGenres.genreId ))
+
+        for (const row of MovieGenres)
         {
-            if (row.genre && !movie.genre.includes(row.genre))
-                { movie.genre.push(row.genre); }
+            movie.genre.push(row.genre)
         }
+        console.log(movie.genre)
 
         return movie;
     }

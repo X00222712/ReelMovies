@@ -11,6 +11,7 @@
     let RMPoints = userData.RMPoints;
 
     let rewardItems = data.rewards;
+    let reviews = data.reviews
 </script>
 
 <div class="p-2">
@@ -48,3 +49,41 @@
 </div>
 
 <Recmovies/>
+
+<div>
+
+    <h2 class="fw-bolder text-center my-4">Some User Review</h2>
+
+    <div class="row g-4 w-100 mx-auto">
+        {#each reviews as review}
+            <div class="col-md-6">
+                <div class="card p-3 review-card h-100">
+                    <h6 class="fw-semibold mb-1">{review.username}</h6>
+                    <p class="mb-2 text-warning">
+                        {"⭐".repeat(review.rating)}
+                    </p>
+                    <p class="mb-0">{review.review}</p>
+                </div>
+            </div>
+        {/each}
+    </div>
+
+    <div class="d-flex justify-content-center my-4">
+        <a href="/feedback">
+            <button class="btn btn-info" type="button">View more</button>
+        </a>
+    </div>
+
+</div>
+
+<style>
+.review-card {
+    background: rgba(28, 37, 65, 0.75);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    transition: all 0.35s ease;
+
+    color: antiquewhite;
+}
+</style>

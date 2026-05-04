@@ -64,6 +64,15 @@ export const contacts = sqliteTable("contacts", {
   createdAt: text("created_at").default(new Date().toISOString())
 });
 
+export const feedback = sqliteTable('feedback', {
+	id: integer("id").notNull().primaryKey(),
+	userId: integer("user_id", { mode : "number"})
+		.notNull()
+		.references(() => user.id, { onDelete: "cascade" }),
+	rating : integer('rating').notNull(),
+	review : text("review")
+})
+
 
 // Start of Alex's and Glen's bookings and screenings system DB
 export const screens = sqliteTable('screens', {

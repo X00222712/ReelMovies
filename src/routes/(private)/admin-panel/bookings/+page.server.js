@@ -1,8 +1,11 @@
 // Author : Glen J
 
-import { idSchema } from "$lib/server/db/validation";
-import { usersService } from "$lib/server/services/users-service";
+// Third Pary
 import { fail, redirect } from "@sveltejs/kit";
+// Our
+import { idSchema, validateCost } from "$lib/server/db/validation";
+import { bookingService } from "$lib/server/services/booking-service";
+import { usersService } from "$lib/server/services/users-service";
 
 
 export async function load({ locals }) {
@@ -41,18 +44,58 @@ export const actions = {
     {
 
         const data = await request.formData();
-
-        console.log(data)
-
         const email = data.get("email")
+        const bookingId = Number(data.get("bookingId"));
 
-        const bookings = data.get("bookings")
-        const bookingId = data.get("booking id");
-        const edits = data.get("edit has paid");
+        // Feilds
+        const editHasPaid = "on" == data.get("edit has paid")
+        const editPrice = "on" == data.get("edit price")
+        const editDiscount = "on" == data.get("edit discount")
 
-        console.log('hi')
-        console.log(email)
+        // Data"
+        const hasPaid = "on" == data.get("has paid")
+        const price = data.get("price")
+        const discount = data.get("discount")
 
+
+        if (editHasPaid)
+            {
+                await bookingService.markPaid( bookingId, hasPaid )
+            }
+        if (editPrice)
+            {
+                let validatedPrice
+                try { validatedPrice = validateCost.parse({cost : Number(price)}).cost }
+                catch (e)
+                {
+                    console.log(e)
+                    return fail(400, {error: true, message : 'Invalid price', email})
+                }
+                await bookingService.updatePrice( bookingId, validatedPrice )
+            }
+        if (editDiscount)
+            {
+
+                let validatedDiscount
+                try { validatedDiscount = validateCost.parse({cost : Number(discount)}).cost }
+                catch (e)
+                {
+                    console.log(e)
+                    return fail(400, {error: true, message : 'Invalid price', email})
+                }
+                await bookingService.updateDiscount( bookingId, validatedDiscount )
+            }
+
+        return fail(200, { email })
+    },
+
+    delete: async ( { request } ) => {
+
+        const data = await request.formData();
+        const email = data.get("email")
+        const bookingId = data.get("bookingId")
+
+        await bookingService.deleteBooking( bookingId )
         return fail(200, { email })
     }
 }

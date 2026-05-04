@@ -1,106 +1,69 @@
 <!-- Author: Alex D -->
 <script>
-  let name = "";
-  let rating = 5;
-  let message = "";
 
-  let reviews = [
-    {
-      name: "Alex",
-      rating: 5,
-      message: "Amazing cinema experience. The seats were super comfortable!"
-    },
-    {
-      name: "Jamie",
-      rating: 4,
-      message: "Great sound quality and friendly staff."
-    }
-  ];
+    let { data } = $props()
+    let feedback = $state(data.feedback)
 
-  function submitReview() {
-    if (!name || !message) return;
-
-    reviews = [
-      {
-        name,
-        rating,
-        message
-      },
-      ...reviews
-    ];
-
-    name = "";
-    rating = 5;
-    message = "";
-  }
 </script>
 
 <div class="container py-5">
 
-  <h2 class="mb-4 fw-bold">Customer Feedback</h2>
+    <h2 class="mb-4 fw-bold">Customer Feedback</h2>
 
-  <div class="card p-4 mb-5 review-form">
+    <div class="card p-4 mb-5 review-form">
     <div class="mb-3">
-  <label for="name" class="form-label">Your Name</label>
-  <input
-    id="name"
-    type="text"
-    class="form-control text-white"
-    bind:value={name}
-    placeholder="Enter your name"
-  />
+
 </div>
 
-<div class="mb-3">
-  <label for="rating" class="form-label">Rating</label>
-  <select
-    id="rating"
-    class="form-select"
-    bind:value={rating}
-  >
-    <option value="5">⭐⭐⭐⭐⭐ (5)</option>
-    <option value="4">⭐⭐⭐⭐ (4)</option>
-    <option value="3">⭐⭐⭐ (3)</option>
-    <option value="2">⭐⭐ (2)</option>
-    <option value="1">⭐ (1)</option>
-  </select>
+
+<form action="?/submitFeedback" method="post">
+    <label for="rating" class="form-label">Rating</label>
+        <select id="rating" name="rating" class="form-select" >
+            <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+            <option value="4">⭐⭐⭐⭐ (4)</option>
+            <option value="3">⭐⭐⭐ (3)</option>
+            <option value="2">⭐⭐ (2)</option>
+            <option value="1">⭐ (1)</option>
+        </select>
+
+        <label for="review" class="form-label">Your Review</label>
+        <textarea
+            name="review"
+            id="review"
+            class="form-control text-white"
+            rows="3"
+            placeholder="Share your experience..."
+        ></textarea>
+
+    <div class="d-flex justify-content-center mt-4">
+        <button class="btn btn-ticket mt-2 text-white border" style="box-shadow: 0 0 5px 2px white;" type="submit">
+            Submit Review
+        </button>
+    </div>
+
+</form>
+
 </div>
 
-<div class="mb-3">
-  <label for="message" class="form-label">Your Review</label>
-  <textarea
-    id="message"
-    class="form-control text-white"
-    rows="3"
-    bind:value={message}
-    placeholder="Share your experience..."
-  ></textarea>
-</div>
+    <h4 class="mb-3">Reviews</h4>
 
-    <button class="btn btn-ticket mt-2" on:click={submitReview}>
-      Submit Review
-    </button>
-  </div>
+    {#if feedback.length === 0}
+        <p class="text-muted">No reviews yet.</p>
+    {/if}
 
-  <h4 class="mb-3">Recent Reviews</h4>
-
-  {#if reviews.length === 0}
-    <p class="text-muted">No reviews yet.</p>
-  {/if}
-
-  <div class="row g-4">
-    {#each reviews as review}
-      <div class="col-md-6">
-        <div class="card p-3 review-card h-100">
-          <h6 class="fw-semibold mb-1">{review.name}</h6>
-          <div class="mb-2 text-warning">
-            {"⭐".repeat(review.rating)}
-          </div>
-          <p class="mb-0">{review.message}</p>
-        </div>
-      </div>
-    {/each}
-  </div>
+    <div class="row g-4">
+        {#each feedback as review}
+            <div class="col-md-6">
+                <div class="card p-3 review-card h-100">
+                    <h6 class="fw-semibold mb-1">{review.username}</h6>
+                    <p class="mb-2 text-warning">
+                        {"⭐".repeat(review.rating)}
+                    </p>
+                    <p class="mb-0">{review.review}</p>
+                </div>
+            </div>
+        {/each}
+    </div>
 
 </div>
 
